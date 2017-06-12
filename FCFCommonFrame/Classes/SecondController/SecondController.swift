@@ -12,7 +12,7 @@ class SecondController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print("git test")
     }
 
     override func didReceiveMemoryWarning() {
