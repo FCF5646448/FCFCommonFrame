@@ -1,0 +1,43 @@
+{
+    "returnMsg": "获取成功",
+    "returnCode":"0000",
+    "datas":[{
+             "id":"1000",
+             "type":"国内",
+             "content":[{
+                        "cid":"1110",
+                        "name":"百度",
+                        "img":"http://3.bp.blogspot.com/-cZKVslIyRSE/Uq9Svt4HgLI/AAAAAAAASbM/EARhC-hF-tI/s1600/hermoso-bosque.jpg",
+                        "url":"www.baidu.com"
+                        },{
+                        "cid":"1113",
+                        "name":"腾讯",
+                        "img":"https://www.travelwithpurpose.com.au/wp-content/uploads/2017/01/L159-Lake-Matheson-West-Coast-Rob-Suisted.jpg",
+                        "url":"www.tencent.com"
+                        },{
+                        "cid":"1114",
+                        "name":"阿里巴巴",
+                        "img":"http://cdn2.ettoday.net/images/2124/d2124310.jpg",
+                        "url":"www.alibaba.com"
+                        }]
+             },{
+             "id":"1001",
+             "type":"国外",
+             "content":[{
+                        "cid":"1115",
+                        "name":"谷歌",
+                        "img":"http://www.sinaimg.cn/dy/slidenews/5_img/2015_49/453_72726_822979.jpg",
+                        "url":"www.google.com"
+                        },{
+                        "cid":"1111",
+                        "name":"git",
+                        "img":"http://imgapi.nownews.com/?w=640&q=60&src=http%3A%2F%2Fs.nownews.com%2Fd9%2F7d%2Fd97d03a7b9ec63979e70c4fd7c02d51e.jpg",
+                        "url":"www.github.com"
+                        },{
+                        "cid":"1112",
+                        "name":"脸书",
+                        "img":"http://www.nawasreh.com/vb/imgcache/1322.imgcache",
+                        "url":"www.facebook.com"
+                        }]
+             }]
+}

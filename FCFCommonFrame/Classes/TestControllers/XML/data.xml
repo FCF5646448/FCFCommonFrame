@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class>
+    <id>8768</id>
+    <classname>高一(2)班</classname>
+    <csnum>2</csnum>
+    <date>2017-06-06 14:24:04</date>
+    <studentList>
+        <student id="001">
+            <name>fcf</name>
+            <age>25</age>
+        </student>
+        <student id="002">
+            <name>Tim</name>
+            <age>18</age>
+        </student>
+        <student id="003">
+            <name>Bob</name>
+            <age>20</age>
+        </student>
+    </studentList>
+    <teacherList>
+        <teacher id="001">
+            <name>feng</name>
+            <age>40</age>
+            <sex>男</sex>
+        </teacher>
+        <teacher id="002">
+            <name>li</name>
+            <age>45</age>
+            <sex>女</sex>
+        </teacher>
+    </teacherList>
+    <mobile>
+        <tel>18701960761</tel>
+        <tel>18701960762</tel>
+        <tel>18701960763</tel>
+        <tel>18701960764</tel>
+    </mobile>
+</class>

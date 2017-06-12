@@ -1,0 +1,4 @@
+项目中使用到的KissXML是OC的，所以需要注意前三步使用步骤
+1:在Link Binary With Libraries添加libxml2.2.tbd
+2:在Header Search Paths里添加 ${SDK_DIR}/usr/include/libxml2
+

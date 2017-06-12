@@ -1,0 +1,60 @@
+1 使用animateWithDuration来实现动画:
+    UIView.animate(withDuration: <#T##TimeInterval#>, delay: <#T##TimeInterval#>, options: <#T##UIViewAnimationOptions#>, animations: <#T##() -> Void#>, completion: <#T##((Bool) -> Void)?##((Bool) -> Void)?##(Bool) -> Void#>)
+
+    1)最多的时候5个参数:
+        duration:动画从开始到结束的持续时间，单位是秒
+        delay:动画开始前等待时间
+        options:通过UIViewAnimationOptions类提供的预置效果设置动画效果
+        animations:自己设置的动画效果代码块
+        completion:动画执行完毕代码块
+    2)UIView支持动画效果的属性
+        frame、bounds、center、alpha、backgroundColor、transform(通过这个3x3矩阵可以对坐标系统进行缩放、平移、旋转)
+    3)transform四个常用的变换方法
+        CGAffineTransformMake():返回变换矩阵
+        CGAffineTransformMakeTranslation():返回平移矩阵
+        CGAffineTransformMakeScale():返回缩放变换矩阵
+        CGAffineTransformMakeRotation():返回旋转变换矩阵
+
+2 使用beginAnimation和commitAnimation来实现动画:
+    //淡入动画 其实就是alpha的变化
+    func fadein(){
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(2.0)
+        redView.alpha = 1.0
+        UIView.commitAnimations()
+    }
+
+    //淡出动画
+    func fadeout(){
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(2.0)
+        redView.alpha = 0.0
+        UIView.commitAnimations()
+    }
+
+    //移动动画
+    func move(){
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(2.0)
+        blueView.center = CGPoint.init(x: 350, y: 500)
+        UIView.setAnimationCurve(UIViewAnimationCurve.easeOut) //设置动画相对速度
+        UIView.commitAnimations()
+    }
+
+    //调整大小
+    func size(){
+        UIView.beginAnimations(nil, context: nil)
+        UIView.setAnimationDuration(2.0)
+        blueView.frame = CGRect.init(origin: blueView.bounds.origin, size: CGSize.init(width: 100, height: 100))
+        UIView.commitAnimations()
+    }
+    // UIViewAnimationTransition两个视图切换的过度动画
+    UIViewAnimationTransition定义了5种过渡动画的效果
+    None 无过渡动画效果
+    FlipFromLeft 从左侧到右侧翻转
+    FlipFromriight 从右侧到左侧翻转
+    CurlUp 向上翻页
+    CurlDown 向下翻页
+
+
+

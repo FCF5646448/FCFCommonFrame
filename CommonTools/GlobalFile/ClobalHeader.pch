@@ -1,0 +1,21 @@
+//
+//  ClobalHeader.pch
+//  FCFCommonFrame
+//
+//  Created by 冯才凡 on 2017/4/17.
+//  Copyright © 2017年 com.fcf. All rights reserved.
+//
+
+#ifndef ClobalHeader_pch
+#define ClobalHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#ifdef __OBJC__
+#import "SwiftCallOC.h"
+#endif
+
+
+
+#endif /* ClobalHeader_pch */

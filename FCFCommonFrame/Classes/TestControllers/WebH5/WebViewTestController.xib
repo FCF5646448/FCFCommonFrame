@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16B2657" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WebViewTestController" customModule="FCFCommonFrame" customModuleProvider="target">
+            <connections>
+                <outlet property="progBar" destination="E3m-3f-3Tf" id="scf-9O-qmo"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+                <outlet property="webview" destination="eNi-Q5-sZi" id="CUb-un-XTQ"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gtF-WH-2fu">
+                    <rect key="frame" x="0.0" y="624" width="375" height="43"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="d6U-CS-Zp0">
+                            <rect key="frame" x="9" y="9" width="22" height="25"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="22" id="WbN-y5-SkO"/>
+                                <constraint firstAttribute="height" constant="25" id="hnE-Tf-Dss"/>
+                            </constraints>
+                            <state key="normal" image="backUnselected"/>
+                            <connections>
+                                <action selector="backBtnClicked:" destination="-1" eventType="touchUpInside" id="glE-Hc-t8S"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="doh-NP-i69">
+                            <rect key="frame" x="73" y="10" width="22" height="23"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="22" id="eev-Iv-30f"/>
+                                <constraint firstAttribute="height" constant="23" id="zpQ-ha-DTo"/>
+                            </constraints>
+                            <state key="normal" image="forwardUnselected"/>
+                            <connections>
+                                <action selector="forwardBtnClicked:" destination="-1" eventType="touchUpInside" id="d9o-t4-yaT"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.8862745098" green="0.8862745098" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstItem="d6U-CS-Zp0" firstAttribute="centerY" secondItem="gtF-WH-2fu" secondAttribute="centerY" id="23s-P2-g2O"/>
+                        <constraint firstItem="doh-NP-i69" firstAttribute="leading" secondItem="d6U-CS-Zp0" secondAttribute="trailing" constant="42" id="BQl-i6-LvY"/>
+                        <constraint firstAttribute="height" constant="43" id="OFv-Yj-Kbe"/>
+                        <constraint firstItem="doh-NP-i69" firstAttribute="centerY" secondItem="gtF-WH-2fu" secondAttribute="centerY" id="vSj-Uo-bs6"/>
+                        <constraint firstItem="d6U-CS-Zp0" firstAttribute="leading" secondItem="gtF-WH-2fu" secondAttribute="leading" constant="9" id="y3C-4U-JfL"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0iy-0v-sUk">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="2"/>
+                    <subviews>
+                        <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="E3m-3f-3Tf">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="2"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="2" id="Vid-uY-OfE"/>
+                            </constraints>
+                        </progressView>
+                    </subviews>
+                    <color key="backgroundColor" red="0.8862745098" green="0.8862745098" blue="0.92549019610000005" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="trailing" secondItem="E3m-3f-3Tf" secondAttribute="trailing" id="EPB-mw-f7N"/>
+                        <constraint firstItem="E3m-3f-3Tf" firstAttribute="leading" secondItem="0iy-0v-sUk" secondAttribute="leading" id="JHW-2f-7Ay"/>
+                        <constraint firstAttribute="height" constant="2" id="bWF-P5-SbM"/>
+                        <constraint firstAttribute="bottom" secondItem="E3m-3f-3Tf" secondAttribute="bottom" id="zof-1C-dI9"/>
+                    </constraints>
+                </view>
+                <webView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eNi-Q5-sZi">
+                    <rect key="frame" x="0.0" y="2" width="375" height="622"/>
+                    <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </webView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="0iy-0v-sUk" secondAttribute="trailing" id="0ei-j6-hct"/>
+                <constraint firstAttribute="trailing" secondItem="eNi-Q5-sZi" secondAttribute="trailing" id="0lO-N2-Xh2"/>
+                <constraint firstItem="eNi-Q5-sZi" firstAttribute="top" secondItem="0iy-0v-sUk" secondAttribute="bottom" id="57o-zi-VbT"/>
+                <constraint firstItem="gtF-WH-2fu" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="JXV-NG-v6v"/>
+                <constraint firstAttribute="trailing" secondItem="gtF-WH-2fu" secondAttribute="trailing" id="MQu-1m-ZrC"/>
+                <constraint firstItem="0iy-0v-sUk" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="Pc1-ax-Tkv"/>
+                <constraint firstItem="gtF-WH-2fu" firstAttribute="top" secondItem="eNi-Q5-sZi" secondAttribute="bottom" id="You-bV-1II"/>
+                <constraint firstItem="0iy-0v-sUk" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="bZl-BT-LDC"/>
+                <constraint firstAttribute="bottom" secondItem="gtF-WH-2fu" secondAttribute="bottom" id="fLf-4t-non"/>
+                <constraint firstItem="eNi-Q5-sZi" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="hPq-JZ-huf"/>
+            </constraints>
+            <point key="canvasLocation" x="46.5" y="56.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="backUnselected" width="50" height="50"/>
+        <image name="forwardUnselected" width="50" height="50"/>
+    </resources>
+</document>

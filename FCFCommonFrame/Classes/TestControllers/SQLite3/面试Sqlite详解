@@ -1,0 +1,39 @@
+
+
+
+
+//swift本身是没法使用sqlite功能的，必须利用OC与sqlite链接。需要注意的是在Linked Frameworks里加上libsqlite3.tbd,否则会报错
+1 sqlite 的优势：
+    1、占用资源低
+    2、速度快
+
+2 SQLite不区分大小写
+
+3 DDL数据库定义语言学习
+    创建表 CREATE TABLE IF NOT EXISTS 表名(字段名 字段类型,字段名1 字段类型1,...);
+    删除表 DROP TABLE 表名;
+    插入数据 INSERT INTO 表名(字段...) VALUES(值...);
+    更新数据 UPDATE 表名 SET 字段名=值,...;
+    删除数据 DELETE FROME 表名;
+    主键 PRIMARY KEY;
+    数据不能为空 NOT NULL;
+    条件 WHERE;
+4 DQL数据查询语言
+    查询数据 SELECT 字段名...FROM 表名 WHERE 条件...;
+    查询有多少条数据 SELECT COUNT(字段) FROM 表名;
+    分页取数据 SELECT 字段... FROM 表名 LIMIT a,b; (表示从a开始到取b条数据,没有a就是从0开始取)
+
+5 动态添加字段:
+    ALTER TABLE 表名 ADD 字段名 字段类型;
+
+sqlite3 原生语句解析:
+    OpaquePointer 数据库链接对象
+    sqlite3_stmt 代表SQL语句的对象，是个类型
+    sqlite3_open(_:OpaquePointer) //打开数据库函数，返回SQLITE_OK代表成功，否则失败
+    sqlite3_prepare //这是有一个系列的函数(如sqlite3_prepare_v2),它用来负责编译SQL语句
+    sqlite3_step() //使用sqlite3_prepare函数将SQL语句编译好之后，可以使用step函数来执行。对于有返回的执行语句(例如select)，调用一次sqlite_step函数将会执行并记录一行有效的结果到SQL语句的对象里.要继续获取后面的运行结果，就要再执行sqlite3_step函数直到所有结果都记录完毕。比如，SQL语句"select * from table order by id",若结果包含多条数据，则使用sqlite3_step()函数只能得到一行内容，继续调用该函数直到所有结果都已记录完毕。而对于没有返回值的语句，执行一次即可。
+    sqlite3_column() //对与select语句，在使用sqlite3_step语句运行之后，需要将结果读出来。实际上不存在一个叫sqlite3_column()的函数，这是一系列函数的代称，它们的共同作用就是从当前的结果中按列号取出值。比如一个select语句运行后，其中的一条结果为 01"what_if""male".这个结果包含三列，那么就可以利用该函数，找出特定某一列的值，根据值的类型不同，需要调用不同的函数，比如针对第一列，类型为整形，调用sqlite3_column_int(stmt,0)来返回第一列的值；而第二列是文本就相应地调用sqlite3_column_text(stmt,1)得到第二列文本信息。还有其他byte、double等函数。
+    sqlite3_finalize() //SQL语句的对象使用完毕之后，用sqlite3_finalizw()函数来销毁。如果把sqlite3_stmt看作是对象的话，这个函数就相当于是它的析构函数，在结束使用sqlite3_stmt之后，一定要调用该函数，否则会造成内存泄漏。
+    sqlite3_close() //数据库操作结束后，需要使用sqlite3_close()来将数据库连接关闭，这是和sqlite_open()成对出现的。在关闭之前，需要使用sqlite3_finalize()来销毁sqlite3_stmt对象
+    sqlite3_exec() //是执行SQL语句的一种便捷方法，只需要将sql语句的字符串传递给函数即可。我们指定回调函数来处理执行后的返回值。不过一般情况下，sqlite3_exec()一般用来执行无返回值的语句，对于有返回值的操作(select)，常结合sqlite3_prepare、sqlite3_step()、sqlite3_clumn()获得执行结果
+

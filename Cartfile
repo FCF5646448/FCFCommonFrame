@@ -1,0 +1,5 @@
+github "realm/realm-cocoa"
+github "Hearst-DD/ObjectMapper" ~> 2.2
+github "rs/SDWebImage"
+github "jdg/MBProgressHUD" ~> 1.0.0
+github "Alamofire/Alamofire" ~> 4.4
