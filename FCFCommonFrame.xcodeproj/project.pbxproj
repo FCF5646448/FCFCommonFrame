@@ -673,6 +673,7 @@
 		1937CE8C1ECAE59000992949 /* TestControllers */ = {
 			isa = PBXGroup;
 			children = (
+				19C7B4F91EEFD79000CFBFB9 /* Spritekit */,
 				193718001EEA826A00C13430 /* AudioAndVideo */,
 				193717A91EE8E9DE00C13430 /* Animate */,
 				1937178A1EE794CB00C13430 /* JSON */,
@@ -872,6 +873,13 @@
 				19612C8F1EA611E700A842DE /* NSString+MJExtension.m */,
 			);
 			path = MJExtension;
+			sourceTree = "<group>";
+		};
+		19C7B4F91EEFD79000CFBFB9 /* Spritekit */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Spritekit;
 			sourceTree = "<group>";
 		};
 		19D1D28A1ED57BD9000188ED /* Search */ = {

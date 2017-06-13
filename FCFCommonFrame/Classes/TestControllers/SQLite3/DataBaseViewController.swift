@@ -45,6 +45,10 @@ extension DataBaseViewController:UITableViewDelegate,UITableViewDataSource{
             let vc = UserDefaultTestController()
             vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(vc, animated: true)
+        case "NSCode将对象存储到plist文件":
+            let vc = NSCodeToPlistController()
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
         case "sqlite3原生":
             let vc = SQlite3TestController()
             vc.hidesBottomBarWhenPushed = true
