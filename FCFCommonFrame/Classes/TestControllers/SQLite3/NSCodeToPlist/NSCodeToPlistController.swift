@@ -23,6 +23,7 @@ class NSCodeToPlistController: BaseViewController {
         tableView.tableFooterView = UIView()
         createRightBtn()
         createTestData()
+        save()
     }
 
     override func didReceiveMemoryWarning() {
@@ -32,8 +33,8 @@ class NSCodeToPlistController: BaseViewController {
     
     func createRightBtn(){
         rightBtn = UIButton.init(type: .custom)
-        rightBtn.frame = CGRect.init(x: 0, y: 0, width: 40, height: 40)
-        rightBtn.setTitle("保存", for: .normal)
+        rightBtn.frame = CGRect.init(x: 0, y: 0, width: 50, height: 40)
+        rightBtn.setTitle("加载", for: .normal)
         rightBtn.setTitleColor(UIColor.white, for: .normal)
         rightBtn.addTarget(self, action: #selector(rightBtnClicked), for: .touchUpInside)
         let rightBarBtn = UIBarButtonItem.init(customView: rightBtn)
@@ -41,13 +42,8 @@ class NSCodeToPlistController: BaseViewController {
     }
     
     func rightBtnClicked(){
-        if data.count > 0 {
-            rightBtn.setTitle("加载", for: .normal)
-            save()
-        }else{
-            load()
-            rightBtn.setTitle("保存", for: .normal)
-        }
+        
+        load()
     }
     
     func createTestData(){
@@ -88,7 +84,7 @@ class NSCodeToPlistController: BaseViewController {
             self.data = unarchive.decodeObject(forKey: "userList") as! [NSCodeDataModel]
             unarchive.finishDecoding()
             self.tableView.reloadData()
-            
+            rightBtn.isEnabled = false
             //每一次加载完成后就删掉
             try! defaultManager.removeItem(atPath: path)
         }
