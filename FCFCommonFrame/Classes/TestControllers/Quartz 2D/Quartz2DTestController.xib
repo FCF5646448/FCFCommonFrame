@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16G8c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Quartz2DTestController" customModule="FCFCommonFrame" customModuleProvider="target">
             <connections>
+                <outlet property="bgImage" destination="n60-u4-Afv" id="C94-BM-nNh"/>
                 <outlet property="imgView" destination="r4N-Tv-Xn0" id="SO4-gp-GVj"/>
                 <outlet property="segment" destination="w10-2c-9jZ" id="NgN-46-MAk"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -27,40 +28,42 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cDi-G7-gU8">
                             <rect key="frame" x="0.0" y="622" width="375" height="45"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdu-pL-FeH">
-                                    <rect key="frame" x="100" y="6.5" width="32" height="32"/>
-                                    <constraints>
-                                        <constraint firstAttribute="height" constant="32" id="7mJ-bS-jlA"/>
-                                        <constraint firstAttribute="width" constant="32" id="89w-Bu-V7p"/>
-                                    </constraints>
-                                    <state key="normal" image="backoutSelected"/>
-                                    <connections>
-                                        <action selector="backoutSelected:" destination="-1" eventType="touchUpInside" id="z8x-vh-4Zw"/>
-                                    </connections>
-                                </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a5r-Xn-rk9">
-                                    <rect key="frame" x="243" y="6.5" width="32" height="32"/>
+                                    <rect key="frame" x="187.5" y="7" width="187.5" height="32"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="32" id="jlh-xu-jvh"/>
-                                        <constraint firstAttribute="width" constant="32" id="koC-wi-7LY"/>
                                     </constraints>
                                     <state key="normal" image="redrawSelected"/>
                                     <connections>
                                         <action selector="redrawSelected:" destination="-1" eventType="touchUpInside" id="A2o-Ma-gyQ"/>
                                     </connections>
                                 </button>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdu-pL-FeH">
+                                    <rect key="frame" x="0.0" y="6.5" width="187.5" height="32"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="32" id="7mJ-bS-jlA"/>
+                                    </constraints>
+                                    <state key="normal" image="backoutSelected"/>
+                                    <connections>
+                                        <action selector="backoutSelected:" destination="-1" eventType="touchUpInside" id="z8x-vh-4Zw"/>
+                                    </connections>
+                                </button>
                             </subviews>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
+                                <constraint firstItem="a5r-Xn-rk9" firstAttribute="leading" secondItem="fdu-pL-FeH" secondAttribute="trailing" id="0X9-Ea-woq"/>
                                 <constraint firstItem="a5r-Xn-rk9" firstAttribute="centerY" secondItem="cDi-G7-gU8" secondAttribute="centerY" id="BqE-Yw-lOg"/>
-                                <constraint firstAttribute="trailing" secondItem="a5r-Xn-rk9" secondAttribute="trailing" constant="100" id="Jrb-r0-tyc"/>
-                                <constraint firstItem="fdu-pL-FeH" firstAttribute="leading" secondItem="cDi-G7-gU8" secondAttribute="leading" constant="100" id="lKc-hw-7bi"/>
+                                <constraint firstItem="a5r-Xn-rk9" firstAttribute="width" secondItem="fdu-pL-FeH" secondAttribute="width" id="JNs-Xb-ttI"/>
+                                <constraint firstItem="a5r-Xn-rk9" firstAttribute="leading" secondItem="fdu-pL-FeH" secondAttribute="trailing" id="PtM-R5-9RX"/>
+                                <constraint firstAttribute="trailing" secondItem="a5r-Xn-rk9" secondAttribute="trailing" id="SEB-4k-Xit"/>
                                 <constraint firstItem="fdu-pL-FeH" firstAttribute="centerY" secondItem="cDi-G7-gU8" secondAttribute="centerY" id="nKz-jH-Oj2"/>
+                                <constraint firstItem="fdu-pL-FeH" firstAttribute="leading" secondItem="cDi-G7-gU8" secondAttribute="leading" id="rpZ-n6-j8t"/>
                                 <constraint firstAttribute="height" constant="45" id="tK3-3r-9Rz"/>
                             </constraints>
                         </view>
                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="w10-2c-9jZ">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="41"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="Yff-M4-AMg"/>
                             </constraints>
@@ -73,6 +76,9 @@
                                 <segment title="橡皮擦"/>
                             </segments>
                         </segmentedControl>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="n60-u4-Afv">
+                            <rect key="frame" x="0.0" y="40" width="375" height="582"/>
+                        </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r4N-Tv-Xn0">
                             <rect key="frame" x="0.0" y="40" width="375" height="582"/>
                         </imageView>
@@ -85,9 +91,13 @@
                         <constraint firstItem="w10-2c-9jZ" firstAttribute="leading" secondItem="5JV-u7-3of" secondAttribute="leading" id="7XW-hV-Ani"/>
                         <constraint firstAttribute="trailing" secondItem="r4N-Tv-Xn0" secondAttribute="trailing" id="A75-jc-oHv"/>
                         <constraint firstItem="cDi-G7-gU8" firstAttribute="top" secondItem="r4N-Tv-Xn0" secondAttribute="bottom" id="JUW-1K-xst"/>
+                        <constraint firstAttribute="trailing" secondItem="n60-u4-Afv" secondAttribute="trailing" id="Kcl-0W-pxB"/>
                         <constraint firstItem="w10-2c-9jZ" firstAttribute="top" secondItem="5JV-u7-3of" secondAttribute="top" id="PeW-v6-8DB"/>
                         <constraint firstItem="r4N-Tv-Xn0" firstAttribute="top" secondItem="w10-2c-9jZ" secondAttribute="bottom" id="T2F-Cs-xVY"/>
+                        <constraint firstItem="n60-u4-Afv" firstAttribute="top" secondItem="w10-2c-9jZ" secondAttribute="bottom" id="igb-vb-2s1"/>
+                        <constraint firstItem="n60-u4-Afv" firstAttribute="leading" secondItem="5JV-u7-3of" secondAttribute="leading" id="kWF-uU-sc2"/>
                         <constraint firstAttribute="trailing" secondItem="cDi-G7-gU8" secondAttribute="trailing" id="odx-P1-Npd"/>
+                        <constraint firstItem="cDi-G7-gU8" firstAttribute="top" secondItem="n60-u4-Afv" secondAttribute="bottom" id="rNd-WE-im1"/>
                         <constraint firstAttribute="bottom" secondItem="cDi-G7-gU8" secondAttribute="bottom" id="zgm-hn-KAF"/>
                     </constraints>
                 </view>

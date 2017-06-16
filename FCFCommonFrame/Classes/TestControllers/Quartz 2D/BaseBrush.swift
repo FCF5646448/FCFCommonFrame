@@ -20,7 +20,7 @@ class BaseBrush: NSObject {
     var endPoint:CGPoint? //手指抬起的位置
     var lastPoint:CGPoint? //手指移动到当前位置之前的位置
     var strokeWidth:CGFloat? //画笔宽度
-    var contents:[CGContext] = [] //用来保存content的数组
+    var contents:[UIImage] = [] //用来保存Image的数组,每一次画完最后一点之后就把图片存起来
 }
 
 extension BaseBrush:PaintBrush{
