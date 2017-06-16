@@ -118,6 +118,10 @@
 		19612CC71EA7565C00A842DE /* RealmSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 19612CC31EA7565C00A842DE /* RealmSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		196640151EC5BD89002FB8F7 /* Image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 196640141EC5BD89002FB8F7 /* Image.xcassets */; };
 		197E0A741ECC8ACB005064B2 /* TextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */; };
+		19AB01F91EF386B2009974A0 /* Quartz2DTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */; };
+		19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */; };
+		19AB02061EF3CD38009974A0 /* BaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB02051EF3CD38009974A0 /* BaseBrush.swift */; };
+		19AB02081EF3DFC7009974A0 /* PencilBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB02071EF3DFC7009974A0 /* PencilBrush.swift */; };
 		19B4A7871E9F69140050F661 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B4A7861E9F69140050F661 /* BaseViewController.swift */; };
 		19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D28B1ED57C48000188ED /* BaseSearchController.swift */; };
 		19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D1D28C1ED57C48000188ED /* BaseSearchController.xib */; };
@@ -341,6 +345,10 @@
 		19612CC31EA7565C00A842DE /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
 		196640141EC5BD89002FB8F7 /* Image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Image.xcassets; sourceTree = "<group>"; };
 		197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewExtension.swift; sourceTree = "<group>"; };
+		19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quartz2DTestController.swift; sourceTree = "<group>"; };
+		19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Quartz2DTestController.xib; sourceTree = "<group>"; };
+		19AB02051EF3CD38009974A0 /* BaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBrush.swift; sourceTree = "<group>"; };
+		19AB02071EF3DFC7009974A0 /* PencilBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilBrush.swift; sourceTree = "<group>"; };
 		19B4A7861E9F69140050F661 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		19D1D28B1ED57C48000188ED /* BaseSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSearchController.swift; sourceTree = "<group>"; };
 		19D1D28C1ED57C48000188ED /* BaseSearchController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseSearchController.xib; sourceTree = "<group>"; };
@@ -673,6 +681,7 @@
 		1937CE8C1ECAE59000992949 /* TestControllers */ = {
 			isa = PBXGroup;
 			children = (
+				19AB01F61EF38697009974A0 /* Quartz 2D */,
 				19C7B4F91EEFD79000CFBFB9 /* Spritekit */,
 				193718001EEA826A00C13430 /* AudioAndVideo */,
 				193717A91EE8E9DE00C13430 /* Animate */,
@@ -873,6 +882,17 @@
 				19612C8F1EA611E700A842DE /* NSString+MJExtension.m */,
 			);
 			path = MJExtension;
+			sourceTree = "<group>";
+		};
+		19AB01F61EF38697009974A0 /* Quartz 2D */ = {
+			isa = PBXGroup;
+			children = (
+				19AB02051EF3CD38009974A0 /* BaseBrush.swift */,
+				19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */,
+				19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */,
+				19AB02071EF3DFC7009974A0 /* PencilBrush.swift */,
+			);
+			path = "Quartz 2D";
 			sourceTree = "<group>";
 		};
 		19C7B4F91EEFD79000CFBFB9 /* Spritekit */ = {
@@ -1149,6 +1169,7 @@
 				193718121EEE480400C13430 /* NSCodeToPlistController.xib in Resources */,
 				19612C381EA4A36900A842DE /* SecondController.xib in Resources */,
 				1937180D1EEA9C0600C13430 /* TextFieldtestController.xib in Resources */,
+				19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */,
 				193717F41EEA6F3000C13430 /* LabelTestController.xib in Resources */,
 				19DF90021EE6780F0044DA68 /* ScrollViewController.xib in Resources */,
 				193718091EEA828400C13430 /* AudioVideoTestController.xib in Resources */,
@@ -1248,6 +1269,7 @@
 				19DF8FFF1EE6780F0044DA68 /* MotionViewController.swift in Sources */,
 				193717EB1EEA3CFF00C13430 /* UserDefaultTestController.swift in Sources */,
 				19612CA61EA611E700A842DE /* MJRefreshBackStateFooter.m in Sources */,
+				19AB01F91EF386B2009974A0 /* Quartz2DTestController.swift in Sources */,
 				193718111EEE480400C13430 /* NSCodeToPlistController.swift in Sources */,
 				193717AC1EE8EA3F00C13430 /* AnimateTestController.swift in Sources */,
 				190C4A711E9F4EF700C0C6D9 /* MineTabBarController.swift in Sources */,
@@ -1321,8 +1343,10 @@
 				19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */,
 				19DA35431ECE986B00A56A93 /* MsgTableViewCell.swift in Sources */,
 				1957EB561ED813FE00CD65FF /* CollectionViewPUBULIUController.swift in Sources */,
+				19AB02081EF3DFC7009974A0 /* PencilBrush.swift in Sources */,
 				19612CB31EA611E700A842DE /* NSObject+MJProperty.m in Sources */,
 				193717A71EE8E22700C13430 /* InterviewTestController.swift in Sources */,
+				19AB02061EF3CD38009974A0 /* BaseBrush.swift in Sources */,
 				193718081EEA828400C13430 /* AudioVideoTestController.swift in Sources */,
 				19612CA81EA611E700A842DE /* MJRefreshNormalHeader.m in Sources */,
 				19DA35471ECEC56200A56A93 /* TableHeaderViewCell.swift in Sources */,
