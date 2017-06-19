@@ -122,6 +122,8 @@
 		19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */; };
 		19AB02061EF3CD38009974A0 /* BaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB02051EF3CD38009974A0 /* BaseBrush.swift */; };
 		19AB02081EF3DFC7009974A0 /* PencilBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB02071EF3DFC7009974A0 /* PencilBrush.swift */; };
+		19AB020C1EF76F3D009974A0 /* CALayerTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB020A1EF76F3D009974A0 /* CALayerTestController.swift */; };
+		19AB020D1EF76F3D009974A0 /* CALayerTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB020B1EF76F3D009974A0 /* CALayerTestController.xib */; };
 		19B4A7871E9F69140050F661 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B4A7861E9F69140050F661 /* BaseViewController.swift */; };
 		19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D28B1ED57C48000188ED /* BaseSearchController.swift */; };
 		19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D1D28C1ED57C48000188ED /* BaseSearchController.xib */; };
@@ -349,6 +351,8 @@
 		19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Quartz2DTestController.xib; sourceTree = "<group>"; };
 		19AB02051EF3CD38009974A0 /* BaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBrush.swift; sourceTree = "<group>"; };
 		19AB02071EF3DFC7009974A0 /* PencilBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilBrush.swift; sourceTree = "<group>"; };
+		19AB020A1EF76F3D009974A0 /* CALayerTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CALayerTestController.swift; sourceTree = "<group>"; };
+		19AB020B1EF76F3D009974A0 /* CALayerTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CALayerTestController.xib; sourceTree = "<group>"; };
 		19B4A7861E9F69140050F661 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		19D1D28B1ED57C48000188ED /* BaseSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSearchController.swift; sourceTree = "<group>"; };
 		19D1D28C1ED57C48000188ED /* BaseSearchController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseSearchController.xib; sourceTree = "<group>"; };
@@ -681,6 +685,7 @@
 		1937CE8C1ECAE59000992949 /* TestControllers */ = {
 			isa = PBXGroup;
 			children = (
+				19AB02091EF76F0D009974A0 /* CALayerAnimation */,
 				19AB01F61EF38697009974A0 /* Quartz 2D */,
 				19C7B4F91EEFD79000CFBFB9 /* Spritekit */,
 				193718001EEA826A00C13430 /* AudioAndVideo */,
@@ -893,6 +898,15 @@
 				19AB02071EF3DFC7009974A0 /* PencilBrush.swift */,
 			);
 			path = "Quartz 2D";
+			sourceTree = "<group>";
+		};
+		19AB02091EF76F0D009974A0 /* CALayerAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				19AB020A1EF76F3D009974A0 /* CALayerTestController.swift */,
+				19AB020B1EF76F3D009974A0 /* CALayerTestController.xib */,
+			);
+			path = CALayerAnimation;
 			sourceTree = "<group>";
 		};
 		19C7B4F91EEFD79000CFBFB9 /* Spritekit */ = {
@@ -1174,6 +1188,7 @@
 				19DF90021EE6780F0044DA68 /* ScrollViewController.xib in Resources */,
 				193718091EEA828400C13430 /* AudioVideoTestController.xib in Resources */,
 				196640151EC5BD89002FB8F7 /* Image.xcassets in Resources */,
+				19AB020D1EF76F3D009974A0 /* CALayerTestController.xib in Resources */,
 				193717AD1EE8EA3F00C13430 /* AnimateTestController.xib in Resources */,
 				19612C341EA49EA100A842DE /* FirstController.xib in Resources */,
 				193718051EEA826A00C13430 /* MusicDemoController.xib in Resources */,
@@ -1313,6 +1328,7 @@
 				19DA353E1ECE872400A56A93 /* MessageItem.swift in Sources */,
 				19612C9E1EA611E700A842DE /* MJRefreshComponent.m in Sources */,
 				19612CB71EA611E700A842DE /* NSBundle+MJRefresh.m in Sources */,
+				19AB020C1EF76F3D009974A0 /* CALayerTestController.swift in Sources */,
 				19612CB41EA611E700A842DE /* NSString+MJExtension.m in Sources */,
 				19612CB81EA611E700A842DE /* UIScrollView+MJExtension.m in Sources */,
 				193717941EE796ED00C13430 /* JSONSerializationTestController.swift in Sources */,

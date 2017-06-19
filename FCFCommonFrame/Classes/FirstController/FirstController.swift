@@ -53,7 +53,7 @@ class FirstController: BaseViewController {
 
     func createData(){
         sectionData.removeAll()
-        let baseData:[String:[String]] = ["基础学习":["UI小控件的学习","Tableview使用","CollectionView使用"],"Demo实践":["加速传感器motion","webview","wkwebview","日历事件的使用","仿微信聊天页面","AnimateDemo","音视频相关"],"三方库的学习":["数据存储相关","JSON相关","XML相关","MJRefresh"],"iOS框架学习":["Quartz 2D"]]
+        let baseData:[String:[String]] = ["基础学习":["UI小控件的学习","Tableview使用","CollectionView使用"],"Demo实践":["加速传感器motion","webview","wkwebview","日历事件的使用","仿微信聊天页面","AnimateDemo","音视频相关"],"三方库的学习":["数据存储相关","JSON相关","XML相关","MJRefresh"],"iOS框架学习":["Quartz 2D","图层与动画"]]
         for sectionObj in baseData.reversed() {
             var items = [FitemObj]()
             for sectionItem in sectionObj.value {
@@ -166,6 +166,10 @@ extension FirstController:UITableViewDelegate,UITableViewDataSource{
             self.navigationController?.pushViewController(vc, animated: true)
         case "Quartz 2D":
             let vc = Quartz2DTestController()
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        case "图层与动画":
+            let vc = CALayerTestController()
             vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(vc, animated: true)
         default:
