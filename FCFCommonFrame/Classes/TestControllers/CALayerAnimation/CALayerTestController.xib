@@ -1,12 +1,20 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11134" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16G8c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11106"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CALayerTestController" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CALayerTestController" customModule="FCFCommonFrame" customModuleProvider="target">
             <connections>
+                <outlet property="clock" destination="IIC-eu-x0k" id="nzL-aX-4pQ"/>
+                <outlet property="hour" destination="oKN-YV-aeB" id="DHu-Z2-FMK"/>
+                <outlet property="min" destination="OsT-lr-QVa" id="a2b-WT-1FM"/>
+                <outlet property="second" destination="M0x-iR-05v" id="SU7-PU-pM2"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -14,7 +22,54 @@
         <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clock" translatesAutoresizingMaskIntoConstraints="NO" id="IIC-eu-x0k">
+                    <rect key="frame" x="86" y="232" width="203" height="203"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="203" id="fLD-xG-MdU"/>
+                        <constraint firstAttribute="width" constant="203" id="xfi-ny-gwO"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hour" translatesAutoresizingMaskIntoConstraints="NO" id="oKN-YV-aeB">
+                    <rect key="frame" x="172" y="308.5" width="30" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="7hz-59-pWT"/>
+                        <constraint firstAttribute="width" constant="30" id="vFg-t6-qvl"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="min" translatesAutoresizingMaskIntoConstraints="NO" id="OsT-lr-QVa">
+                    <rect key="frame" x="177.5" y="300.5" width="20" height="65"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="20" id="9GJ-iR-dX9"/>
+                        <constraint firstAttribute="height" constant="65" id="GR6-TL-TO8"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="second" translatesAutoresizingMaskIntoConstraints="NO" id="M0x-iR-05v">
+                    <rect key="frame" x="147.5" y="323.5" width="80" height="20"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="dXt-Pk-qIR"/>
+                        <constraint firstAttribute="width" constant="80" id="prn-Lp-rXi"/>
+                    </constraints>
+                </imageView>
+            </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="IIC-eu-x0k" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="0Sd-BQ-5JG"/>
+                <constraint firstItem="IIC-eu-x0k" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="5J8-yJ-hhM"/>
+                <constraint firstItem="OsT-lr-QVa" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="5Zm-nC-Nvo"/>
+                <constraint firstItem="oKN-YV-aeB" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Mo8-3h-9i5"/>
+                <constraint firstItem="oKN-YV-aeB" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="eSg-i1-HrC"/>
+                <constraint firstItem="M0x-iR-05v" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="eXO-Tl-Vch"/>
+                <constraint firstItem="M0x-iR-05v" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="o0B-Eo-dGR"/>
+                <constraint firstItem="OsT-lr-QVa" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="pY7-fu-nAj"/>
+            </constraints>
+            <point key="canvasLocation" x="65.5" y="74.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="clock" width="200" height="200"/>
+        <image name="hour" width="1024" height="1024"/>
+        <image name="min" width="1024" height="1024"/>
+        <image name="second" width="1024" height="1024"/>
+    </resources>
 </document>
