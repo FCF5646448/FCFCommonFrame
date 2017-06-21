@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="clock" destination="IIC-eu-x0k" id="nzL-aX-4pQ"/>
                 <outlet property="hour" destination="oKN-YV-aeB" id="DHu-Z2-FMK"/>
+                <outlet property="imageView" destination="9Hp-q7-MJr" id="Szb-Lv-1Yz"/>
                 <outlet property="min" destination="OsT-lr-QVa" id="a2b-WT-1FM"/>
                 <outlet property="second" destination="M0x-iR-05v" id="SU7-PU-pM2"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -51,6 +52,13 @@
                         <constraint firstAttribute="width" constant="80" id="prn-Lp-rXi"/>
                     </constraints>
                 </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9Hp-q7-MJr">
+                    <rect key="frame" x="67.5" y="31" width="240" height="128"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="128" id="Mxg-Gc-vYv"/>
+                        <constraint firstAttribute="width" constant="240" id="wfz-90-RBN"/>
+                    </constraints>
+                </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -60,6 +68,8 @@
                 <constraint firstItem="oKN-YV-aeB" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="Mo8-3h-9i5"/>
                 <constraint firstItem="oKN-YV-aeB" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="eSg-i1-HrC"/>
                 <constraint firstItem="M0x-iR-05v" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="eXO-Tl-Vch"/>
+                <constraint firstItem="9Hp-q7-MJr" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="fS3-o2-uoQ"/>
+                <constraint firstItem="9Hp-q7-MJr" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="31" id="mf4-mB-tAG"/>
                 <constraint firstItem="M0x-iR-05v" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="o0B-Eo-dGR"/>
                 <constraint firstItem="OsT-lr-QVa" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="pY7-fu-nAj"/>
             </constraints>

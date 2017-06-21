@@ -23,12 +23,15 @@ class CALayerTestController: BaseViewController {
     
     @IBOutlet weak var second: UIImageView!
     
+    @IBOutlet weak var imageView: UIImageView!
     var timer:Timer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "CALayer的基本使用"
         changeAnchorPoint()
         createLayer()
+        createMask()
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(tick), userInfo: nil, repeats: true)
     }
 
@@ -45,8 +48,20 @@ class CALayerTestController: BaseViewController {
 //CALayer的基础属性
 extension CALayerTestController:CALayerDelegate{
     func createLayer(){
+        
+        let newShadowViewLayer = UIView()
+        newShadowViewLayer.backgroundColor = UIColor.white //必须要有颜色或其他填充物，否则就没有寄宿图，而阴影正好是围绕寄宿图的轮廓来确定的
+        newShadowViewLayer.frame = CGRect(x: (ContentWidth-200)/2, y: (ContentHeight-200)/2+220, width: 200, height: 200)
+        newShadowViewLayer.layer.shadowOffset = CGSize(width: 5, height: 5)
+        newShadowViewLayer.layer.shadowOpacity = 0.5
+        newShadowViewLayer.layer.shadowColor = UIColor.black.cgColor
+        newShadowViewLayer.layer.shadowRadius = 0
+        newShadowViewLayer.layer.cornerRadius = 4.0
+        newShadowViewLayer.layer.masksToBounds = false
+        self.view.addSubview(newShadowViewLayer) //注意不是加在layerView上,而且在layerView的更底部图层上，如果和self.view.addSubview(layerView)调个位置，则一样没有效果
+        
         layerView = UIView(frame: CGRect(x: (ContentWidth-200)/2, y: (ContentHeight-200)/2+220, width: 200, height: 200))
-        layerView.backgroundColor = UIColor.blue
+        layerView.backgroundColor = UIColor.red
         self.view.addSubview(layerView)
         
         blueLayer = CALayer()
@@ -63,10 +78,12 @@ extension CALayerTestController:CALayerDelegate{
         //        blueLayer.contentsCenter = CGRect.init(x: 0.25, y: 0.25, width: 0.5, height: 0.5) //它定义了一个图片可拉伸的区域
         blueLayer.delegate = self
         
-        layerView.layer.shadowOffset = CGSize.init(width: 5, height: 5)
-        layerView.layer.shadowColor = UIColor.gray.cgColor
+        layerView.layer.shadowOffset = CGSize(width: 5, height: 5)
+        layerView.layer.shadowOpacity = 0.9
+        layerView.layer.shadowColor = UIColor.black.cgColor
+        layerView.layer.shadowRadius = 0 //阴影和视图直接的边界线，为0边界线最明显
         layerView.layer.cornerRadius = 4.0
-//        layerView.layer.masksToBounds = true
+        layerView.layer.masksToBounds = true //这样子阴影效果就被剪裁掉了
         
     }
     
@@ -102,11 +119,15 @@ extension CALayerTestController{
         self.min.layer.anchorPoint = CGPoint(x: 0.5, y: 0.8)
         self.second.layer.anchorPoint = CGPoint(x: 0.1, y: 0.5)
         
-        //给钟表添加一个圆形的阴影，原本放置钟表图的UIImageView是一个正方形
+        //给钟表添加一个圆形的阴影
         self.clock.layer.shadowOpacity = 0.5
         let circlePath = CGMutablePath() //CGPath
         circlePath.addEllipse(in: self.clock.bounds)
-        self.clock.layer.shadowPath = circlePath
+//        self.clock.layer.shadowPath = circlePath
+        //给钟表添加一个矩形的阴影
+        let squarePath = CGMutablePath()
+        squarePath.addRect(self.clock.bounds)
+        self.clock.layer.shadowPath = squarePath
     }
     
     func tick(){
@@ -120,6 +141,17 @@ extension CALayerTestController{
         self.hour.transform = CGAffineTransform(rotationAngle: hourAngle)
         self.min.transform = CGAffineTransform(rotationAngle: minAngle)
         self.second.transform = CGAffineTransform(rotationAngle: secondAngle)
+    }
+}
+
+//蒙版
+extension CALayerTestController{
+    func createMask(){
+        let maskLayer = CALayer()
+        maskLayer.frame = CGRect.init(x: 10, y: 10, width: 100, height: 100)
+        let maskImg = UIImage.init(named: "deer")
+        maskLayer.contents = maskImg?.cgImage
         
+        self.imageView.layer.mask = maskLayer
     }
 }
