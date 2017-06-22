@@ -11,6 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CAShapeLayerTestController" customModule="FCFCommonFrame" customModuleProvider="target">
             <connections>
+                <outlet property="bgImg" destination="him-bg-KF6" id="Mqo-iH-z8J"/>
+                <outlet property="drawLayer" destination="tsp-xu-C6d" id="b9x-PS-LNL"/>
+                <outlet property="segment" destination="uEl-OV-Gp8" id="LMb-yr-Y9B"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -21,9 +24,34 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wQj-jq-ald">
                     <rect key="frame" x="0.0" y="627" width="375" height="40"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cnJ-Pd-7Ax">
+                            <rect key="frame" x="0.0" y="0.0" width="187.5" height="40"/>
+                            <state key="normal" image="backoutSelected"/>
+                            <connections>
+                                <action selector="backBtnClicked:" destination="-1" eventType="touchUpInside" id="HXb-1p-6bX"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pLE-Ei-BIy">
+                            <rect key="frame" x="187.5" y="0.0" width="187.5" height="40"/>
+                            <state key="normal" image="redrawSelected"/>
+                            <connections>
+                                <action selector="forwardBtnClicked:" destination="-1" eventType="touchUpInside" id="akL-vd-srk"/>
+                            </connections>
+                        </button>
+                    </subviews>
                     <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
+                        <constraint firstItem="cnJ-Pd-7Ax" firstAttribute="top" secondItem="wQj-jq-ald" secondAttribute="top" id="1AG-zl-Eny"/>
                         <constraint firstAttribute="height" constant="40" id="744-KU-CtD"/>
+                        <constraint firstAttribute="bottom" secondItem="cnJ-Pd-7Ax" secondAttribute="bottom" id="I47-rb-cZm"/>
+                        <constraint firstItem="cnJ-Pd-7Ax" firstAttribute="leading" secondItem="wQj-jq-ald" secondAttribute="leading" id="K1x-nt-NGJ"/>
+                        <constraint firstItem="pLE-Ei-BIy" firstAttribute="top" secondItem="wQj-jq-ald" secondAttribute="top" id="SBS-bY-TVw"/>
+                        <constraint firstAttribute="trailing" secondItem="pLE-Ei-BIy" secondAttribute="trailing" id="WXA-JX-2AK"/>
+                        <constraint firstAttribute="bottom" secondItem="pLE-Ei-BIy" secondAttribute="bottom" id="YxU-5u-nSg"/>
+                        <constraint firstItem="pLE-Ei-BIy" firstAttribute="leading" secondItem="cnJ-Pd-7Ax" secondAttribute="trailing" id="ZM2-cs-fz4"/>
+                        <constraint firstItem="pLE-Ei-BIy" firstAttribute="leading" secondItem="cnJ-Pd-7Ax" secondAttribute="trailing" id="ijn-tg-NWz"/>
+                        <constraint firstItem="pLE-Ei-BIy" firstAttribute="width" secondItem="cnJ-Pd-7Ax" secondAttribute="width" id="tlN-xJ-OBL"/>
                     </constraints>
                 </view>
                 <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uEl-OV-Gp8">
@@ -45,6 +73,9 @@
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="him-bg-KF6">
                     <rect key="frame" x="0.0" y="38" width="375" height="589"/>
                 </imageView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsp-xu-C6d" customClass="DrawLayerView" customModule="FCFCommonFrame" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="39" width="375" height="588"/>
+                </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
@@ -54,12 +85,20 @@
                 <constraint firstItem="uEl-OV-Gp8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="-4" id="FLR-Th-SMJ"/>
                 <constraint firstAttribute="trailing" secondItem="uEl-OV-Gp8" secondAttribute="trailing" constant="-4" id="MeL-Me-3qD"/>
                 <constraint firstItem="wQj-jq-ald" firstAttribute="top" secondItem="him-bg-KF6" secondAttribute="bottom" id="TKV-Dv-mgM"/>
+                <constraint firstItem="wQj-jq-ald" firstAttribute="top" secondItem="tsp-xu-C6d" secondAttribute="bottom" id="W60-ET-oqK"/>
+                <constraint firstItem="tsp-xu-C6d" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="c2y-El-X3u"/>
+                <constraint firstItem="tsp-xu-C6d" firstAttribute="top" secondItem="uEl-OV-Gp8" secondAttribute="bottom" id="m3n-Ir-p9v"/>
                 <constraint firstItem="uEl-OV-Gp8" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="-1" id="nfI-UH-JHN"/>
                 <constraint firstItem="him-bg-KF6" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="oQh-F6-HVu"/>
                 <constraint firstItem="wQj-jq-ald" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="smF-bO-H0v"/>
                 <constraint firstAttribute="trailing" secondItem="him-bg-KF6" secondAttribute="trailing" id="tW9-YO-Jf2"/>
+                <constraint firstAttribute="trailing" secondItem="tsp-xu-C6d" secondAttribute="trailing" id="uxC-vn-Axb"/>
             </constraints>
             <point key="canvasLocation" x="65.5" y="74.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="backoutSelected" width="32" height="32"/>
+        <image name="redrawSelected" width="32" height="32"/>
+    </resources>
 </document>

@@ -65,7 +65,7 @@ class AlertControllerTest: BaseViewController {
         let alert = UIAlertController.init(title: "提示信息", message: nil, preferredStyle: .alert)
         self.present(alert, animated: true, completion: nil)
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) { 
-            self.presentedViewController?.dismiss(animated: false, completion: nil)
+            alert.dismiss(animated: false, completion: nil)
         }
     }
 }

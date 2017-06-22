@@ -121,6 +121,7 @@
 		1978C4791EFA52C60076B728 /* CAShapeLayerTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1978C4771EFA52C60076B728 /* CAShapeLayerTestController.xib */; };
 		1978C47B1EFA5CE80076B728 /* FCFBaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978C47A1EFA5CE80076B728 /* FCFBaseBrush.swift */; };
 		1978C48C1EFA81320076B728 /* DrawLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978C48B1EFA81320076B728 /* DrawLayerView.swift */; };
+		1978C48E1EFB648A0076B728 /* CurveBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978C48D1EFB648A0076B728 /* CurveBrush.swift */; };
 		197E0A741ECC8ACB005064B2 /* TextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */; };
 		19AB01F91EF386B2009974A0 /* Quartz2DTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */; };
 		19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */; };
@@ -354,6 +355,7 @@
 		1978C4771EFA52C60076B728 /* CAShapeLayerTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CAShapeLayerTestController.xib; sourceTree = "<group>"; };
 		1978C47A1EFA5CE80076B728 /* FCFBaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCFBaseBrush.swift; sourceTree = "<group>"; };
 		1978C48B1EFA81320076B728 /* DrawLayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawLayerView.swift; sourceTree = "<group>"; };
+		1978C48D1EFB648A0076B728 /* CurveBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurveBrush.swift; sourceTree = "<group>"; };
 		197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewExtension.swift; sourceTree = "<group>"; };
 		19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quartz2DTestController.swift; sourceTree = "<group>"; };
 		19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Quartz2DTestController.xib; sourceTree = "<group>"; };
@@ -904,6 +906,7 @@
 				1978C4761EFA52C60076B728 /* CAShapeLayerTestController.swift */,
 				1978C4771EFA52C60076B728 /* CAShapeLayerTestController.xib */,
 				1978C47A1EFA5CE80076B728 /* FCFBaseBrush.swift */,
+				1978C48D1EFB648A0076B728 /* CurveBrush.swift */,
 				1978C48B1EFA81320076B728 /* DrawLayerView.swift */,
 			);
 			path = CAShapeLayer;
@@ -1378,6 +1381,7 @@
 				19612CB91EA611E700A842DE /* UIScrollView+MJRefresh.m in Sources */,
 				19DF8FE71EE652FC0044DA68 /* SQLTable.swift in Sources */,
 				19DF90321EE6A46B0044DA68 /* DDXMLElement.m in Sources */,
+				1978C48E1EFB648A0076B728 /* CurveBrush.swift in Sources */,
 				19DF8FE01EE64FE80044DA68 /* DataBaseViewController.swift in Sources */,
 				19612CAD1EA611E700A842DE /* MJProperty.m in Sources */,
 				19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */,

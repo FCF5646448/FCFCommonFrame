@@ -8,12 +8,6 @@
 
 import UIKit
 
-enum DrawingState{
-    case begin
-    case moved
-    case ended
-}
-
 //画图的原理就是每次从上一点画到下一点
 class Quartz2DTestController: BaseViewController {
 

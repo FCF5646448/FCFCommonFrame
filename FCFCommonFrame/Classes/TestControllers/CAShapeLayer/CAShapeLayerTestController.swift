@@ -8,63 +8,111 @@
 
 import UIKit
 
+
+var drawArray:[String:AnyObject] = [:] //全局存放画的任何东西
+
 class CAShapeLayerTestController: BaseViewController {
     
-    var path = UIBezierPath() 
-    let shapeLayer:CAShapeLayer = CAShapeLayer() //最好只有一层
+    @IBOutlet weak var segment: UISegmentedControl!
     
-    var drawingState:DrawingState? //当前绘画状态
+    @IBOutlet weak var bgImg: UIImageView!
+    
+    @IBOutlet weak var drawLayer: DrawLayerView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "CAShapeLayer的基本使用"
         
-        shapeLayer.strokeColor = UIColor.red.cgColor
-        shapeLayer.lineWidth = 3
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.lineCap = kCALineCapRound
-        shapeLayer.lineJoin = kCALineJoinRound
-        self.view.layer.addSublayer(shapeLayer)
+        
+    }
+    
+    func loadUI(){
+        self.bgImg.image = UIImage(named:"qupu")
+        segment.addTarget(self, action: #selector(segmentSelectedChanged), for: .valueChanged)
+        segment.selectedSegmentIndex = 0
+        segmentSelectedChanged(sender: segment)
+        
+        let btn = UIButton.init(type: .custom)
+        btn.frame = CGRect.init(x: 0, y: 0, width: 60, height: 40)
+        btn.setTitle("保存", for: .normal)
+        btn.addTarget(self, action: #selector(saveDrawToXML), for: .touchUpInside)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: btn)
+        
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
     }
-}
-
-extension CAShapeLayerTestController{
-    //画
-    func getDraw() {
-        shapeLayer.path = self.path.cgPath
-    }
-}
-
-extension CAShapeLayerTestController{
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let point = touches.first?.location(in: self.view)
-        self.drawingState = .begin
-        path.move(to: point!)
-        getDraw()
+    
+    func segmentSelectedChanged(sender:UISegmentedControl){
+        switch sender.selectedSegmentIndex {
+        case 0:
+            print("铅笔")
+            drawLayer.didSelectPen(linewidth: 3, strokecolor: UIColor.red.cgColor, penType: .Curve)
+        case 1:
+            print("音符")
+        case 2:
+            print("形状")
+            
+        case 3:
+            print("文本")
+        case 4:
+            print("橡皮擦")
+        default:
+            break
+        }
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let point = touches.first?.location(in: self.view)
-        self.drawingState = .moved
-        path.addLine(to: point!)
-        getDraw()
-    }
-    
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let point = touches.first?.location(in: self.view)
-        self.drawingState = .ended
-        path.addLine(to: point!)
-        getDraw()
+    //撤销最后一笔
+    @IBAction func backBtnClicked(_ sender: Any) {
         
     }
     
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        print("取消")
+    //重新把刚才撤销的笔画画上去
+    @IBAction func forwardBtnClicked(_ sender: Any) {
+        
     }
 }
+
+extension CAShapeLayerTestController{
+    //从XML文件中加载数据
+    func loadDrawFromText(){
+//        let userDefault = UserDefaults.standard
+//        if let index:Int = userDefault.integer(forKey: "Current"){
+//            if let pointStr = self.getMutablePointStr(index: index){
+//                var pointArr:[String] = pointStr.components(separatedBy: "^")
+//                for str in pointArr {
+//                    let point:CGPoint = CGPointFromString(str)
+//                }
+//            }
+//            
+//        }
+    }
+    
+    //从userdefault中获取这个笔画的
+    func getMutablePointStr(index:Int)->NSMutableString?{
+        let userDefault = UserDefaults.standard
+        if let pointStrArr:[NSMutableString] = userDefault.array(forKey: "pointStrArr") as? [NSMutableString]{
+            if index < pointStrArr.count {
+                let pointStr:NSMutableString = pointStrArr[index]
+                return pointStr
+            }
+            return nil
+        }
+        return nil
+    }
+    
+    //将画的所有的东西按原始顺序存到xml文件中
+    func saveDrawToXML(){
+        
+    }
+    
+    func loadXML(){
+        //从服务器加载xml文件，将文件存到本地
+        //从本地加载xml文件
+        
+    }
+}
+
 
