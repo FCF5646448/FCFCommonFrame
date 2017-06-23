@@ -16,31 +16,73 @@ enum DrawingState{
 
 //画笔类型
 enum DrawShapeType{
-    case Curve //曲线
-    case Line //直线
-    case Ellipse //椭圆
-    case Rect  //矩形
+    case Curve //曲线,CAShapeLayer
+    case Line //直线,CAShapeLayer
+    case Ellipse //椭圆,CAShapeLayer
+    case Rect  //矩形,CAShapeLayer
+    case Eraser //橡皮擦 ,CAShapeLayer
+    case Text //文本 CATextLayer(待定)
+    case Note //音符 (待定)
 }
 
 
 //画笔的基类
 class FCFBaseBrush: NSObject {
-    var strokeWidth:CGFloat? //画笔宽度
-    var strokeColor:CGColor? //画笔颜色
+    var penType:DrawShapeType = .Curve //默认为画曲线
+    var strokeWidth:CGFloat = 1 //画笔宽度
+    var strokeColor:String = "000000" //画笔颜色,十六进制,默认是黑色，0是透明色
     var pointsArr:[(state:DrawingState,point:CGPoint)] = []//放置点的数组
-    var path:UIBezierPath? //每个画笔对应一个特定的path
+    var basePath:UIBezierPath = UIBezierPath() //每个画笔对应一个特定的path
+//    func addPointToArr(point:CGPoint,state:DrawingState){
+//    
+//    }
+//    func drawInShape(shape:inout CAShapeLayer){
+//        
+//    }
+//    func saveCurrentDraw(){
+//        
+//    }
     
-    func addPointToArr(point:CGPoint,state:DrawingState){//将点加到数组里
-//        print("子类必须重写")
+    func addPointToArr(point:CGPoint,state:DrawingState){
+        switch self.penType {
+        case .Curve:
+            self.pointsArr.append((state,point))
+            switch state {
+            case .begin:
+                self.pointsArr.removeAll()
+                basePath.move(to: point)
+            case .moved:
+                basePath.addLine(to: point)
+            case .ended:
+                basePath.addLine(to: point)
+            }
+            break
+        default:
+            break
+        }
+        
     }
     
-    func drawInShape(shape:inout CAShapeLayer){//绘画，将layer传进去
-//        print("子类必须重写")
-        shape.strokeColor = self.strokeColor
-        shape.lineWidth = self.strokeWidth!
+    func drawInShape()->CAShapeLayer{
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.lineCap = kCALineCapRound
+        shapeLayer.lineJoin = kCALineJoinRound
+        shapeLayer.strokeColor = UIColor.haxString(hex: self.strokeColor).cgColor
+        shapeLayer.lineWidth = self.strokeWidth
+        
+        shapeLayer.path = self.basePath.cgPath
+        return shapeLayer
     }
-    func supportedContinDrawing()->Bool{//是否连续绘画
-        return false
+    
+    func saveCurrentDraw(){
+        //可以存到全局数组里，等后面进入后台以后，再写进xml文件中
+        var pointArr:[CGPoint] = []
+        for item in self.pointsArr {
+            pointArr.append(item.point)
+        }
+        DrawArray.append((type: .Curve, colorStr: self.strokeColor, strokeWidth: self.strokeWidth, points: pointArr)) //将笔画数组存起来
+        currentIndex = DrawArray.count
     }
 }
 
