@@ -13,8 +13,6 @@ var currentIndex:Int = 0 //DrawShapeType.count
 
 class CAShapeLayerTestController: BaseViewController {
     
-    @IBOutlet weak var segment: UISegmentedControl!
-    
     @IBOutlet weak var bgImg: UIImageView!
     
     @IBOutlet weak var drawLayer: DrawLayerView!
@@ -23,23 +21,11 @@ class CAShapeLayerTestController: BaseViewController {
         super.viewDidLoad()
         title = "CAShapeLayer的基本使用"
         loadUI()
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationWillTerminate, object: nil, queue: OperationQueue.main) { (notifation) in
-            self.saveDrawToXML() //app被干掉的时候，将数组写进XML文件里
-        }
     }
     
     func loadUI(){
         self.bgImg.image = UIImage(named:"qupu")
-        segment.addTarget(self, action: #selector(segmentSelectedChanged), for: .valueChanged)
-        segment.selectedSegmentIndex = 0
-        segmentSelectedChanged(sender: segment)
-        
-        let btn = UIButton.init(type: .custom)
-        btn.frame = CGRect.init(x: 0, y: 0, width: 60, height: 40)
-        btn.setTitle("保存", for: .normal)
-        btn.addTarget(self, action: #selector(saveDrawToXML), for: .touchUpInside)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem.init(customView: btn)
-        
+        drawLayer.didSelectPen(linewidth: 3, strokecolor: "000000", penType: .Curve)
     }
 
     override func didReceiveMemoryWarning() {
@@ -53,27 +39,6 @@ class CAShapeLayerTestController: BaseViewController {
             //先找本地有木有，没有就找内存的
             currentIndex = DrawArray.count
             drawFromDrawArray(index:currentIndex)
-        }else{
-            loadXML()
-        }
-    }
-    
-    func segmentSelectedChanged(sender:UISegmentedControl){
-        switch sender.selectedSegmentIndex {
-        case 0:
-            print("铅笔")
-            drawLayer.didSelectPen(linewidth: 3, strokecolor: "000000", penType: .Curve)
-        case 1:
-            print("音符")
-        case 2:
-            print("形状")
-            
-        case 3:
-            print("文本")
-        case 4:
-            print("橡皮擦")
-        default:
-            break
         }
     }
     
@@ -99,18 +64,6 @@ class CAShapeLayerTestController: BaseViewController {
 }
 
 extension CAShapeLayerTestController{
-    //从XML文件中加载数据
-    func loadDrawFromText(){
-//        let userDefault = UserDefaults.standard
-//        if let index:Int = userDefault.integer(forKey: "Current"){
-//            if let pointStr = self.getMutablePointStr(index: index){
-//                var pointArr:[String] = pointStr.components(separatedBy: "^")
-//                for str in pointArr {
-//                    let point:CGPoint = CGPointFromString(str)
-//                }
-//            }
-//        }
-    }
     
     //将DrawArray里的内容画到画布上去
     func drawFromDrawArray(index:Int){
@@ -125,7 +78,7 @@ extension CAShapeLayerTestController{
                 var colorStr = item.colorStr
                 if i >= index  {
                     //无色
-                    colorStr = "0"
+                    colorStr = MainColor //会把颜色冲掉
                 }
                 drawLayer.didSelectPen(linewidth: item.strokeWidth, strokecolor: colorStr, penType: .Curve)
                 var i = 0
@@ -170,28 +123,6 @@ extension CAShapeLayerTestController{
         return nil
     }
     
-    ////将保存的笔画存到xml文件里
-    func saveDrawToXML(){
-        //将点转成字符串
-        for item in DrawArray {
-            
-        }
-//        var pointStrArr:[NSMutableString] = []
-//        let pointStr = NSMutableString()
-//        for item in DrawArray {
-//            let str = NSStringFromCGPoint(item.point)
-//            pointStr.append(str)
-//            if item != self.pointsArr.last! {
-//                pointStr.append("^") //将所有的点按^分割开来
-//            }
-//        }
-    }
-    
-    func loadXML(){
-        //从服务器加载xml文件，将文件存到本地
-        //从本地加载xml文件
-        
-    }
 }
 
 

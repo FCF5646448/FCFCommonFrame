@@ -10,23 +10,23 @@ import UIKit
 
 //这个图层是加在最上面的
 class DrawLayerView: UIView {
-//    var textLayer:CATextLayer = CATextLayer() //文本
-//    var shapeLayer:CAShapeLayer?
+    var textLayer:CATextLayer = CATextLayer() //文本
+    var shapeLayer:CAShapeLayer?
     var brush:FCFBaseBrush = FCFBaseBrush()//画笔
     var ifSavePoint:Bool = true //是否需要保存数据，如果是从DrawArray里拿到的数据就不保存
     
     override func awakeFromNib() {
         super.awakeFromNib()
         self.backgroundColor = UIColor.clear
-//        shapeLayer = CAShapeLayer()
-//        shapeLayer?.frame = self.frame
-//        self.layer.addSublayer(shapeLayer!)
+        shapeLayer = CAShapeLayer()
+        shapeLayer?.frame = self.frame
+        self.layer.addSublayer(shapeLayer!)
     }
 
     func didSelectPen(linewidth:CGFloat = 1,strokecolor:String = "000000",penType:DrawShapeType = .Curve){
-//        shapeLayer?.fillColor = UIColor.clear.cgColor
-//        shapeLayer?.lineCap = kCALineCapRound
-//        shapeLayer?.lineJoin = kCALineJoinRound
+        shapeLayer?.fillColor = UIColor.clear.cgColor
+        shapeLayer?.lineCap = kCALineCapRound
+        shapeLayer?.lineJoin = kCALineJoinRound
         
         switch penType {
         case .Curve:
@@ -54,7 +54,8 @@ extension DrawLayerView{
     func addPoint(point:CGPoint,state:DrawingState){
         brush.addPointToArr(point: point, state: state)
         //这里应该就是调用画笔进行作画
-        self.layer.addSublayer(brush.drawInShape())
+        
+        brush.drawInShape(shape: &shapeLayer!)
         if state == .ended && ifSavePoint {
             //调用保存point
             brush.saveCurrentDraw()

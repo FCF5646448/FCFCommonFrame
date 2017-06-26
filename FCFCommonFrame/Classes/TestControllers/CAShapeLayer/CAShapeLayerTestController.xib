@@ -13,7 +13,6 @@
             <connections>
                 <outlet property="bgImg" destination="him-bg-KF6" id="Mqo-iH-z8J"/>
                 <outlet property="drawLayer" destination="tsp-xu-C6d" id="b9x-PS-LNL"/>
-                <outlet property="segment" destination="uEl-OV-Gp8" id="LMb-yr-Y9B"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -54,41 +53,22 @@
                         <constraint firstItem="pLE-Ei-BIy" firstAttribute="width" secondItem="cnJ-Pd-7Ax" secondAttribute="width" id="tlN-xJ-OBL"/>
                     </constraints>
                 </view>
-                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="uEl-OV-Gp8">
-                    <rect key="frame" x="-4" y="-1" width="383" height="41"/>
-                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="MfW-FY-BvX"/>
-                    </constraints>
-                    <segments>
-                        <segment title="铅笔">
-                            <size key="contentOffset" width="-1" height="0.0"/>
-                        </segment>
-                        <segment title="音符"/>
-                        <segment title="形状"/>
-                        <segment title="文本"/>
-                        <segment title="橡皮擦"/>
-                    </segments>
-                </segmentedControl>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="him-bg-KF6">
-                    <rect key="frame" x="0.0" y="38" width="375" height="589"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="627"/>
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tsp-xu-C6d" customClass="DrawLayerView" customModule="FCFCommonFrame" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="39" width="375" height="588"/>
+                    <rect key="frame" x="0.0" y="1" width="375" height="626"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="him-bg-KF6" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="38" id="294-V4-h40"/>
+                <constraint firstItem="him-bg-KF6" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="294-V4-h40"/>
                 <constraint firstAttribute="bottom" secondItem="wQj-jq-ald" secondAttribute="bottom" id="7lm-Ng-rvT"/>
+                <constraint firstItem="tsp-xu-C6d" firstAttribute="centerY" secondItem="him-bg-KF6" secondAttribute="centerY" id="EO6-OQ-RJx"/>
                 <constraint firstAttribute="trailing" secondItem="wQj-jq-ald" secondAttribute="trailing" id="Egh-d6-NdA"/>
-                <constraint firstItem="uEl-OV-Gp8" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="-4" id="FLR-Th-SMJ"/>
-                <constraint firstAttribute="trailing" secondItem="uEl-OV-Gp8" secondAttribute="trailing" constant="-4" id="MeL-Me-3qD"/>
                 <constraint firstItem="wQj-jq-ald" firstAttribute="top" secondItem="him-bg-KF6" secondAttribute="bottom" id="TKV-Dv-mgM"/>
                 <constraint firstItem="wQj-jq-ald" firstAttribute="top" secondItem="tsp-xu-C6d" secondAttribute="bottom" id="W60-ET-oqK"/>
                 <constraint firstItem="tsp-xu-C6d" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="c2y-El-X3u"/>
-                <constraint firstItem="tsp-xu-C6d" firstAttribute="top" secondItem="uEl-OV-Gp8" secondAttribute="bottom" id="m3n-Ir-p9v"/>
-                <constraint firstItem="uEl-OV-Gp8" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="-1" id="nfI-UH-JHN"/>
                 <constraint firstItem="him-bg-KF6" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="oQh-F6-HVu"/>
                 <constraint firstItem="wQj-jq-ald" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="smF-bO-H0v"/>
                 <constraint firstAttribute="trailing" secondItem="him-bg-KF6" secondAttribute="trailing" id="tW9-YO-Jf2"/>

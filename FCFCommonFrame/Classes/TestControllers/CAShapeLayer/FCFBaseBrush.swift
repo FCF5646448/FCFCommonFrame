@@ -33,15 +33,6 @@ class FCFBaseBrush: NSObject {
     var strokeColor:String = "000000" //画笔颜色,十六进制,默认是黑色，0是透明色
     var pointsArr:[(state:DrawingState,point:CGPoint)] = []//放置点的数组
     var basePath:UIBezierPath = UIBezierPath() //每个画笔对应一个特定的path
-//    func addPointToArr(point:CGPoint,state:DrawingState){
-//    
-//    }
-//    func drawInShape(shape:inout CAShapeLayer){
-//        
-//    }
-//    func saveCurrentDraw(){
-//        
-//    }
     
     func addPointToArr(point:CGPoint,state:DrawingState){
         switch self.penType {
@@ -63,16 +54,11 @@ class FCFBaseBrush: NSObject {
         
     }
     
-    func drawInShape()->CAShapeLayer{
-        let shapeLayer = CAShapeLayer()
-        shapeLayer.fillColor = UIColor.clear.cgColor
-        shapeLayer.lineCap = kCALineCapRound
-        shapeLayer.lineJoin = kCALineJoinRound
-        shapeLayer.strokeColor = UIColor.haxString(hex: self.strokeColor).cgColor
-        shapeLayer.lineWidth = self.strokeWidth
+    func drawInShape(shape:inout CAShapeLayer){
+        shape.strokeColor = UIColor.haxString(hex: self.strokeColor).cgColor
+        shape.lineWidth = self.strokeWidth
         
-        shapeLayer.path = self.basePath.cgPath
-        return shapeLayer
+        shape.path = self.basePath.cgPath
     }
     
     func saveCurrentDraw(){
