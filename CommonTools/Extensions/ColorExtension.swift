@@ -20,8 +20,8 @@ extension UIColor{
     }
     //16进制字符串设置颜色
     class func haxString(hex:String) -> UIColor {
-        if hex.characters.count < 6 {
-            return UIColor.clear //如果数值少于6位就认为是透明色
+        if hex == "0" {
+            return UIColor.clear //如果为"0",就认为是透明色
         }
         let scanner:Scanner = Scanner(string: hex)
         var valueRGB:UInt32 = 0

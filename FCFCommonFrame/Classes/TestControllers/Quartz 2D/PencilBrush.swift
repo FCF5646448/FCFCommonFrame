@@ -8,6 +8,7 @@
 
 import UIKit
 
+//曲线
 class PencilBrush: BaseBrush {
     override func drawInContext(context: CGContext) {
         if let lastP = self.lastPoint {

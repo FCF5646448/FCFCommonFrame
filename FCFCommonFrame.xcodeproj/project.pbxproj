@@ -129,6 +129,7 @@
 		19AB020C1EF76F3D009974A0 /* CALayerTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB020A1EF76F3D009974A0 /* CALayerTestController.swift */; };
 		19AB020D1EF76F3D009974A0 /* CALayerTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB020B1EF76F3D009974A0 /* CALayerTestController.xib */; };
 		19AD69A51EFD1B9D00D796D2 /* CurveBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AD69A41EFD1B9D00D796D2 /* CurveBrush.swift */; };
+		19AD69A71F00E3D500D796D2 /* DrawContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AD69A61F00E3D500D796D2 /* DrawContext.swift */; };
 		19B4A7871E9F69140050F661 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B4A7861E9F69140050F661 /* BaseViewController.swift */; };
 		19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D28B1ED57C48000188ED /* BaseSearchController.swift */; };
 		19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D1D28C1ED57C48000188ED /* BaseSearchController.xib */; };
@@ -363,6 +364,7 @@
 		19AB020A1EF76F3D009974A0 /* CALayerTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CALayerTestController.swift; sourceTree = "<group>"; };
 		19AB020B1EF76F3D009974A0 /* CALayerTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CALayerTestController.xib; sourceTree = "<group>"; };
 		19AD69A41EFD1B9D00D796D2 /* CurveBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurveBrush.swift; sourceTree = "<group>"; };
+		19AD69A61F00E3D500D796D2 /* DrawContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawContext.swift; sourceTree = "<group>"; };
 		19B4A7861E9F69140050F661 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		19D1D28B1ED57C48000188ED /* BaseSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSearchController.swift; sourceTree = "<group>"; };
 		19D1D28C1ED57C48000188ED /* BaseSearchController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseSearchController.xib; sourceTree = "<group>"; };
@@ -915,9 +917,10 @@
 		19AB01F61EF38697009974A0 /* Quartz 2D */ = {
 			isa = PBXGroup;
 			children = (
-				19AB02051EF3CD38009974A0 /* BaseBrush.swift */,
 				19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */,
 				19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */,
+				19AD69A61F00E3D500D796D2 /* DrawContext.swift */,
+				19AB02051EF3CD38009974A0 /* BaseBrush.swift */,
 				19AB02071EF3DFC7009974A0 /* PencilBrush.swift */,
 			);
 			path = "Quartz 2D";
@@ -1332,6 +1335,7 @@
 				19612CA31EA611E700A842DE /* MJRefreshAutoStateFooter.m in Sources */,
 				190C4A6F1E9F4EF700C0C6D9 /* MineMainTabController.swift in Sources */,
 				190C4A701E9F4EF700C0C6D9 /* MineNavigationController.swift in Sources */,
+				19AD69A71F00E3D500D796D2 /* DrawContext.swift in Sources */,
 				193717EF1EEA6CB300C13430 /* ScrollViewTestController.swift in Sources */,
 				19612C9C1EA611E700A842DE /* MJRefreshAutoFooter.m in Sources */,
 				193717F91EEA7B7000C13430 /* ActivityIndicatorController.swift in Sources */,

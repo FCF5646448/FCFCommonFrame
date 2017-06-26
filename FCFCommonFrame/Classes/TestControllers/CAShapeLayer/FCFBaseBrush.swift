@@ -8,12 +8,6 @@
 
 import UIKit
 
-enum DrawingState{
-    case begin
-    case moved
-    case ended
-}
-
 //画笔类型
 enum DrawShapeType{
     case Curve //曲线,CAShapeLayer
@@ -24,8 +18,6 @@ enum DrawShapeType{
     case Text //文本 CATextLayer(待定)
     case Note //音符 (待定)
 }
-
-
 //画笔的基类
 class FCFBaseBrush: NSObject {
     var penType:DrawShapeType = .Curve //默认为画曲线

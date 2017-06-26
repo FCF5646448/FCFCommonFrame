@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12120" systemVersion="16G8c" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="Quartz2DTestController" customModule="FCFCommonFrame" customModuleProvider="target">
             <connections>
                 <outlet property="bgImage" destination="n60-u4-Afv" id="C94-BM-nNh"/>
-                <outlet property="imgView" destination="r4N-Tv-Xn0" id="SO4-gp-GVj"/>
+                <outlet property="drawContext" destination="r4N-Tv-Xn0" id="IwO-ag-VcQ"/>
                 <outlet property="segment" destination="w10-2c-9jZ" id="NgN-46-MAk"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -64,22 +64,22 @@
                         <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="w10-2c-9jZ">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="41"/>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <rect key="contentStretch" x="0.0" y="0.0" width="0.94999999999999996" height="1"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="Yff-M4-AMg"/>
                             </constraints>
                             <segments>
-                                <segment title="铅笔"/>
-                                <segment title="直尺"/>
-                                <segment title="虚线"/>
-                                <segment title="矩形"/>
-                                <segment title="圆形"/>
+                                <segment title="画笔"/>
+                                <segment title="形状"/>
+                                <segment title="文本"/>
+                                <segment title="音符"/>
                                 <segment title="橡皮擦"/>
                             </segments>
                         </segmentedControl>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="n60-u4-Afv">
                             <rect key="frame" x="0.0" y="40" width="375" height="582"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r4N-Tv-Xn0">
+                        <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r4N-Tv-Xn0" customClass="DrawContext" customModule="FCFCommonFrame" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="40" width="375" height="582"/>
                         </imageView>
                     </subviews>
