@@ -67,6 +67,8 @@
 		1957EBC31EE1384E00CD65FF /* SQlite3TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1957EBC11EE1384E00CD65FF /* SQlite3TestController.swift */; };
 		1957EBC41EE1384E00CD65FF /* SQlite3TestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1957EBC21EE1384E00CD65FF /* SQlite3TestController.xib */; };
 		1957EBCA1EE14B8500CD65FF /* FCFSQLiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1957EBC91EE14B8500CD65FF /* FCFSQLiteManager.swift */; };
+		195C82351F024C5B00297840 /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C82331F024C5B00297840 /* ColorPicker.swift */; };
+		195C82361F024C5B00297840 /* ColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 195C82341F024C5B00297840 /* ColorPicker.xib */; };
 		19612C2E1EA45BC300A842DE /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19612C2D1EA45BC300A842DE /* DownloadManager.swift */; };
 		19612C301EA45E0500A842DE /* GlobalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19612C2F1EA45E0500A842DE /* GlobalManager.swift */; };
 		19612C331EA49EA100A842DE /* FirstController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19612C311EA49EA100A842DE /* FirstController.swift */; };
@@ -156,6 +158,7 @@
 		19DA35441ECE986B00A56A93 /* MsgTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19DA35421ECE986B00A56A93 /* MsgTableViewCell.xib */; };
 		19DA35471ECEC56200A56A93 /* TableHeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DA35451ECEC56200A56A93 /* TableHeaderViewCell.swift */; };
 		19DA35481ECEC56200A56A93 /* TableHeaderViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19DA35461ECEC56200A56A93 /* TableHeaderViewCell.xib */; };
+		19DD723D1F024CD1000CAC0C /* colorPalette.plist in Resources */ = {isa = PBXBuildFile; fileRef = 19DD723C1F024CD1000CAC0C /* colorPalette.plist */; };
 		19DF8FDB1EE506100044DA68 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */; };
 		19DF8FDD1EE64ED40044DA68 /* 面试Sqlite详解 in Resources */ = {isa = PBXBuildFile; fileRef = 19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */; };
 		19DF8FE01EE64FE80044DA68 /* DataBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */; };
@@ -273,6 +276,8 @@
 		1957EBC11EE1384E00CD65FF /* SQlite3TestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQlite3TestController.swift; sourceTree = "<group>"; };
 		1957EBC21EE1384E00CD65FF /* SQlite3TestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SQlite3TestController.xib; sourceTree = "<group>"; };
 		1957EBC91EE14B8500CD65FF /* FCFSQLiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCFSQLiteManager.swift; sourceTree = "<group>"; };
+		195C82331F024C5B00297840 /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		195C82341F024C5B00297840 /* ColorPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorPicker.xib; sourceTree = "<group>"; };
 		19612C2D1EA45BC300A842DE /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		19612C2F1EA45E0500A842DE /* GlobalManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalManager.swift; sourceTree = "<group>"; };
 		19612C311EA49EA100A842DE /* FirstController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstController.swift; sourceTree = "<group>"; };
@@ -391,6 +396,7 @@
 		19DA35421ECE986B00A56A93 /* MsgTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MsgTableViewCell.xib; sourceTree = "<group>"; };
 		19DA35451ECEC56200A56A93 /* TableHeaderViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableHeaderViewCell.swift; sourceTree = "<group>"; };
 		19DA35461ECEC56200A56A93 /* TableHeaderViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableHeaderViewCell.xib; sourceTree = "<group>"; };
+		19DD723C1F024CD1000CAC0C /* colorPalette.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = colorPalette.plist; sourceTree = "<group>"; };
 		19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "面试Sqlite详解"; sourceTree = "<group>"; };
 		19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseViewController.swift; sourceTree = "<group>"; };
@@ -916,12 +922,15 @@
 		19AB01F61EF38697009974A0 /* Quartz 2D */ = {
 			isa = PBXGroup;
 			children = (
+				19DD723C1F024CD1000CAC0C /* colorPalette.plist */,
 				19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */,
 				19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */,
 				19AD69A61F00E3D500D796D2 /* DrawContext.swift */,
 				19AB02051EF3CD38009974A0 /* BaseBrush.swift */,
 				19AB02071EF3DFC7009974A0 /* PencilBrush.swift */,
 				19AD69A81F0238E200D796D2 /* EraserBrush.swift */,
+				195C82331F024C5B00297840 /* ColorPicker.swift */,
+				195C82341F024C5B00297840 /* ColorPicker.xib */,
 			);
 			path = "Quartz 2D";
 			sourceTree = "<group>";
@@ -1208,6 +1217,7 @@
 				19D1D2981ED6B623000188ED /* TestSearchController.xib in Resources */,
 				193718121EEE480400C13430 /* NSCodeToPlistController.xib in Resources */,
 				19612C381EA4A36900A842DE /* SecondController.xib in Resources */,
+				195C82361F024C5B00297840 /* ColorPicker.xib in Resources */,
 				1937180D1EEA9C0600C13430 /* TextFieldtestController.xib in Resources */,
 				19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */,
 				193717F41EEA6F3000C13430 /* LabelTestController.xib in Resources */,
@@ -1248,6 +1258,7 @@
 				19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */,
 				19DF8FFE1EE6780F0044DA68 /* EKEventStoreController.xib in Resources */,
 				1957EB531ED80FFD00CD65FF /* CollectViewDataController.xib in Resources */,
+				19DD723D1F024CD1000CAC0C /* colorPalette.plist in Resources */,
 				19D1D29F1ED6E028000188ED /* WebKitViewController.xib in Resources */,
 				19DF90061EE678850044DA68 /* XMLTestController.xib in Resources */,
 				1957EB911EDEB05D00CD65FF /* ViewTestController.xib in Resources */,
@@ -1299,6 +1310,7 @@
 				19DF8FEA1EE6533E0044DA68 /* SqliteDBSwiftController.swift in Sources */,
 				1957EB8C1EDE981800CD65FF /* PageControlTestController.swift in Sources */,
 				19D1D2AA1ED6E0C5000188ED /* CollectionViewController.swift in Sources */,
+				195C82351F024C5B00297840 /* ColorPicker.swift in Sources */,
 				19DF90011EE6780F0044DA68 /* ScrollViewController.swift in Sources */,
 				19612CB21EA611E700A842DE /* NSObject+MJKeyValue.m in Sources */,
 				19DF90331EE6A46B0044DA68 /* DDXMLNode.m in Sources */,

@@ -31,6 +31,8 @@ class Quartz2DTestController: BaseViewController {
         segment.addTarget(self, action: #selector(segmentValueChanged), for: .valueChanged)
         segment.selectedSegmentIndex = 0 //默认就是画曲线的画笔
         segmentValueChanged(seg: segment)
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -64,7 +66,8 @@ class Quartz2DTestController: BaseViewController {
         switch seg.selectedSegmentIndex {
         case 0:
             //画笔
-            drawContext.initBrush(type: .Pentype(.Curve), color: MainColor, width: 3.0)
+            showColorPick(tp: .Pentype(.Curve))
+
             break
         case 1:
             //形状
@@ -79,12 +82,31 @@ class Quartz2DTestController: BaseViewController {
             
             break
         case 4:
-            //橡皮擦
-            drawContext.initBrush(type: .Eraser, color: "0", width: 5.0)
+            //橡皮擦,不需要选颜色
+            showColorPick(tp: .Eraser)
             break
         default:
             break
         }
+    }
+    
+    //选完颜色和大小
+    func showColorPick(tp:DrawType) {
+        let color = ColorPicker(type: tp) {[weak self] (type, colorStr, fontSize) in
+            var colorString = colorStr
+            switch type{
+            case .Eraser:
+                colorString = "0" //橡皮擦颜色始终为clear
+                break;
+            default:
+                break
+            }
+            self?.drawContext.initBrush(type: type, color: colorString, width: fontSize)
+        }
+        color.view.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
+        color.definesPresentationContext = true
+        color.modalPresentationStyle = .overCurrentContext
+        self.present(color, animated: false, completion: nil)
     }
     
     deinit {
