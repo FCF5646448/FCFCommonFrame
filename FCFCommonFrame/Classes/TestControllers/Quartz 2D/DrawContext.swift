@@ -31,6 +31,13 @@ enum DrawType{
     case Note //音符 (待定)
 }
 
+//自定义一个数据模型，有下标、image、textview,如果是图片，就txtview为nil，如果是文本，就UIImage为nil
+class DrawModel:NSObject{
+    var indexKey:Int = -1
+    var img:UIImage?
+    var txtview:DrawTextView?
+}
+
 //全局单例,用来存储每次画的笔画的相关数据
 class DrawManager{
     static let shareInstance = DrawManager()
@@ -39,7 +46,7 @@ class DrawManager{
     var index = -1
     //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imageData就是图片数据;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
     var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imageData:Data,Width:CGFloat? ,Height:CGFloat? ,Rotate:CGFloat? ))] = [] //Scale:CGFloat
-    //数组保存图片,存放每一笔的图片
+    //数组保存图片,存放每一笔的图片,如果是文本则存一个空的UIImage()，
     var imgArr = [UIImage]()
     //可以撤回
     var canUndo:Bool{
@@ -77,7 +84,7 @@ class DrawManager{
         if index <= imgArr.count - 1 {
             return imgArr[index]
         }else{
-            if index >= 0 {
+            if index >= 0 && imgArr.count > 0 {
                 index = imgArr.count - 1
                 return imgArr[index]
             }
@@ -120,6 +127,11 @@ class DrawContext: UIImageView {
     var realImg:UIImage? //当前图片,它只是一个临时缓存作用
     var drawType:DrawType? //画笔类型
     
+//    lazy var textView:DrawTextView = {
+//        //默认3行
+//        let textView = DrawTextView.init(frame: CGRect(x: (self.brush?.beginPoint?.x)!, y: (self.brush?.beginPoint?.y)!, width: 200, height: 24 * 3), size: (self.brush?.strokeWidth)!, color: (self.brush?.strockColor)!)
+//        return textView
+//    }()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -136,11 +148,11 @@ class DrawContext: UIImageView {
             brush?.strockColor = color!
             
         case .Pentype(.Line):
+            
             print("直线")
-        
         case .Formtype(.Rect):
+            
             print("矩形")
-        
         case .Formtype(.Ellipse):
             
             print("椭圆")
@@ -153,8 +165,10 @@ class DrawContext: UIImageView {
             
             print("音符")
         case .Text:
-            
             print("文本")
+            brush = TextBrush()
+            brush?.strockColor = color!
+            brush?.strokeWidth = width!
         }
     }
     
@@ -205,6 +219,17 @@ extension DrawContext{
         }
     }
     
+    //文本
+    func drawText(){
+        if self.brush != nil {
+            //默认3行
+            let textView = DrawTextView(frame: CGRect(x: (self.brush?.beginPoint?.x)!, y: (self.brush?.beginPoint?.y)!, width: 200, height: 24 * 3), size: (self.brush?.strokeWidth)!, color: (self.brush?.strockColor)!)
+            textView.becomeFirstResponder()
+            textView.delegate = self
+            self.addSubview(textView)
+        }
+    }
+    
     //是否可重做
     func canForward()->Bool{
         return self.canRedo
@@ -249,6 +274,16 @@ extension DrawContext{
     
 }
 
+extension DrawContext:UITextViewDelegate{
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+        }
+        return true
+    }
+}
+
 //处理手指触碰
 extension DrawContext{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -258,8 +293,16 @@ extension DrawContext{
             brush.beginPoint = point
             brush.endPoint = brush.beginPoint
             self.drawingState = .begin
-            brush.pointsArr.append(point)
-            self.drawShapeing()
+            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() {
+                
+                brush.pointsArr.append(point)
+                self.drawShapeing()
+            }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
+                brush.pointsArr.append(point) //原点位置
+                self.drawText()
+            }else{
+                
+            }
         }
     }
     

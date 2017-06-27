@@ -36,6 +36,16 @@ class WechatViewController: BaseViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange), name: .UIKeyboardWillChangeFrame, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+//        IQKeyboardManager.sharedManager().enable = false
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+//        IQKeyboardManager.sharedManager().enable = true
+    }
+    
     func createBaseData(){
         self.tableView.fcfRegister(MsgTableViewCell.self)
         self.tableView.fcfRegister(TableHeaderViewCell.self)

@@ -124,6 +124,8 @@
 		1978C47B1EFA5CE80076B728 /* FCFBaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978C47A1EFA5CE80076B728 /* FCFBaseBrush.swift */; };
 		1978C48C1EFA81320076B728 /* DrawLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978C48B1EFA81320076B728 /* DrawLayerView.swift */; };
 		197E0A741ECC8ACB005064B2 /* TextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */; };
+		197E39451F0297FC008AC461 /* DrawTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E39441F0297FC008AC461 /* DrawTextView.swift */; };
+		197E39471F02A05A008AC461 /* TextBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E39461F02A05A008AC461 /* TextBrush.swift */; };
 		19AB01F91EF386B2009974A0 /* Quartz2DTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */; };
 		19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */; };
 		19AB02061EF3CD38009974A0 /* BaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB02051EF3CD38009974A0 /* BaseBrush.swift */; };
@@ -362,6 +364,8 @@
 		1978C47A1EFA5CE80076B728 /* FCFBaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCFBaseBrush.swift; sourceTree = "<group>"; };
 		1978C48B1EFA81320076B728 /* DrawLayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawLayerView.swift; sourceTree = "<group>"; };
 		197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewExtension.swift; sourceTree = "<group>"; };
+		197E39441F0297FC008AC461 /* DrawTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawTextView.swift; sourceTree = "<group>"; };
+		197E39461F02A05A008AC461 /* TextBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextBrush.swift; sourceTree = "<group>"; };
 		19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quartz2DTestController.swift; sourceTree = "<group>"; };
 		19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Quartz2DTestController.xib; sourceTree = "<group>"; };
 		19AB02051EF3CD38009974A0 /* BaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBrush.swift; sourceTree = "<group>"; };
@@ -929,6 +933,8 @@
 				19AB02051EF3CD38009974A0 /* BaseBrush.swift */,
 				19AB02071EF3DFC7009974A0 /* PencilBrush.swift */,
 				19AD69A81F0238E200D796D2 /* EraserBrush.swift */,
+				197E39461F02A05A008AC461 /* TextBrush.swift */,
+				197E39441F0297FC008AC461 /* DrawTextView.swift */,
 				195C82331F024C5B00297840 /* ColorPicker.swift */,
 				195C82341F024C5B00297840 /* ColorPicker.xib */,
 			);
@@ -1351,6 +1357,7 @@
 				193717EF1EEA6CB300C13430 /* ScrollViewTestController.swift in Sources */,
 				19612C9C1EA611E700A842DE /* MJRefreshAutoFooter.m in Sources */,
 				193717F91EEA7B7000C13430 /* ActivityIndicatorController.swift in Sources */,
+				197E39451F0297FC008AC461 /* DrawTextView.swift in Sources */,
 				190C4A781E9F4EF700C0C6D9 /* ViewExtension.swift in Sources */,
 				19612CA41EA611E700A842DE /* MJRefreshBackGifFooter.m in Sources */,
 				19612CA01EA611E700A842DE /* MJRefreshHeader.m in Sources */,
@@ -1391,6 +1398,7 @@
 				19DF902E1EE6A46B0044DA68 /* DDXMLElementAdditions.m in Sources */,
 				19612C3B1EA4A37C00A842DE /* ThirdController.swift in Sources */,
 				19D1D2AE1ED6E378000188ED /* BaseCollectionViewCell.swift in Sources */,
+				197E39471F02A05A008AC461 /* TextBrush.swift in Sources */,
 				190C4A721E9F4EF700C0C6D9 /* CellExtension.swift in Sources */,
 				19612CAF1EA611E700A842DE /* MJPropertyType.m in Sources */,
 				1937179E1EE7D6E900C13430 /* SwiftyJSONTestController.swift in Sources */,

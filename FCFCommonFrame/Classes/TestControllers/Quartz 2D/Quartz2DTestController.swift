@@ -75,7 +75,7 @@ class Quartz2DTestController: BaseViewController {
             break
         case 2:
             //文本
-            
+            showColorPick(tp: .Text)
             break
         case 3:
             //音符
@@ -94,14 +94,23 @@ class Quartz2DTestController: BaseViewController {
     func showColorPick(tp:DrawType) {
         let color = ColorPicker(type: tp) {[weak self] (type, colorStr, fontSize) in
             var colorString = colorStr
+            var fsize = fontSize
             switch type{
             case .Eraser:
                 colorString = "0" //橡皮擦颜色始终为clear
                 break;
+            case .Text:
+                if fsize < 8 {
+                    fsize = 8 //默认最小8号字体
+                }
+                if fsize > 30 {
+                    fsize = 30 //默认最大30号字体
+                }
+                break
             default:
                 break
             }
-            self?.drawContext.initBrush(type: type, color: colorString, width: fontSize)
+            self?.drawContext.initBrush(type: type, color: colorString, width: fsize)
         }
         color.view.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
         color.definesPresentationContext = true

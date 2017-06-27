@@ -27,7 +27,8 @@ class BaseBrush: NSObject {
 
 extension BaseBrush:PaintBrush{
     func drawInContext(context: CGContext) {
-        assert(false,"子类必须实现")
+        //
+//        assert(false,"子类必须实现")
     }
 
     func supportedContinnuousDrawing() -> Bool {
