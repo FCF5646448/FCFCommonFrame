@@ -31,11 +31,19 @@ enum DrawType{
     case Note //音符 (待定)
 }
 
-//自定义一个数据模型，有下标、image、textview,如果是图片，就txtview为nil，如果是文本，就UIImage为nil
+//自定义一个数据模型，有image、textview,如果是图片，就txtview为nil，如果是文本，就UIImage为nil
 class DrawModel:NSObject{
-    var indexKey:Int = -1
-    var img:UIImage?
-    var txtview:DrawTextView?
+    var imgData:Data?
+    var textData:Data?
+    
+//    let labeldata = NSKeyedArchiver.archivedData(withRootObject: label)
+//    userdefault.set(labeldata, forKey: "labelData")
+//    
+//    //读取
+//    let labelObjdata = userdefault.data(forKey: "labelData")
+//    let mylabel = NSKeyedUnarchiver.unarchiveObject(with: labelObjdata!) as? UILabel
+//    self.view.addSubview(mylabel!)
+    
 }
 
 //全局单例,用来存储每次画的笔画的相关数据
@@ -44,10 +52,13 @@ class DrawManager{
     private init(){}
     
     var index = -1
-    //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imageData就是图片数据;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
-    var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imageData:Data,Width:CGFloat? ,Height:CGFloat? ,Rotate:CGFloat? ))] = [] //Scale:CGFloat
-    //数组保存图片,存放每一笔的图片,如果是文本则存一个空的UIImage()，
-    var imgArr = [UIImage]()
+    //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imgData:就是图片数据;textStr:文本String,文本就是文字内容;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
+    var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imgData:Data,textStr:String,Width:CGFloat? ,Height:CGFloat? ,Rotate:CGFloat? ))] = [] //Scale:CGFloat
+    //数组保存图片,存放每一笔的图片\文本，
+    var modelArr = [DrawModel]()
+    //这里就存储文本，key值是对应modelArr中对应的下标，值是图片
+    var textViewArr:[(index:Int,txv:Data)] = []
+    
     //可以撤回
     var canUndo:Bool{
         get {
@@ -57,36 +68,39 @@ class DrawManager{
     //可以重做
     var canRedo:Bool{
         get {
-            return index + 1 <= imgArr.count
+            return index + 1 <= modelArr.count
         }
     }
-    //添加图片
-    func addImg(_ img:UIImage){
+    //添加图片或文本
+    func addModel(_ obj:DrawModel){
         if index == -1{
-            imgArr.removeAll()
+            modelArr.removeAll()
         }
-        imgArr.append(img)
-        index = imgArr.count - 1
+        if let textV = obj.textData {
+            textViewArr.append((index: index, txv: textV))
+        }
+        modelArr.append(obj)
+        index = modelArr.count - 1
     }
-    //撤回时候需要的图片
-    func imgForUndo()->UIImage?{
+    //撤回时候需要的model
+    func modelForUndo()->DrawModel?{
         index = index - 1
         if index >= 0 {
-            return imgArr[index]
+            return modelArr[index]
         }else{
             index = -1
             return nil
         }
     }
-    //重做时需要的图片
-    func imgForRedo()->UIImage?{
+    //重做时需要的model
+    func modelForRedo()->DrawModel?{
         index = index + 1
-        if index <= imgArr.count - 1 {
-            return imgArr[index]
+        if index <= modelArr.count - 1 {
+            return modelArr[index]
         }else{
-            if index >= 0 && imgArr.count > 0 {
-                index = imgArr.count - 1
-                return imgArr[index]
+            if index >= 0 && modelArr.count > 0 {
+                index = modelArr.count - 1
+                return modelArr[index]
             }
             index = -1
             return nil
@@ -95,21 +109,23 @@ class DrawManager{
     
     var hasDrawed:Bool{
         get {
-            return imgArr.count > 0 ? true : false
+            return modelArr.count > 0 ? true : false
         }
     }
-    //获取最上层图片
-    func getTopImg() -> UIImage? {
-        if imgArr.count > 0 {
-            index = imgArr.count - 1
-            return imgArr[imgArr.count - 1]
+    //刚进来的时候，获取最上层的“图片model”，文本则要重头加
+    func getTopImg() -> DrawModel? {
+        index = modelArr.count - 1
+        for obj in modelArr.reversed() {
+            if obj.imgData != nil {
+                return obj
+            }
         }
         return nil
     }
     
     //每缓存一次就应该清理一下数组
     func clearArr(){
-        self.imgArr.removeAll()
+        self.modelArr.removeAll()
         self.drawData.removeAll()
         self.index = -1
     }
@@ -209,11 +225,14 @@ extension DrawContext{
             //实时显示当前的绘制状态，并记录最后一个点
             self.image = previewImage
             if self.drawingState == .ended {
-                //将图片存进数组中
-                self.boardUndoManager.addImg(previewImage!)
-                //将点集存进数组
                 let imgData = NSKeyedArchiver.archivedData(withRootObject: self.image!)
-                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imageData: imgData, Width: 0, Height: 0, Rotate: 0)))
+                //将图片存进数组中
+                let obj = DrawModel()
+                obj.imgData = imgData
+                self.boardUndoManager.addModel(obj)
+                //将点集存进数组
+                
+                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imgData:imgData,textStr:"", Width: 0, Height: 0, Rotate: 0)))
             }
             brush.lastPoint = brush.endPoint
         }
@@ -243,8 +262,17 @@ extension DrawContext{
         if self.canUndo == false {
             return
         }
-        self.image = self.boardUndoManager.imgForUndo()
-        self.realImg = self.image
+        if let obj = self.boardUndoManager.modelForUndo(){
+            if let imgData = obj.imgData {
+                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
+                self.image = img
+                self.realImg = self.image
+            }else if let textData = obj.textData{
+                //文本,将文本移除，待续
+                let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! DrawTextView
+                textView.removeFromSuperview()
+            }
+        }
         //已经撤销到第一张
         if self.boardUndoManager.index == -1 {
             //
@@ -255,21 +283,44 @@ extension DrawContext{
         if self.canRedo == false {
             return
         }
-        self.image = self.boardUndoManager.imgForRedo()
-        self.realImg = self.image
+        if let obj = self.boardUndoManager.modelForRedo() {
+            if let imgData = obj.imgData {
+                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
+                self.image = img
+                self.realImg = self.image
+            }else if let textData = obj.textData{
+                //文本,将文本移除，待续
+                let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! DrawTextView
+                self.addSubview(textView)
+            }
+        }
+        
         //已经前进到最后一张图片
-        if self.boardUndoManager.index == self.boardUndoManager.imgArr.count - 1 {
+        if self.boardUndoManager.index == self.boardUndoManager.modelArr.count - 1 {
             //
         }
     }
     
-    //拿取到最上层图片
-    func getTopImg(){
+    //还原原来的图层样式，将最顶层的图片取出来作为realImg，再将文本加进来。
+    func restoreDraw(){
         if self.hasDraw == false{
             return
         }
-        self.image = self.boardUndoManager.getTopImg()
-        self.realImg = self.image
+        
+        if let obj = self.boardUndoManager.getTopImg() {
+            if let imgData = obj.imgData {
+                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
+                self.image = img
+                self.realImg = self.image
+            }
+        }
+        
+        //将文本加上去，这里虽然不是按顺序加的，但是在modelArr中是有顺序记录的
+        for (_,textData) in self.boardUndoManager.textViewArr {
+            let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! DrawTextView
+            self.addSubview(textView)
+        }
+        
     }
     
 }
@@ -278,6 +329,16 @@ extension DrawContext:UITextViewDelegate{
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
+            //将图片存进数组中
+            let textDTView = DrawTextView(frame: textView.frame, size: (self.brush?.strokeWidth)!, color: (self.brush?.strockColor)!)
+            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textDTView)
+            let obj = DrawModel()
+            obj.textData = dataDTView
+            self.boardUndoManager.addModel(obj)
+            //将点集存进数组
+            
+            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textView.text, Width: 200, Height: 24 * 3, Rotate: 0)))
+            
             textView.resignFirstResponder()
         }
         return true

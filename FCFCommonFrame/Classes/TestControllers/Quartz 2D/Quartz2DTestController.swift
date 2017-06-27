@@ -42,7 +42,7 @@ class Quartz2DTestController: BaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if self.drawContext.hasDraw {
-            self.drawContext.getTopImg()
+            self.drawContext.restoreDraw()
         }else{
             //从xml中读取
         }
