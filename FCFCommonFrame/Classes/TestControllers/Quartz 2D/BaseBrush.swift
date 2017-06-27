@@ -20,9 +20,9 @@ class BaseBrush: NSObject {
     var endPoint:CGPoint? //手指抬起的位置
     var lastPoint:CGPoint? //手指移动到当前位置之前的位置
     var strokeWidth:CGFloat = 1.0 //画笔宽度，默认1.0
-    var strockColor:CGColor = UIColor.haxString(hex: "000000").cgColor //画笔颜色,默认黑色
-    var pointsArr:[(state:DrawingState,point:CGPoint)] = []//放置点的数组
-    var contents:[UIImage] = [] //用来保存Image的数组,每一次画完最后一点之后就把图片存起来
+    var strockColor:String = "000000" //画笔颜色,默认黑色
+    var pointsArr:[CGPoint] = []//放置点的数组(state:DrawingState,point:
+    
 }
 
 extension BaseBrush:PaintBrush{

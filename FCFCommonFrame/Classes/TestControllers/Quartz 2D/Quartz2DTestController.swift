@@ -28,7 +28,7 @@ class Quartz2DTestController: BaseViewController {
         super.viewDidLoad()
         title = "画板"
         self.bgImage.image = UIImage(named:"qupu")
-        segment.addTarget(self, action: #selector(segmentValueChanged), for: .touchUpInside)
+        segment.addTarget(self, action: #selector(segmentValueChanged), for: .valueChanged)
         segment.selectedSegmentIndex = 0 //默认就是画曲线的画笔
         segmentValueChanged(seg: segment)
     }
@@ -36,15 +36,28 @@ class Quartz2DTestController: BaseViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if self.drawContext.hasDraw {
+            self.drawContext.getTopImg()
+        }else{
+            //从xml中读取
+        }
+    }
 
     //复原 减笔画
     @IBAction func backoutSelected(_ sender: Any) {
-        
+        if self.drawContext.canBack() {
+            drawContext.undo()
+        }
     }
     
     //重做 加笔画
     @IBAction func redrawSelected(_ sender: Any) {
-        
+        if self.drawContext.canForward() {
+            drawContext.redo()
+        }
     }
     
     func segmentValueChanged(seg:UISegmentedControl){
@@ -67,7 +80,7 @@ class Quartz2DTestController: BaseViewController {
             break
         case 4:
             //橡皮擦
-            
+            drawContext.initBrush(type: .Eraser, color: "0", width: 5.0)
             break
         default:
             break

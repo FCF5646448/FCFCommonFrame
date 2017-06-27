@@ -87,17 +87,17 @@
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="w10-2c-9jZ" secondAttribute="trailing" id="0Re-Cd-dpd"/>
                         <constraint firstItem="cDi-G7-gU8" firstAttribute="leading" secondItem="5JV-u7-3of" secondAttribute="leading" id="1tx-db-WRC"/>
-                        <constraint firstItem="r4N-Tv-Xn0" firstAttribute="leading" secondItem="5JV-u7-3of" secondAttribute="leading" id="6cG-e1-EEk"/>
                         <constraint firstItem="w10-2c-9jZ" firstAttribute="leading" secondItem="5JV-u7-3of" secondAttribute="leading" id="7XW-hV-Ani"/>
-                        <constraint firstAttribute="trailing" secondItem="r4N-Tv-Xn0" secondAttribute="trailing" id="A75-jc-oHv"/>
-                        <constraint firstItem="cDi-G7-gU8" firstAttribute="top" secondItem="r4N-Tv-Xn0" secondAttribute="bottom" id="JUW-1K-xst"/>
                         <constraint firstAttribute="trailing" secondItem="n60-u4-Afv" secondAttribute="trailing" id="Kcl-0W-pxB"/>
                         <constraint firstItem="w10-2c-9jZ" firstAttribute="top" secondItem="5JV-u7-3of" secondAttribute="top" id="PeW-v6-8DB"/>
-                        <constraint firstItem="r4N-Tv-Xn0" firstAttribute="top" secondItem="w10-2c-9jZ" secondAttribute="bottom" id="T2F-Cs-xVY"/>
+                        <constraint firstItem="r4N-Tv-Xn0" firstAttribute="centerY" secondItem="n60-u4-Afv" secondAttribute="centerY" id="Wzc-65-vwU"/>
+                        <constraint firstItem="r4N-Tv-Xn0" firstAttribute="centerX" secondItem="n60-u4-Afv" secondAttribute="centerX" id="YP7-02-cdg"/>
+                        <constraint firstItem="r4N-Tv-Xn0" firstAttribute="width" secondItem="n60-u4-Afv" secondAttribute="width" id="ckB-Gf-LHv"/>
                         <constraint firstItem="n60-u4-Afv" firstAttribute="top" secondItem="w10-2c-9jZ" secondAttribute="bottom" id="igb-vb-2s1"/>
                         <constraint firstItem="n60-u4-Afv" firstAttribute="leading" secondItem="5JV-u7-3of" secondAttribute="leading" id="kWF-uU-sc2"/>
                         <constraint firstAttribute="trailing" secondItem="cDi-G7-gU8" secondAttribute="trailing" id="odx-P1-Npd"/>
                         <constraint firstItem="cDi-G7-gU8" firstAttribute="top" secondItem="n60-u4-Afv" secondAttribute="bottom" id="rNd-WE-im1"/>
+                        <constraint firstItem="r4N-Tv-Xn0" firstAttribute="height" secondItem="n60-u4-Afv" secondAttribute="height" id="z2x-sV-uzF"/>
                         <constraint firstAttribute="bottom" secondItem="cDi-G7-gU8" secondAttribute="bottom" id="zgm-hn-KAF"/>
                     </constraints>
                 </view>

@@ -8,8 +8,6 @@
 
 import UIKit
 
-var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imageData:Data))] = [] //这个数组就是存储每一笔的相关数据，points就是每一笔所经过的点，imageData就是图片数据
-
 enum DrawingState{
     case begin
     case moved
@@ -33,13 +31,89 @@ enum DrawType{
     case Note //音符 (待定)
 }
 
+//全局单例,用来存储每次画的笔画的相关数据
+class DrawManager{
+    static let shareInstance = DrawManager()
+    private init(){}
+    
+    var index = -1
+    //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imageData就是图片数据;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
+    var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imageData:Data,Width:CGFloat? ,Height:CGFloat? ,Rotate:CGFloat? ))] = [] //Scale:CGFloat
+    //数组保存图片,存放每一笔的图片
+    var imgArr = [UIImage]()
+    //可以撤回
+    var canUndo:Bool{
+        get {
+            return index != -1
+        }
+    }
+    //可以重做
+    var canRedo:Bool{
+        get {
+            return index + 1 <= imgArr.count
+        }
+    }
+    //添加图片
+    func addImg(_ img:UIImage){
+        if index == -1{
+            imgArr.removeAll()
+        }
+        imgArr.append(img)
+        index = imgArr.count - 1
+    }
+    //撤回时候需要的图片
+    func imgForUndo()->UIImage?{
+        index = index - 1
+        if index >= 0 {
+            return imgArr[index]
+        }else{
+            index = -1
+            return nil
+        }
+    }
+    //重做时需要的图片
+    func imgForRedo()->UIImage?{
+        index = index + 1
+        if index <= imgArr.count - 1 {
+            return imgArr[index]
+        }else{
+            if index >= 0 {
+                index = imgArr.count - 1
+                return imgArr[index]
+            }
+            index = -1
+            return nil
+        }
+    }
+    
+    var hasDrawed:Bool{
+        get {
+            return imgArr.count > 0 ? true : false
+        }
+    }
+    //获取最上层图片
+    func getTopImg() -> UIImage? {
+        if imgArr.count > 0 {
+            index = imgArr.count - 1
+            return imgArr[imgArr.count - 1]
+        }
+        return nil
+    }
+    
+    //每缓存一次就应该清理一下数组
+    func clearArr(){
+        self.imgArr.removeAll()
+        self.drawData.removeAll()
+        self.index = -1
+    }
+}
+
 //所有的画画都在这里操作
 class DrawContext: UIImageView {
-
-    //管理返回重画
-    fileprivate class drawManager{
-        
-    }
+    var boardUndoManager = DrawManager.shareInstance
+    var canUndo:Bool{get{return self.boardUndoManager.canUndo}}
+    var canRedo:Bool{get{return self.boardUndoManager.canRedo}}
+    var hasDraw:Bool{get{return self.boardUndoManager.hasDrawed}}
     
     var brush:BaseBrush? //画笔
     var drawingState:DrawingState? //当前绘画状态
@@ -49,17 +123,17 @@ class DrawContext: UIImageView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
     }
     
     //初始化🖌️，设置默认为曲线、黑色、笔宽为1.0
     func initBrush(type:DrawType? = .Pentype(.Curve),color:String? = "000000",width:CGFloat? = 1.0){
-        switch type! {
+        self.drawType = type
+        switch self.drawType! {
         case .Pentype(.Curve):
             print("曲线")
             brush = PencilBrush()
             brush?.strokeWidth = width!
-            brush?.strockColor = UIColor.haxString(hex: color!).cgColor
+            brush?.strockColor = color!
             
         case .Pentype(.Line):
             print("直线")
@@ -68,14 +142,18 @@ class DrawContext: UIImageView {
             print("矩形")
         
         case .Formtype(.Ellipse):
+            
             print("椭圆")
-            
         case .Eraser:
-            
             print("橡皮擦")
+            brush = EraserBrush()
+            brush?.strokeWidth = width!
+            brush?.strockColor = color!
         case .Note:
+            
             print("音符")
         case .Text:
+            
             print("文本")
         }
     }
@@ -83,7 +161,8 @@ class DrawContext: UIImageView {
 }
 
 extension DrawContext{
-    func drawing(){
+    //这个方法只适用于直线、曲线、椭圆、矩形、橡皮擦等类型
+    func drawShapeing(){
         if let brush = self.brush {
             //创建一个位图上下文
             UIGraphicsBeginImageContext(self.bounds.size)
@@ -94,7 +173,7 @@ extension DrawContext{
             context?.setLineCap(CGLineCap.round)
             context?.setLineWidth(brush.strokeWidth)
             
-            context?.setStrokeColor(brush.strockColor)
+            context?.setStrokeColor(UIColor.haxString(hex: brush.strockColor).cgColor)
             
             //把图片画进去
             if let img = self.realImg { //
@@ -115,51 +194,93 @@ extension DrawContext{
             
             //实时显示当前的绘制状态，并记录最后一个点
             self.image = previewImage
+            if self.drawingState == .ended {
+                //将图片存进数组中
+                self.boardUndoManager.addImg(previewImage!)
+                //将点集存进数组
+                let imgData = NSKeyedArchiver.archivedData(withRootObject: self.image!)
+                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imageData: imgData, Width: 0, Height: 0, Rotate: 0)))
+            }
             brush.lastPoint = brush.endPoint
         }
     }
     
-    func saveTodataArray(){
-        
-        //将context数组存到userdefault
-        //        brush.contents.append(self.realImg!) //将最后一幅图存起来
-        //
-        //        let userDefault = UserDefaults.standard
-        //        var imgData:[Data] = []
-        //        for img in brush.contents{
-        //            let imgD = NSKeyedArchiver.archivedData(withRootObject: img)
-        //            imgData.append(imgD)
-        //        }
-        //        self.currentIndex = imgData.count - 1
-        //        userDefault.set(imgData, forKey: "contexts")
+    //是否可重做
+    func canForward()->Bool{
+        return self.canRedo
     }
+    //是否可撤销
+    func canBack()->Bool{
+        return self.canUndo
+    }
+    //撤销
+    func undo() {
+        if self.canUndo == false {
+            return
+        }
+        self.image = self.boardUndoManager.imgForUndo()
+        self.realImg = self.image
+        //已经撤销到第一张
+        if self.boardUndoManager.index == -1 {
+            //
+        }
+    }
+    //重做
+    func redo() {
+        if self.canRedo == false {
+            return
+        }
+        self.image = self.boardUndoManager.imgForRedo()
+        self.realImg = self.image
+        //已经前进到最后一张图片
+        if self.boardUndoManager.index == self.boardUndoManager.imgArr.count - 1 {
+            //
+        }
+    }
+    
+    //拿取到最上层图片
+    func getTopImg(){
+        if self.hasDraw == false{
+            return
+        }
+        self.image = self.boardUndoManager.getTopImg()
+        self.realImg = self.image
+    }
+    
 }
 
 //处理手指触碰
 extension DrawContext{
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point:CGPoint = (touches.first?.location(in: self))!
         if let brush = self.brush {
             brush.lastPoint = nil
-            brush.beginPoint = touches.first!.location(in: self)
+            brush.beginPoint = point
             brush.endPoint = brush.beginPoint
             self.drawingState = .begin
-            self.drawing()
+            brush.pointsArr.append(point)
+            self.drawShapeing()
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point:CGPoint = (touches.first?.location(in: self))!
         if let brush = self.brush {
-            brush.endPoint = touches.first?.location(in: self)
+            brush.pointsArr.removeAll()
+            brush.endPoint = point
             self.drawingState = .moved
-            self.drawing()
+            brush.pointsArr.append(point)
+            self.drawShapeing()
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let point:CGPoint = (touches.first?.location(in: self))!
         if let brush = self.brush {
-            brush.endPoint = touches.first?.location(in: self)
+            brush.endPoint = point
             self.drawingState = .ended
-            self.drawing()
+            brush.pointsArr.append(point)
+            self.drawShapeing()
         }
     }
     
