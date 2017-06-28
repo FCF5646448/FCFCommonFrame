@@ -8,7 +8,7 @@
 
 import UIKit
 
-//文本
+//文本，使用的是textview
 class TextBrush: BaseBrush {
 
 }

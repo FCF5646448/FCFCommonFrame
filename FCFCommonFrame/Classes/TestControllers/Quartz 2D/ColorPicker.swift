@@ -8,29 +8,16 @@
 
 import UIKit
 
-typealias selectedCallBack = (_ type:DrawType,_ colorStr:String,_ size:CGFloat)->()
+typealias selectedCallBack = (_ colorStr:String)->()
 
 class ColorPicker: UIViewController {
 
     @IBOutlet weak var collctionBg: UIView!
     @IBOutlet weak var colorView: UICollectionView!
-    
-    @IBOutlet weak var selectedBtn: UIButton!
-    
-    @IBOutlet weak var sureBtn: UIButton!
-    
-    @IBOutlet weak var slide: UISlider!
-    
-    var selectedColor:String = "000000"
-    
     var callback:selectedCallBack?
-    
     var colorData:[String] = []
     
-    var brushtype:DrawType
-    
-    init(type:DrawType,selected:@escaping ((_ type:DrawType,_ colorStr:String,_ size:CGFloat)->())) {
-        self.brushtype = type
+    init(selected:@escaping ((_ colorStr:String)->())) {
         self.callback = selected
         super.init(nibName: nil, bundle: nil)
     }
@@ -44,11 +31,7 @@ class ColorPicker: UIViewController {
         self.view.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
         collctionBg.layer.cornerRadius = 4
         collctionBg.layer.masksToBounds = true
-        selectedBtn.layer.cornerRadius = 4
-        selectedBtn.layer.masksToBounds = true
-        selectedBtn.backgroundColor = UIColor.haxString(hex: selectedColor)
-        sureBtn.layer.cornerRadius = 4
-        sureBtn.layer.masksToBounds = true
+
         
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 2
@@ -63,7 +46,6 @@ class ColorPicker: UIViewController {
         colorView.collectionViewLayout = layout
         colorView.fcfRegister(BaseCollectionViewCell.self)
         
-        slide.addTarget(self, action: #selector(slideValueChanged), for: .valueChanged)
         initColorData()
     }
     
@@ -83,17 +65,7 @@ class ColorPicker: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    func slideValueChanged(sender:UISlider){
-        _ = sender.value
-    }
 
-    //确定
-    @IBAction func sureBtnClicked(_ sender: Any) {
-        self.callback!(self.brushtype,selectedColor,CGFloat(slide.value))
-        self.dismiss(animated: false, completion: nil)
-    }
-    
 }
 
 extension ColorPicker:UICollectionViewDelegate,UICollectionViewDataSource{
@@ -111,19 +83,8 @@ extension ColorPicker:UICollectionViewDelegate,UICollectionViewDataSource{
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        switch self.brushtype {
-        case .Eraser:
-            let alert = UIAlertController.init(title: "橡皮擦无法选择颜色", message: "", preferredStyle: .alert)
-            self.present(alert, animated: true, completion: nil)
-            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2, execute: { 
-                alert.dismiss(animated: false, completion: nil)
-            })
-            return
-        default:
-            break
-        }
         let colorstr = self.colorData[indexPath.row]
-        selectedColor = colorstr
-        self.selectedBtn.backgroundColor = UIColor.haxString(hex: colorstr)
+        self.callback!(colorstr)
+        self.dismiss(animated: false, completion: nil)
     }
 }

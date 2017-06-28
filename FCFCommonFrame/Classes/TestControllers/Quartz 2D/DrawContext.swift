@@ -17,33 +17,26 @@ enum DrawingState{
 //画笔类型
 enum DrawType{
     enum PenType {
-        case Curve //曲线,CAShapeLayer
-        case Line //直线,CAShapeLayer
+        case Curve //曲线
+        case Line //直线
+        case ImaginaryLine //虚线
     }
     case Pentype(PenType)
     enum FormType{
-        case Ellipse //椭圆,CAShapeLayer
-        case Rect  //矩形,CAShapeLayer
+        case Ellipse //椭圆
+        case Rect  //矩形
     }
     case Formtype(FormType)
-    case Eraser //橡皮擦 ,CAShapeLayer
-    case Text //文本 CATextLayer(待定)
-    case Note //音符 (待定)
+    case Eraser //橡皮擦
+    case Text //文本
+    case Note //音符
 }
 
-//自定义一个数据模型，有image、textview,如果是图片，就txtview为nil，如果是文本，就UIImage为nil
+//自定义一个数据模型，有image、textview,如果是图片，就txtview为nil，如果是文本，就UIImage为就存之前的图片
 class DrawModel:NSObject{
+    var ifTextView:Bool = false //是否是文本，默认不是文本而是图片
     var imgData:Data?
     var textData:Data?
-    
-//    let labeldata = NSKeyedArchiver.archivedData(withRootObject: label)
-//    userdefault.set(labeldata, forKey: "labelData")
-//    
-//    //读取
-//    let labelObjdata = userdefault.data(forKey: "labelData")
-//    let mylabel = NSKeyedUnarchiver.unarchiveObject(with: labelObjdata!) as? UILabel
-//    self.view.addSubview(mylabel!)
-    
 }
 
 //全局单例,用来存储每次画的笔画的相关数据
@@ -57,8 +50,7 @@ class DrawManager{
     //数组保存图片,存放每一笔的图片\文本，
     var modelArr = [DrawModel]()
     //这里就存储文本，key值是对应modelArr中对应的下标，值是图片
-    var textViewArr:[(index:Int,txv:Data)] = []
-    
+    var textViewDic:[Int:Data] = [:]
     //可以撤回
     var canUndo:Bool{
         get {
@@ -76,8 +68,8 @@ class DrawManager{
         if index == -1{
             modelArr.removeAll()
         }
-        if let textV = obj.textData {
-            textViewArr.append((index: index, txv: textV))
+        if obj.ifTextView {
+            textViewDic[index+1] = obj.textData!
         }
         modelArr.append(obj)
         index = modelArr.count - 1
@@ -86,12 +78,23 @@ class DrawManager{
     func modelForUndo()->DrawModel?{
         index = index - 1
         if index >= 0 {
-            return modelArr[index]
+            let obj:DrawModel = modelArr[index]
+            return obj
         }else{
             index = -1
             return nil
         }
     }
+    
+    //取出某一步骤的model
+    func modelFor(ind:Int)->DrawModel?{
+        if ind >= 0 && ind < modelArr.count {
+            let obj:DrawModel = modelArr[ind]
+            return obj
+        }
+        return nil
+    }
+    
     //重做时需要的model
     func modelForRedo()->DrawModel?{
         index = index + 1
@@ -112,7 +115,7 @@ class DrawManager{
             return modelArr.count > 0 ? true : false
         }
     }
-    //刚进来的时候，获取最上层的“图片model”，文本则要重头加
+    //刚进来的时候，获取退出页面时的 最上层的“图片model”，文本则要重头加
     func getTopImg() -> DrawModel? {
         index = modelArr.count - 1
         for obj in modelArr.reversed() {
@@ -143,12 +146,6 @@ class DrawContext: UIImageView {
     var realImg:UIImage? //当前图片,它只是一个临时缓存作用
     var drawType:DrawType? //画笔类型
     
-//    lazy var textView:DrawTextView = {
-//        //默认3行
-//        let textView = DrawTextView.init(frame: CGRect(x: (self.brush?.beginPoint?.x)!, y: (self.brush?.beginPoint?.y)!, width: 200, height: 24 * 3), size: (self.brush?.strokeWidth)!, color: (self.brush?.strockColor)!)
-//        return textView
-//    }()
-    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -164,22 +161,35 @@ class DrawContext: UIImageView {
             brush?.strockColor = color!
             
         case .Pentype(.Line):
-            
             print("直线")
+            brush = LineBrush()
+            brush?.strokeWidth = width!
+            brush?.strockColor = color!
+        case .Pentype(.ImaginaryLine):
+            print("虚线")
+            brush = ImaginaryLineBrush()
+            brush?.strokeWidth = width!
+            brush?.strockColor = color!
         case .Formtype(.Rect):
-            
             print("矩形")
+            brush = RectBrush()
+            brush?.strokeWidth = width!
+            brush?.strockColor = color!
         case .Formtype(.Ellipse):
-            
             print("椭圆")
+            brush = EllipseBrush()
+            brush?.strokeWidth = width!
+            brush?.strockColor = color!
         case .Eraser:
             print("橡皮擦")
             brush = EraserBrush()
             brush?.strokeWidth = width!
             brush?.strockColor = color!
         case .Note:
-            
             print("音符")
+            brush = WordBrush()
+            brush?.strockColor = color!
+            brush?.strokeWidth = width!
         case .Text:
             print("文本")
             brush = TextBrush()
@@ -187,7 +197,158 @@ class DrawContext: UIImageView {
             brush?.strokeWidth = width!
         }
     }
+}
+
+//对外接口
+extension DrawContext{
+    //颜色改变了
+    func changeBrushColor(color:String) {
+        if let brush = self.brush {
+            brush.strockColor = color
+        }
+    }
     
+    //画笔大小改变了
+    func changeBrushSize(size:CGFloat){
+        if let brush = self.brush {
+            brush.strokeWidth = size
+        }
+    }
+    
+    //如果切换为其他的就隐藏文本的编辑及UI功能
+    func hideTextViewUIMsg(){
+        for i in 0..<self.subviews.count {
+            let view = self.subviews[i]
+            if view.classForKeyedArchiver == UITextView.classForCoder() {
+                let textView:UITextView = view as! UITextView
+                textView.layer.borderWidth = 0.0
+                textView.layer.borderColor = UIColor.clear.cgColor
+            }
+        }
+    }
+    //如果切换为文本就显示文本的编辑及UI功能
+    func showTextVIewUIMsg(){
+        for i in 0..<self.subviews.count {
+            let view = self.subviews[i]
+            if view.classForKeyedArchiver == UITextView.classForCoder() {
+                var textView:UITextView = view as! UITextView
+                perfectTextView(textView: &textView)
+            }
+        }
+    }
+    
+    //每次选中文本就将textview的基本信息设置一下
+    func perfectTextView(textView:inout UITextView){
+        textView.backgroundColor = UIColor.clear
+        textView.layer.cornerRadius = 4
+        textView.layer.borderWidth = 0.5
+        textView.layer.borderColor = UIColor.gray.cgColor
+        textView.layer.masksToBounds = true
+        textView.returnKeyType = .done
+    }
+    
+    //是否可重做
+    func canForward()->Bool{
+        return self.canRedo
+    }
+    //是否可撤销
+    func canBack()->Bool{
+        return self.canUndo
+    }
+    //撤销
+    func undo() {
+        if self.canUndo == false {
+            return
+        }
+        if let obj = self.boardUndoManager.modelForUndo(){
+            if obj.ifTextView {
+                //如果是文本，那当前文本就不移除，只需要图片显示对应的img就行,然后将当前文本之后的所有文本移除掉
+                let imgData = obj.imgData
+                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData!) as! UIImage
+                self.image = img
+                self.realImg = self.image
+                if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
+                    //是文本,将其移除
+                    let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                    for view in self.subviews {
+                        if view.frame == textView.frame {
+                            view.removeFromSuperview()
+                        }
+                    }
+                }
+            }else{
+                //如果当前是图片，则需要判断刚才移除的步骤是否是文本,如果是文本就不动图片，只需将文本移除就好
+                if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
+                    //是文本,将其移除
+                    let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                    for view in self.subviews {
+                        if view.frame == textView.frame {
+                            view.removeFromSuperview()
+                        }
+                    }
+                }else if let imgData = obj.imgData {
+                    //图片
+                    let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
+                    self.image = img
+                    self.realImg = self.image
+                }
+            }
+        }else{
+            self.image = nil
+            self.realImg = nil
+        }
+        //已经撤销到第一张
+        if self.boardUndoManager.index == -1 {
+            //
+        }
+    }
+    //重做
+    func redo() {
+        if self.canRedo == false {
+            return
+        }
+        if let obj = self.boardUndoManager.modelForRedo() {
+            if obj.ifTextView {
+                //文本
+                let textData:Data = obj.textData!
+                let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                self.addSubview(textView)
+            }else if let imgData = obj.imgData{
+                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
+                self.image = img
+                self.realImg = self.image
+            }
+        }
+        
+        //已经前进到最后一张图片
+        if self.boardUndoManager.index == self.boardUndoManager.modelArr.count - 1 {
+            //
+        }
+    }
+    
+    //还原原来的图层样式，将最顶层的图片取出来作为realImg，再将文本加进来。
+    func restoreDraw(){
+        if self.hasDraw == false{
+            return
+        }
+        
+        if let obj = self.boardUndoManager.getTopImg() {
+            if let imgData = obj.imgData {
+                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
+                self.image = img
+                self.realImg = self.image
+            }
+        }
+        
+        //将文本加上去，这里虽然不是按顺序加的，但是在modelArr中是有顺序记录的
+        
+        for (_,value) in self.boardUndoManager.textViewDic {
+            let textData:Data = value
+            let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+            print(textView.frame)
+            self.addSubview(textView)
+        }
+    }
 }
 
 extension DrawContext{
@@ -240,104 +401,85 @@ extension DrawContext{
     
     //文本
     func drawText(){
-        if self.brush != nil {
+        if let brush = self.brush {
             //默认3行
-            let textView = DrawTextView(frame: CGRect(x: (self.brush?.beginPoint?.x)!, y: (self.brush?.beginPoint?.y)!, width: 200, height: 24 * 3), size: (self.brush?.strokeWidth)!, color: (self.brush?.strockColor)!)
+            let twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
+            var textView = UITextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3))
+            textView.textColor = UIColor.haxString(hex:brush.strockColor)
+            textView.font = UIFont.systemFont(ofSize:brush.strokeWidth)
+            perfectTextView(textView: &textView)
             textView.becomeFirstResponder()
             textView.delegate = self
             self.addSubview(textView)
+            
         }
     }
     
-    //是否可重做
-    func canForward()->Bool{
-        return self.canRedo
-    }
-    //是否可撤销
-    func canBack()->Bool{
-        return self.canUndo
-    }
-    //撤销
-    func undo() {
-        if self.canUndo == false {
-            return
-        }
-        if let obj = self.boardUndoManager.modelForUndo(){
-            if let imgData = obj.imgData {
-                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
-                self.image = img
-                self.realImg = self.image
-            }else if let textData = obj.textData{
-                //文本,将文本移除，待续
-                let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! DrawTextView
-                textView.removeFromSuperview()
-            }
-        }
-        //已经撤销到第一张
-        if self.boardUndoManager.index == -1 {
-            //
-        }
-    }
-    //重做
-    func redo() {
-        if self.canRedo == false {
-            return
-        }
-        if let obj = self.boardUndoManager.modelForRedo() {
-            if let imgData = obj.imgData {
-                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
-                self.image = img
-                self.realImg = self.image
-            }else if let textData = obj.textData{
-                //文本,将文本移除，待续
-                let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! DrawTextView
-                self.addSubview(textView)
-            }
-        }
-        
-        //已经前进到最后一张图片
-        if self.boardUndoManager.index == self.boardUndoManager.modelArr.count - 1 {
-            //
-        }
-    }
-    
-    //还原原来的图层样式，将最顶层的图片取出来作为realImg，再将文本加进来。
-    func restoreDraw(){
-        if self.hasDraw == false{
-            return
-        }
-        
-        if let obj = self.boardUndoManager.getTopImg() {
-            if let imgData = obj.imgData {
-                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
-                self.image = img
-                self.realImg = self.image
-            }
-        }
-        
-        //将文本加上去，这里虽然不是按顺序加的，但是在modelArr中是有顺序记录的
-        for (_,textData) in self.boardUndoManager.textViewArr {
-            let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! DrawTextView
-            self.addSubview(textView)
-        }
-        
-    }
-    
-}
-
-extension DrawContext:UITextViewDelegate{
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
+    //文字
+    func drawWord() {
+        if let brush = self.brush {
+            //开启图片上下文
+            UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+            //图形重绘
+            self.draw(self.bounds)
+            let fontsize:CGFloat = brush.strokeWidth
+            //水印文字属性
+            let att = [NSForegroundColorAttributeName:UIColor.haxString(hex: brush.strockColor),NSFontAttributeName:UIFont.systemFont(ofSize: fontsize),NSBackgroundColorAttributeName:UIColor.clear] as [String : Any]
+            //水印文字大小
+            let text = NSString(string: "♪ ♩ ♫ ♬ ¶ ‖♭ ♯ § ∮")
+            let textSize = text.boundingRect(with: CGSize(width: 320, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
+            let textW:CGFloat = textSize.width;
+            let textH:CGFloat = textSize.height;
+            
+            //绘制文字 ,文字显示的位置，要在textview的适当位置
+            text.draw(in: CGRect(x:(brush.beginPoint?.x)!-(fontsize/2.0),y:(brush.beginPoint?.y)!-(fontsize/2.0),width:textW + 10,height:textH + 10), withAttributes: att)
+            //从当前上下文获取图片
+            let image = UIGraphicsGetImageFromCurrentImageContext()
+            //关闭上下文
+            UIGraphicsEndImageContext()
+            self.image = image
+            
+            self.realImg = image
+            
+            let imgData = NSKeyedArchiver.archivedData(withRootObject: self.image!)
             //将图片存进数组中
-            let textDTView = DrawTextView(frame: textView.frame, size: (self.brush?.strokeWidth)!, color: (self.brush?.strockColor)!)
-            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textDTView)
             let obj = DrawModel()
-            obj.textData = dataDTView
+            obj.imgData = imgData
             self.boardUndoManager.addModel(obj)
             //将点集存进数组
             
-            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textView.text, Width: 200, Height: 24 * 3, Rotate: 0)))
+            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imgData:imgData,textStr:"", Width: 0, Height: 0, Rotate: 0)))
+        }
+    }
+}
+
+extension DrawContext:UITextViewDelegate{
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            if textView.text == "" {
+                textView.removeFromSuperview()
+                return true
+            }
+            
+            //修正framw
+            let fontsize:CGFloat = (brush?.strokeWidth)!
+            let text = NSString(string: textView.text)
+            let textSize = text.boundingRect(with: CGSize(width: textView.frame.size.width, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
+            let textW:CGFloat = textSize.width;
+            let textH:CGFloat = textSize.height;
+            textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: textW + 10, height: textH + 10)
+            
+            //将图片存进数组中
+            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textView)
+            let imgData = NSKeyedArchiver.archivedData(withRootObject: self.image!)
+            let obj = DrawModel()
+            obj.textData = dataDTView
+            obj.imgData = imgData
+            obj.ifTextView = true
+            self.boardUndoManager.addModel(obj)
+            
+            //将点集存进数组
+            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textView.text, Width: (textW + 10), Height: textH + 10, Rotate: 0)))
             
             textView.resignFirstResponder()
         }
@@ -354,15 +496,18 @@ extension DrawContext{
             brush.beginPoint = point
             brush.endPoint = brush.beginPoint
             self.drawingState = .begin
-            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() {
+            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
                 
                 brush.pointsArr.append(point)
                 self.drawShapeing()
             }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
+                //文本
                 brush.pointsArr.append(point) //原点位置
                 self.drawText()
-            }else{
-                
+            }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
+                //文字
+                brush.pointsArr.append(point) //原点位置
+                drawWord()
             }
         }
     }
@@ -373,8 +518,16 @@ extension DrawContext{
             brush.pointsArr.removeAll()
             brush.endPoint = point
             self.drawingState = .moved
-            brush.pointsArr.append(point)
-            self.drawShapeing()
+            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
+                
+                brush.pointsArr.append(point)
+                self.drawShapeing()
+            }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
+                
+            }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
+
+            }
+            
         }
     }
     
@@ -383,8 +536,15 @@ extension DrawContext{
         if let brush = self.brush {
             brush.endPoint = point
             self.drawingState = .ended
-            brush.pointsArr.append(point)
-            self.drawShapeing()
+            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
+                
+                brush.pointsArr.append(point)
+                self.drawShapeing()
+            }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
+                
+            }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
+                
+            }
         }
     }
     

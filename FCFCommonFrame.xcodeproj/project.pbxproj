@@ -161,6 +161,11 @@
 		19DA35471ECEC56200A56A93 /* TableHeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DA35451ECEC56200A56A93 /* TableHeaderViewCell.swift */; };
 		19DA35481ECEC56200A56A93 /* TableHeaderViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19DA35461ECEC56200A56A93 /* TableHeaderViewCell.xib */; };
 		19DD723D1F024CD1000CAC0C /* colorPalette.plist in Resources */ = {isa = PBXBuildFile; fileRef = 19DD723C1F024CD1000CAC0C /* colorPalette.plist */; };
+		19DD72411F03450A000CAC0C /* WordBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72401F03450A000CAC0C /* WordBrush.swift */; };
+		19DD72431F035127000CAC0C /* RectBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72421F035127000CAC0C /* RectBrush.swift */; };
+		19DD72451F035BCC000CAC0C /* LineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72441F035BCB000CAC0C /* LineBrush.swift */; };
+		19DD72471F035CBE000CAC0C /* ImaginaryLineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */; };
+		19DD72491F035EA7000CAC0C /* EllipseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72481F035EA7000CAC0C /* EllipseBrush.swift */; };
 		19DF8FDB1EE506100044DA68 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */; };
 		19DF8FDD1EE64ED40044DA68 /* 面试Sqlite详解 in Resources */ = {isa = PBXBuildFile; fileRef = 19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */; };
 		19DF8FE01EE64FE80044DA68 /* DataBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */; };
@@ -401,6 +406,11 @@
 		19DA35451ECEC56200A56A93 /* TableHeaderViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableHeaderViewCell.swift; sourceTree = "<group>"; };
 		19DA35461ECEC56200A56A93 /* TableHeaderViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableHeaderViewCell.xib; sourceTree = "<group>"; };
 		19DD723C1F024CD1000CAC0C /* colorPalette.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = colorPalette.plist; sourceTree = "<group>"; };
+		19DD72401F03450A000CAC0C /* WordBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordBrush.swift; sourceTree = "<group>"; };
+		19DD72421F035127000CAC0C /* RectBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectBrush.swift; sourceTree = "<group>"; };
+		19DD72441F035BCB000CAC0C /* LineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineBrush.swift; sourceTree = "<group>"; };
+		19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImaginaryLineBrush.swift; sourceTree = "<group>"; };
+		19DD72481F035EA7000CAC0C /* EllipseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipseBrush.swift; sourceTree = "<group>"; };
 		19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "面试Sqlite详解"; sourceTree = "<group>"; };
 		19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseViewController.swift; sourceTree = "<group>"; };
@@ -932,8 +942,13 @@
 				19AD69A61F00E3D500D796D2 /* DrawContext.swift */,
 				19AB02051EF3CD38009974A0 /* BaseBrush.swift */,
 				19AB02071EF3DFC7009974A0 /* PencilBrush.swift */,
+				19DD72441F035BCB000CAC0C /* LineBrush.swift */,
+				19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */,
+				19DD72421F035127000CAC0C /* RectBrush.swift */,
+				19DD72481F035EA7000CAC0C /* EllipseBrush.swift */,
 				19AD69A81F0238E200D796D2 /* EraserBrush.swift */,
 				197E39461F02A05A008AC461 /* TextBrush.swift */,
+				19DD72401F03450A000CAC0C /* WordBrush.swift */,
 				197E39441F0297FC008AC461 /* DrawTextView.swift */,
 				195C82331F024C5B00297840 /* ColorPicker.swift */,
 				195C82341F024C5B00297840 /* ColorPicker.xib */,
@@ -1315,12 +1330,15 @@
 				19612CA51EA611E700A842DE /* MJRefreshBackNormalFooter.m in Sources */,
 				19DF8FEA1EE6533E0044DA68 /* SqliteDBSwiftController.swift in Sources */,
 				1957EB8C1EDE981800CD65FF /* PageControlTestController.swift in Sources */,
+				19DD72431F035127000CAC0C /* RectBrush.swift in Sources */,
 				19D1D2AA1ED6E0C5000188ED /* CollectionViewController.swift in Sources */,
 				195C82351F024C5B00297840 /* ColorPicker.swift in Sources */,
 				19DF90011EE6780F0044DA68 /* ScrollViewController.swift in Sources */,
 				19612CB21EA611E700A842DE /* NSObject+MJKeyValue.m in Sources */,
+				19DD72451F035BCC000CAC0C /* LineBrush.swift in Sources */,
 				19DF90331EE6A46B0044DA68 /* DDXMLNode.m in Sources */,
 				19612CB11EA611E700A842DE /* NSObject+MJCoding.m in Sources */,
+				19DD72471F035CBE000CAC0C /* ImaginaryLineBrush.swift in Sources */,
 				19612CAE1EA611E700A842DE /* MJPropertyKey.m in Sources */,
 				19612CBA1EA611E700A842DE /* UIView+MJExtension.m in Sources */,
 				19612C9F1EA611E700A842DE /* MJRefreshFooter.m in Sources */,
@@ -1407,6 +1425,7 @@
 				19DF8FE71EE652FC0044DA68 /* SQLTable.swift in Sources */,
 				19DF90321EE6A46B0044DA68 /* DDXMLElement.m in Sources */,
 				19DF8FE01EE64FE80044DA68 /* DataBaseViewController.swift in Sources */,
+				19DD72411F03450A000CAC0C /* WordBrush.swift in Sources */,
 				19612CAD1EA611E700A842DE /* MJProperty.m in Sources */,
 				19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */,
 				19DA35431ECE986B00A56A93 /* MsgTableViewCell.swift in Sources */,
@@ -1421,6 +1440,7 @@
 				19612C2E1EA45BC300A842DE /* DownloadManager.swift in Sources */,
 				19612C9D1EA611E700A842DE /* MJRefreshBackFooter.m in Sources */,
 				19612C371EA4A36900A842DE /* SecondController.swift in Sources */,
+				19DD72491F035EA7000CAC0C /* EllipseBrush.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

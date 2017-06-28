@@ -22,17 +22,44 @@ class Quartz2DTestController: BaseViewController {
     
     @IBOutlet weak var bgImage: UIImageView! //曲谱背景
     
-    var currentIndex:Int = -1 //笔画缓存的下标，-1表示没有缓存
+    @IBOutlet weak var forwardBtn: UIButton!
+    
+    @IBOutlet weak var backBtn: UIButton!
+    
+    @IBOutlet weak var colorBtn: UIButton!
+    
+    @IBOutlet weak var fontSizeSlide: UISlider!
+    
+    var selectedColor:String = "000000" {
+        didSet {
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: selectedColor)
+            self.drawContext.changeBrushColor(color: selectedColor)
+        }
+    }
+    
+    var fontSize:CGFloat = 13.0 {
+        didSet {
+            self.drawContext.changeBrushSize(size: fontSize)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "画板"
+        updateUI()
         self.bgImage.image = UIImage(named:"qupu")
         segment.addTarget(self, action: #selector(segmentValueChanged), for: .valueChanged)
         segment.selectedSegmentIndex = 0 //默认就是画曲线的画笔
         segmentValueChanged(seg: segment)
-        
-        
+    }
+    
+    func updateUI(){
+        self.backBtn.layer.cornerRadius = 4
+        self.backBtn.layer.masksToBounds = true
+        self.forwardBtn.layer.cornerRadius = 4
+        self.forwardBtn.layer.masksToBounds = true
+        self.colorBtn.layer.cornerRadius = 4
+        self.colorBtn.layer.masksToBounds = true
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,28 +89,45 @@ class Quartz2DTestController: BaseViewController {
         }
     }
     
+    //换颜色
+    @IBAction func colorBtnClicked(_ sender: Any) {
+        if segment.selectedSegmentIndex == 4 {
+            return
+        }
+        showColorPick()
+    }
+    
+    //调整画笔大小
+    @IBAction func fontSizeChanged(_ sender: Any) {
+        fontSize = CGFloat((sender as! UISlider).value)
+    }
+    
     func segmentValueChanged(seg:UISegmentedControl){
+        if seg.selectedSegmentIndex == 2 {
+            self.drawContext.showTextVIewUIMsg()
+        }else{
+            self.drawContext.hideTextViewUIMsg()
+        }
         switch seg.selectedSegmentIndex {
         case 0:
             //画笔
-            showColorPick(tp: .Pentype(.Curve))
-
+            self.drawContext.initBrush(type: .Pentype(.Curve), color: selectedColor, width: fontSize)
             break
         case 1:
-            //形状
-            
+            //形状,先默认是矩形
+            self.drawContext.initBrush(type: .Formtype(.Rect), color: selectedColor, width: fontSize)
             break
         case 2:
             //文本
-            showColorPick(tp: .Text)
+            self.drawContext.initBrush(type: .Text, color: selectedColor, width: fontSize)
             break
         case 3:
-            //音符
-            
+            //音符，当作文字来添加
+            self.drawContext.initBrush(type: .Note, color: selectedColor, width: fontSize)
             break
         case 4:
             //橡皮擦,不需要选颜色
-            showColorPick(tp: .Eraser)
+            self.drawContext.initBrush(type: .Eraser, color: selectedColor, width: fontSize)
             break
         default:
             break
@@ -91,26 +135,9 @@ class Quartz2DTestController: BaseViewController {
     }
     
     //选完颜色和大小
-    func showColorPick(tp:DrawType) {
-        let color = ColorPicker(type: tp) {[weak self] (type, colorStr, fontSize) in
-            var colorString = colorStr
-            var fsize = fontSize
-            switch type{
-            case .Eraser:
-                colorString = "0" //橡皮擦颜色始终为clear
-                break;
-            case .Text:
-                if fsize < 8 {
-                    fsize = 8 //默认最小8号字体
-                }
-                if fsize > 30 {
-                    fsize = 30 //默认最大30号字体
-                }
-                break
-            default:
-                break
-            }
-            self?.drawContext.initBrush(type: type, color: colorString, width: fsize)
+    func showColorPick() {
+        let color = ColorPicker.init { (colorStr) in
+            self.selectedColor = colorStr
         }
         color.view.backgroundColor = UIColor.lightGray.withAlphaComponent(0.3)
         color.definesPresentationContext = true
@@ -119,7 +146,7 @@ class Quartz2DTestController: BaseViewController {
     }
     
     deinit {
-//        NotificationCenter.default.removeObserver(self)
+
     }
     
 }
@@ -139,47 +166,47 @@ extension Quartz2DTestController{
 
 
 //备用
-extension Quartz2DTestController{
-    func getCacheImg(index:Int)->UIImage?{
-        let userdefault = UserDefaults.standard
-        if let contexts = userdefault.array(forKey: "contexts") {
-            if index >= contexts.count {
-                self.currentIndex = contexts.count - 1
-                let imgD = contexts[currentIndex] as! Data
-                let img = NSKeyedUnarchiver.unarchiveObject(with: imgD) as! UIImage
-                return img
-            }else if index >= 0 { //index < contexts.count &&
-                let imgD = contexts[index] as! Data
-                let img = NSKeyedUnarchiver.unarchiveObject(with: imgD) as! UIImage
-                return img
-            }else {
-                self.currentIndex = -1
-            }
-        }
-        return nil
-    }
-    
-    func fu(){
-        let userdefault = UserDefaults.standard
-        if let contexts = userdefault.array(forKey: "contexts") {
-            self.currentIndex = contexts.count - 1 //把当前定义为最后一张图
-//            self.imgView.image = self.getCacheImg(index: self.currentIndex)
-        }
-        
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: nil, queue: OperationQueue.main) { (notification) in
-            //程序进入后台，就把缓存里的笔画存为当前的笔画，之前被回撤的笔画就会消失掉
-            let userdefault = UserDefaults.standard
-            if let contexts = userdefault.array(forKey: "contexts") {
-                var contextArr = contexts
-                if self.currentIndex < 0{
-                    userdefault.set(nil, forKey: "contexts")
-                }else if self.currentIndex < contexts.count && self.currentIndex >= 0 {
-                    let n = contextArr.count - (self.currentIndex + 1)
-                    contextArr.removeLast(n) //移除最后n个元素
-                    userdefault.set(contextArr, forKey: "contexts")
-                }
-            }
-            
-        }
-    }
-}
+//extension Quartz2DTestController{
+//    func getCacheImg(index:Int)->UIImage?{
+//        let userdefault = UserDefaults.standard
+//        if let contexts = userdefault.array(forKey: "contexts") {
+//            if index >= contexts.count {
+//                self.currentIndex = contexts.count - 1
+//                let imgD = contexts[currentIndex] as! Data
+//                let img = NSKeyedUnarchiver.unarchiveObject(with: imgD) as! UIImage
+//                return img
+//            }else if index >= 0 { //index < contexts.count &&
+//                let imgD = contexts[index] as! Data
+//                let img = NSKeyedUnarchiver.unarchiveObject(with: imgD) as! UIImage
+//                return img
+//            }else {
+//                self.currentIndex = -1
+//            }
+//        }
+//        return nil
+//    }
+//    
+//    func fu(){
+//        let userdefault = UserDefaults.standard
+//        if let contexts = userdefault.array(forKey: "contexts") {
+//            self.currentIndex = contexts.count - 1 //把当前定义为最后一张图
+////            self.imgView.image = self.getCacheImg(index: self.currentIndex)
+//        }
+//        
+//        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: nil, queue: OperationQueue.main) { (notification) in
+//            //程序进入后台，就把缓存里的笔画存为当前的笔画，之前被回撤的笔画就会消失掉
+//            let userdefault = UserDefaults.standard
+//            if let contexts = userdefault.array(forKey: "contexts") {
+//                var contextArr = contexts
+//                if self.currentIndex < 0{
+//                    userdefault.set(nil, forKey: "contexts")
+//                }else if self.currentIndex < contexts.count && self.currentIndex >= 0 {
+//                    let n = contextArr.count - (self.currentIndex + 1)
+//                    contextArr.removeLast(n) //移除最后n个元素
+//                    userdefault.set(contextArr, forKey: "contexts")
+//                }
+//            }
+//            
+//        }
+//    }
+//}
