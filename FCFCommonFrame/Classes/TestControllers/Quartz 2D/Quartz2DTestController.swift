@@ -74,6 +74,11 @@ class Quartz2DTestController: BaseViewController {
             //从xml中读取
         }
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.drawContext.removeUselessSave()
+    }
 
     //复原 减笔画
     @IBAction func backoutSelected(_ sender: Any) {

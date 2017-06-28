@@ -126,6 +126,24 @@ class DrawManager{
         return nil
     }
     
+    //当撤销到某一步的时候，如果重新开始画了东西，那么之前撤销的笔画都从缓存中移除
+    func removeBiggerThanCurrentIndex(){
+        if index <= -1 {
+            clearArr()
+        }else if index <= modelArr.count {
+            let n = modelArr.count - (index + 1)
+            if n > 0 {
+                modelArr.removeLast(n)
+                drawData.removeLast(n)
+                for (key,_) in textViewDic {
+                    if key > index {
+                        textViewDic.removeValue(forKey: key)
+                    }
+                }
+            }
+        }
+    }
+    
     //每缓存一次就应该清理一下数组
     func clearArr(){
         self.modelArr.removeAll()
@@ -326,6 +344,11 @@ extension DrawContext{
         }
     }
     
+    //在离开当前页面的时候，将之前撤销的东西彻底清掉，如果没有离开当前页面，但是撤销完了之后重新画画，那也把之前撤销的彻底清掉
+    func removeUselessSave(){
+        self.boardUndoManager.removeBiggerThanCurrentIndex()
+    }
+    
     //还原原来的图层样式，将最顶层的图片取出来作为realImg，再将文本加进来。
     func restoreDraw(){
         if self.hasDraw == false{
@@ -489,63 +512,74 @@ extension DrawContext:UITextViewDelegate{
 
 //处理手指触碰
 extension DrawContext{
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let point:CGPoint = (touches.first?.location(in: self))!
-        if let brush = self.brush {
-            brush.lastPoint = nil
-            brush.beginPoint = point
-            brush.endPoint = brush.beginPoint
-            self.drawingState = .begin
-            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
-                
-                brush.pointsArr.append(point)
-                self.drawShapeing()
-            }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
-                //文本
-                brush.pointsArr.append(point) //原点位置
-                self.drawText()
-            }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
-                //文字
-                brush.pointsArr.append(point) //原点位置
-                drawWord()
+    
+    //统一调用画图方法,解析xml的同时，调用这个方法就OK了
+    func drawPoints(state:DrawingState,point:CGPoint) {
+        self.drawingState = state
+        if let brush = self.brush  {
+            switch state {
+            case .begin:
+                brush.pointsArr.removeAll()
+                brush.lastPoint = nil
+                brush.beginPoint = point
+                brush.endPoint = brush.beginPoint
+                if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
+                    
+                    brush.pointsArr.append(point)
+                    self.drawShapeing()
+                }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
+                    //文本
+                    brush.pointsArr.append(point) //原点位置
+                    self.drawText()
+                }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
+                    //文字
+                    brush.pointsArr.append(point) //原点位置
+                    drawWord()
+                }
+                break
+            case .moved:
+                brush.endPoint = point
+                if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
+                    
+                    brush.pointsArr.append(point)
+                    self.drawShapeing()
+                }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
+                    
+                }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
+                    
+                }
+                break
+            case .ended:
+                brush.endPoint = point
+                if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
+                    
+                    brush.pointsArr.append(point)
+                    self.drawShapeing()
+                }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
+                    
+                }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
+                    
+                }
+                break
             }
         }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //每次绘画的时候将之前撤销的清理掉
+        removeUselessSave()
+        let point:CGPoint = (touches.first?.location(in: self))!
+        self.drawPoints(state: .begin, point: point)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point:CGPoint = (touches.first?.location(in: self))!
-        if let brush = self.brush {
-            brush.pointsArr.removeAll()
-            brush.endPoint = point
-            self.drawingState = .moved
-            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
-                
-                brush.pointsArr.append(point)
-                self.drawShapeing()
-            }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
-                
-            }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
-
-            }
-            
-        }
+        self.drawPoints(state: .moved, point: point)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point:CGPoint = (touches.first?.location(in: self))!
-        if let brush = self.brush {
-            brush.endPoint = point
-            self.drawingState = .ended
-            if brush.classForKeyedArchiver == PencilBrush.classForCoder() || brush.classForKeyedArchiver == EraserBrush.classForCoder() || brush.classForKeyedArchiver == ImaginaryLineBrush.classForCoder() || brush.classForKeyedArchiver == LineBrush.classForCoder() || brush.classForKeyedArchiver == RectBrush.classForCoder() || brush.classForKeyedArchiver == EllipseBrush.classForCoder() {
-                
-                brush.pointsArr.append(point)
-                self.drawShapeing()
-            }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
-                
-            }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
-                
-            }
-        }
+        self.drawPoints(state: .ended, point: point)
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
