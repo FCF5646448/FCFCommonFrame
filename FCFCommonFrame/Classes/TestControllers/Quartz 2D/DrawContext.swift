@@ -36,7 +36,7 @@ enum DrawType{
 class DrawModel:NSObject{
     var ifTextView:Bool = false //是否是文本，默认不是文本而是图片
     var imgData:Data?
-    var textData:Data?
+    var textData:DrawTextView? //Data?
 }
 
 //全局单例,用来存储每次画的笔画的相关数据
@@ -50,7 +50,7 @@ class DrawManager{
     //数组保存图片,存放每一笔的图片\文本，
     var modelArr = [DrawModel]()
     //这里就存储文本，key值是对应modelArr中对应的下标，值是图片
-    var textViewDic:[Int:Data] = [:]
+    var textViewDic:[Int:DrawTextView] = [:] //Data
     //可以撤回
     var canUndo:Bool{
         get {
@@ -237,8 +237,8 @@ extension DrawContext{
     func hideTextViewUIMsg(){
         for i in 0..<self.subviews.count {
             let view = self.subviews[i]
-            if view.classForKeyedArchiver == UITextView.classForCoder() {
-                let textView:UITextView = view as! UITextView
+            if view.classForKeyedArchiver == DrawTextView.classForCoder() {
+                let textView:DrawTextView = view as! DrawTextView
                 textView.layer.borderWidth = 0.0
                 textView.layer.borderColor = UIColor.clear.cgColor
             }
@@ -248,21 +248,20 @@ extension DrawContext{
     func showTextVIewUIMsg(){
         for i in 0..<self.subviews.count {
             let view = self.subviews[i]
-            if view.classForKeyedArchiver == UITextView.classForCoder() {
-                var textView:UITextView = view as! UITextView
+            if view.classForKeyedArchiver == DrawTextView.classForCoder() {
+                var textView:DrawTextView = view as! DrawTextView
                 perfectTextView(textView: &textView)
             }
         }
     }
     
     //每次选中文本就将textview的基本信息设置一下
-    func perfectTextView(textView:inout UITextView){
+    func perfectTextView(textView:inout DrawTextView){
         textView.backgroundColor = UIColor.clear
         textView.layer.cornerRadius = 4
         textView.layer.borderWidth = 0.5
         textView.layer.borderColor = UIColor.gray.cgColor
         textView.layer.masksToBounds = true
-        textView.returnKeyType = .done
     }
     
     //是否可重做
@@ -281,13 +280,14 @@ extension DrawContext{
         if let obj = self.boardUndoManager.modelForUndo(){
             if obj.ifTextView {
                 //如果是文本，那当前文本就不移除，只需要图片显示对应的img就行,然后将当前文本之后的所有文本移除掉
-                let imgData = obj.imgData
-                let img = NSKeyedUnarchiver.unarchiveObject(with: imgData!) as! UIImage
-                self.image = img
-                self.realImg = self.image
+                if let imgData = obj.imgData {
+                    let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
+                    self.image = img
+                    self.realImg = self.image
+                }
                 if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
                     //是文本,将其移除
-                    let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                    let textView = textData as DrawTextView //NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
                     for view in self.subviews {
                         if view.frame == textView.frame {
                             view.removeFromSuperview()
@@ -298,7 +298,7 @@ extension DrawContext{
                 //如果当前是图片，则需要判断刚才移除的步骤是否是文本,如果是文本就不动图片，只需将文本移除就好
                 if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
                     //是文本,将其移除
-                    let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                    let textView = textData as DrawTextView //NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
                     for view in self.subviews {
                         if view.frame == textView.frame {
                             view.removeFromSuperview()
@@ -328,8 +328,8 @@ extension DrawContext{
         if let obj = self.boardUndoManager.modelForRedo() {
             if obj.ifTextView {
                 //文本
-                let textData:Data = obj.textData!
-                let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+//                let textData:Data = obj.textData!
+                let textView = obj.textData! as DrawTextView // NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
                 self.addSubview(textView)
             }else if let imgData = obj.imgData{
                 let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
@@ -366,10 +366,10 @@ extension DrawContext{
         //将文本加上去，这里虽然不是按顺序加的，但是在modelArr中是有顺序记录的
         
         for (_,value) in self.boardUndoManager.textViewDic {
-            let textData:Data = value
-            let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
-            print(textView.frame)
-            self.addSubview(textView)
+            let textData:DrawTextView = value
+//            let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+            print(textData.frame)
+            self.addSubview(textData)
         }
     }
 }
@@ -427,14 +427,14 @@ extension DrawContext{
         if let brush = self.brush {
             //默认3行
             let twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
-            var textView = UITextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3))
+            var textView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3))
             textView.textColor = UIColor.haxString(hex:brush.strockColor)
             textView.font = UIFont.systemFont(ofSize:brush.strokeWidth)
             perfectTextView(textView: &textView)
             textView.becomeFirstResponder()
             textView.delegate = self
+            textView.btnDelegate = self
             self.addSubview(textView)
-            
         }
     }
     
@@ -476,36 +476,54 @@ extension DrawContext{
     }
 }
 
-extension DrawContext:UITextViewDelegate{
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            if textView.text == "" {
-                textView.removeFromSuperview()
-                return true
-            }
-            
-            //修正framw
-            let fontsize:CGFloat = (brush?.strokeWidth)!
-            let text = NSString(string: textView.text)
-            let textSize = text.boundingRect(with: CGSize(width: textView.frame.size.width, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
-            let textW:CGFloat = textSize.width;
-            let textH:CGFloat = textSize.height;
-            textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: textW + 10, height: textH + 10)
-            
-            //将图片存进数组中
-            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textView)
-            let imgData = NSKeyedArchiver.archivedData(withRootObject: self.image!)
-            let obj = DrawModel()
-            obj.textData = dataDTView
-            obj.imgData = imgData
-            obj.ifTextView = true
-            self.boardUndoManager.addModel(obj)
-            
-            //将点集存进数组
-            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textView.text, Width: (textW + 10), Height: textH + 10, Rotate: 0)))
-            
-            textView.resignFirstResponder()
+extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
+    func drawTextViewDeleteBtnCLicked(textView:DrawTextView){
+        textView.removeFromSuperview() //
+        //移除。同时也需要从数组中移除，待续
+    }
+    
+    func drawTextViewSureBtnCLicked(textView:DrawTextView){
+        if textView.text == "" {
+            textView.removeFromSuperview()
+            return
         }
+        
+        //修正framw
+        let fontsize:CGFloat = (brush?.strokeWidth)!
+        let text = NSString(string: textView.text)
+        let textSize = text.boundingRect(with: CGSize(width: textView.frame.size.width, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
+        let textW:CGFloat = textSize.width;
+        let textH:CGFloat = textSize.height;
+        textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: textW + 10, height: textH + 10)
+        
+        //将图片存进数组中
+        //            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textView)
+        var imgData:Data? = nil
+        if let img = self.image {
+            imgData = NSKeyedArchiver.archivedData(withRootObject: img)
+        }
+        let obj = DrawModel()
+        obj.textData = textView //dataDTView
+        obj.imgData = imgData
+        obj.ifTextView = true
+        self.boardUndoManager.addModel(obj)
+        
+        //将点集存进数组
+        self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textView.text, Width: (textW + 10), Height: textH + 10, Rotate: 0)))
+        
+        textView.resignFirstResponder()
+    }
+    
+    func textViewDidChange(_ textView: UITextView){
+        if textView.text != "" {
+            //将输入的文字显示在inputAccessoryView上
+            let tx:DrawTextView = textView as! DrawTextView
+            tx.textView.text = textView.text
+            let bottom = tx.textView.contentSize.height - tx.textView.bounds.size.height
+            tx.textView.setContentOffset(CGPoint(x: 0, y: bottom), animated: true)
+        }
+    }
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         return true
     }
 }
