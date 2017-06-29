@@ -312,6 +312,16 @@ extension DrawContext{
                 }
             }
         }else{
+            //如果第0个是文本
+            if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
+                //是文本,将其移除
+                let textView = textData as DrawTextView
+                for view in self.subviews {
+                    if view.frame == textView.frame {
+                        view.removeFromSuperview()
+                    }
+                }
+            }
             self.image = nil
             self.realImg = nil
         }
