@@ -14,7 +14,7 @@ class BaseSearchController: BaseViewController {
     @IBOutlet weak var tableView: UITableView!
     var searchActivity:Bool = false
     
-    var baseData:[String] = ["UILabel","UIButton","UIView","UITextField","UITextView","UISwitch","UIActivity","UIActivityIndicator","UISegmentControl","UIImageView","UIProgressView","UISlider","UIStepper","UIPageControl","UIScrollView","UIPickerView","UIWebView","UIDatePicker","UIToolbar","UIActionSheet","UIAlertController","UISearchController"]
+    var baseData:[String] = ["UILabel","UIButton","UIView","UITextField","UITextView","UISwitch","UIActivity","UIActivityIndicator","UISegmentControl","UIImageView","UIProgressView","UISlider","UIStepper","UIPageControl","UIScrollView","UIPickerView","UIWebView","UIDatePicker","UIToolbar","UIActionSheet","UIAlertController","UISearchController","Rotated"]
     var searchData:[String] = []
     
     override func viewDidLoad() {
@@ -168,6 +168,10 @@ extension BaseSearchController:UITableViewDelegate,UITableViewDataSource{
             self.navigationController?.pushViewController(search, animated: true)
         case "UIPageControl":
             let vc = PageControlTestController()
+            vc.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(vc, animated: true)
+        case "Rotated":
+            let vc = RotateController()
             vc.hidesBottomBarWhenPushed = true
             self.navigationController?.pushViewController(vc, animated: true)
         default:

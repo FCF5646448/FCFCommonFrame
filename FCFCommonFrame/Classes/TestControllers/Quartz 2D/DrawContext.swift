@@ -182,6 +182,9 @@ class DrawContext: UIImageView {
     var realImg:UIImage? //当前图片,它只是一个临时缓存作用
     var drawType:DrawType? //画笔类型
     
+    var rotateding:Bool = false
+    var selectedDrawTextView:DrawTextView?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
     }
@@ -277,8 +280,6 @@ extension DrawContext{
     func perfectTextView(textView:inout DrawTextView){
         textView.backgroundColor = UIColor.clear
         textView.layer.cornerRadius = 4
-        textView.layer.borderWidth = 0.5
-        textView.layer.borderColor = UIColor.gray.cgColor
         textView.layer.masksToBounds = true
     }
     
@@ -467,14 +468,10 @@ extension DrawContext{
         if let brush = self.brush {
             //默认3行
             let twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
-            var textView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3),index:self.boardUndoManager.index + 1)
-            textView.textColor = UIColor.haxString(hex:brush.strockColor)
-            textView.font = UIFont.systemFont(ofSize:brush.strokeWidth)
-            perfectTextView(textView: &textView)
-            textView.becomeFirstResponder()
-            textView.delegate = self
-            textView.btnDelegate = self
-            self.addSubview(textView)
+            var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:brush.strokeWidth)
+            perfectTextView(textView: &drawtextView)
+            drawtextView.btnDelegate = self
+            self.addSubview(drawtextView)
         }
     }
     
@@ -517,32 +514,47 @@ extension DrawContext{
 }
 
 extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
-    func drawTextViewPullToNewPosition(textView: DrawTextView,index:Int, oldCenterPoint: CGPoint, newCenterPoint: CGPoint) {
+    func drawTextViewRotated(drawTextView:DrawTextView,index:Int,touchPoint:CGPoint){
+        let target = drawTextView.center
         
+        let angle = atan2(touchPoint.y-target.y, touchPoint.x-target.x)
+        drawTextView.transform = CGAffineTransform(rotationAngle: angle)
     }
-
-    func drawTextViewDeleteBtnCLicked(textView:DrawTextView,index:Int){
-        textView.resignFirstResponder()
-        textView.removeFromSuperview() //
-        //移除。同时也需要从数组中移除，待续
-        self.boardUndoManager.delete(textView: textView)
+    func drawTextViewPullToNewPosition(drawTextView: DrawTextView,index:Int, oldCenterPoint: CGPoint, newCenterPoint: CGPoint) {
+        
     }
     
-    func drawTextViewSureBtnCLicked(textView:DrawTextView,index:Int){
-        textView.resignFirstResponder()
+    func drawTextViewRotated(drawTextView:DrawTextView,index:Int,rotated:Bool){
+        self.rotateding = rotated
+        if rotated {
+            self.selectedDrawTextView = drawTextView
+        }else{
+            self.selectedDrawTextView = nil
+        }
+    }
+
+    func drawTextViewDeleteBtnCLicked(drawTextView:DrawTextView,index:Int){
+        drawTextView.textView.resignFirstResponder()
+        drawTextView.removeFromSuperview() //
+        //移除。同时也需要从数组中移除，待续
+        self.boardUndoManager.delete(textView: drawTextView)
+    }
+    
+    func drawTextViewSureBtnCLicked(drawTextView:DrawTextView,index:Int,textStr:String){
+        drawTextView.textView.resignFirstResponder()
         
-        if textView.text == "" {
-            textView.removeFromSuperview()
+        if textStr == "" {
+            drawTextView.removeFromSuperview()
             return
         }
         
         //修正framw
-        let fontsize:CGFloat = (brush?.strokeWidth)!
-        let text = NSString(string: textView.text)
-        let textSize = text.boundingRect(with: CGSize(width: textView.frame.size.width, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
-        let textW:CGFloat = textSize.width;
-        let textH:CGFloat = textSize.height;
-        textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: (textW + 10 > 34 ? (textW + 10) : 34), height: (textH + 10 > 34 ? (textH + 10) : 34))
+//        let fontsize:CGFloat = (brush?.strokeWidth)!
+//        let text = NSString(string: textView.text)
+//        let textSize = text.boundingRect(with: CGSize(width: textView.frame.size.width, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
+//        let textW:CGFloat = textSize.width;
+//        let textH:CGFloat = textSize.height;
+//        textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: (textW + 10 > 34 ? (textW + 10) : 34), height: (textH + 10 > 34 ? (textH + 10) : 34))
         
         //将图片存进数组中
         //            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textView)
@@ -551,28 +563,13 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
             imgData = NSKeyedArchiver.archivedData(withRootObject: img)
         }
         let obj = DrawModel()
-        obj.textData = textView
+        obj.textData = drawTextView
         obj.imgData = imgData
         obj.ifTextView = true
         self.boardUndoManager.addModel(obj)
-        
+        let twidth:CGFloat = (self.frame.width - (self.brush!.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (self.brush!.beginPoint?.x)!)
         //将点集存进数组
-        self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textView.text, Width: (textW + 10), Height: textH + 10, Rotate: 0)))
-    }
-    
-    func textViewDidChange(_ textView: UITextView){
-        if textView.text != "" {
-            let fontsize:CGFloat = (brush?.strokeWidth)!
-            //将输入的文字显示在inputAccessoryView上
-            let tx:DrawTextView = textView as! DrawTextView
-            tx.textView.font = UIFont.systemFont(ofSize: fontsize)
-            tx.textView.text = textView.text
-            let bottom = tx.textView.contentSize.height - tx.textView.bounds.size.height
-            tx.textView.setContentOffset(CGPoint(x: 0, y: bottom), animated: true)
-        }
-    }
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        return true
+        self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textStr, Width: twidth, Height: 200, Rotate: 0))) //(textW + 10) textH + 10
     }
 }
 
@@ -632,20 +629,32 @@ extension DrawContext{
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        //每次绘画的时候将之前撤销的清理掉
-        removeUselessSave()
         let point:CGPoint = (touches.first?.location(in: self))!
-        self.drawPoints(state: .begin, point: point)
+        if !self.rotateding{
+            //每次绘画的时候将之前撤销的清理掉
+            removeUselessSave()
+            self.drawPoints(state: .begin, point: point)
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point:CGPoint = (touches.first?.location(in: self))!
-        self.drawPoints(state: .moved, point: point)
+        if !self.rotateding{
+            self.drawPoints(state: .moved, point: point)
+        }else if let drawTV = self.selectedDrawTextView {
+            if !drawTV.textView.frame.contains(point) {
+                let target = drawTV.center
+                let angle = atan2(point.y-target.y, point.x-target.x)
+                drawTV.transform = CGAffineTransform(rotationAngle: angle)
+            }
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let point:CGPoint = (touches.first?.location(in: self))!
-        self.drawPoints(state: .ended, point: point)
+        if !self.rotateding{
+            self.drawPoints(state: .ended, point: point)
+        }
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {

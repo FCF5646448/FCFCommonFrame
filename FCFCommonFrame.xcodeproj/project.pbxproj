@@ -135,6 +135,7 @@
 		19AD69A71F00E3D500D796D2 /* DrawContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AD69A61F00E3D500D796D2 /* DrawContext.swift */; };
 		19AD69A91F0238E200D796D2 /* EraserBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AD69A81F0238E200D796D2 /* EraserBrush.swift */; };
 		19B4A7871E9F69140050F661 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B4A7861E9F69140050F661 /* BaseViewController.swift */; };
+		19C48ACE1F05316C00676324 /* RotateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C48ACD1F05316C00676324 /* RotateController.swift */; };
 		19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D28B1ED57C48000188ED /* BaseSearchController.swift */; };
 		19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D1D28C1ED57C48000188ED /* BaseSearchController.xib */; };
 		19D1D2971ED6B623000188ED /* TestSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D2951ED6B623000188ED /* TestSearchController.swift */; };
@@ -380,6 +381,7 @@
 		19AD69A61F00E3D500D796D2 /* DrawContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawContext.swift; sourceTree = "<group>"; };
 		19AD69A81F0238E200D796D2 /* EraserBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EraserBrush.swift; sourceTree = "<group>"; };
 		19B4A7861E9F69140050F661 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		19C48ACD1F05316C00676324 /* RotateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotateController.swift; sourceTree = "<group>"; };
 		19D1D28B1ED57C48000188ED /* BaseSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSearchController.swift; sourceTree = "<group>"; };
 		19D1D28C1ED57C48000188ED /* BaseSearchController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseSearchController.xib; sourceTree = "<group>"; };
 		19D1D2951ED6B623000188ED /* TestSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSearchController.swift; sourceTree = "<group>"; };
@@ -758,6 +760,7 @@
 				193717F81EEA7B7000C13430 /* ActivityIndicatorController.xib */,
 				1937180A1EEA9C0600C13430 /* TextFieldtestController.swift */,
 				1937180B1EEA9C0600C13430 /* TextFieldtestController.xib */,
+				19C48ACD1F05316C00676324 /* RotateController.swift */,
 			);
 			path = LitterUIControls;
 			sourceTree = "<group>";
@@ -1414,6 +1417,7 @@
 				190C4A731E9F4EF700C0C6D9 /* ColorExtension.swift in Sources */,
 				19612C331EA49EA100A842DE /* FirstController.swift in Sources */,
 				19DF902E1EE6A46B0044DA68 /* DDXMLElementAdditions.m in Sources */,
+				19C48ACE1F05316C00676324 /* RotateController.swift in Sources */,
 				19612C3B1EA4A37C00A842DE /* ThirdController.swift in Sources */,
 				19D1D2AE1ED6E378000188ED /* BaseCollectionViewCell.swift in Sources */,
 				197E39471F02A05A008AC461 /* TextBrush.swift in Sources */,
