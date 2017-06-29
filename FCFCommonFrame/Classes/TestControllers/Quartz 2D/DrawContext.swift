@@ -36,7 +36,7 @@ enum DrawType{
 class DrawModel:NSObject{
     var ifTextView:Bool = false //是否是文本，默认不是文本而是图片
     var imgData:Data?
-    var textData:DrawTextView? //Data?
+    var textData:DrawTextView?
 }
 
 //全局单例,用来存储每次画的笔画的相关数据
@@ -50,7 +50,7 @@ class DrawManager{
     //数组保存图片,存放每一笔的图片\文本，
     var modelArr = [DrawModel]()
     //这里就存储文本，key值是对应modelArr中对应的下标，值是图片
-    var textViewDic:[Int:DrawTextView] = [:] //Data
+    var textViewDic:[Int:DrawTextView] = [:]
     //可以撤回
     var canUndo:Bool{
         get {
@@ -287,7 +287,7 @@ extension DrawContext{
                 }
                 if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
                     //是文本,将其移除
-                    let textView = textData as DrawTextView //NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                    let textView = textData as DrawTextView
                     for view in self.subviews {
                         if view.frame == textView.frame {
                             view.removeFromSuperview()
@@ -298,7 +298,7 @@ extension DrawContext{
                 //如果当前是图片，则需要判断刚才移除的步骤是否是文本,如果是文本就不动图片，只需将文本移除就好
                 if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
                     //是文本,将其移除
-                    let textView = textData as DrawTextView //NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                    let textView = textData as DrawTextView
                     for view in self.subviews {
                         if view.frame == textView.frame {
                             view.removeFromSuperview()
@@ -328,8 +328,7 @@ extension DrawContext{
         if let obj = self.boardUndoManager.modelForRedo() {
             if obj.ifTextView {
                 //文本
-//                let textData:Data = obj.textData!
-                let textView = obj.textData! as DrawTextView // NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
+                let textView = obj.textData! as DrawTextView
                 self.addSubview(textView)
             }else if let imgData = obj.imgData{
                 let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
@@ -367,7 +366,6 @@ extension DrawContext{
         
         for (_,value) in self.boardUndoManager.textViewDic {
             let textData:DrawTextView = value
-//            let textView = NSKeyedUnarchiver.unarchiveObject(with: textData) as! UITextView
             print(textData.frame)
             self.addSubview(textData)
         }
@@ -478,11 +476,14 @@ extension DrawContext{
 
 extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
     func drawTextViewDeleteBtnCLicked(textView:DrawTextView){
+        textView.resignFirstResponder()
         textView.removeFromSuperview() //
         //移除。同时也需要从数组中移除，待续
     }
     
     func drawTextViewSureBtnCLicked(textView:DrawTextView){
+        textView.resignFirstResponder()
+        
         if textView.text == "" {
             textView.removeFromSuperview()
             return
@@ -503,15 +504,13 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
             imgData = NSKeyedArchiver.archivedData(withRootObject: img)
         }
         let obj = DrawModel()
-        obj.textData = textView //dataDTView
+        obj.textData = textView
         obj.imgData = imgData
         obj.ifTextView = true
         self.boardUndoManager.addModel(obj)
         
         //将点集存进数组
         self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textView.text, Width: (textW + 10), Height: textH + 10, Rotate: 0)))
-        
-        textView.resignFirstResponder()
     }
     
     func textViewDidChange(_ textView: UITextView){

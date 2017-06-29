@@ -49,7 +49,6 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  moduleName = "Realm"
                   usesParentBreakpointCondition = "Yes"
                   offsetFromSymbolStart = "0">
                </Location>
@@ -127,12 +126,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
-            timestampString = "520347384.36632"
+            timestampString = "520395734.656845"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "324"
-            endingLineNumber = "324"
-            landmarkName = "redo()"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
+            landmarkName = "undo()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -143,7 +142,71 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
-            timestampString = "520347765.486401"
+            timestampString = "520395766.441991"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
+            landmarkName = "undo()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FCFCommonFrame.DrawContext.undo () -&gt; ()"
+                  moduleName = "FCFCommonFrame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fengcaifan/Desktop/git/FCFCommonFrame/FCFCommonFrame/Classes/TestControllers/Quartz%202D/DrawContext.swift"
+                  timestampString = "520396613.427635"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "283"
+                  endingLineNumber = "283"
+                  offsetFromSymbolStart = "200">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FCFCommonFrame.DrawContext.undo () -&gt; ()"
+                  moduleName = "FCFCommonFrame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fengcaifan/Desktop/git/FCFCommonFrame/FCFCommonFrame/Classes/TestControllers/Quartz%202D/DrawContext.swift"
+                  timestampString = "520396613.429694"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "283"
+                  endingLineNumber = "283"
+                  offsetFromSymbolStart = "248">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
+            timestampString = "520395767.619847"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "280"
+            endingLineNumber = "280"
+            landmarkName = "undo()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
+            timestampString = "520395776.404087"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "79"
@@ -159,12 +222,76 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
-            timestampString = "520348616.506357"
+            timestampString = "520395777.475965"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "131"
-            endingLineNumber = "131"
-            landmarkName = "removeBiggerThanCurrentIndex()"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "modelFor(ind:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
+            timestampString = "520395783.774369"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "modelForRedo()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
+            timestampString = "520396203.663092"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "68"
+            endingLineNumber = "68"
+            landmarkName = "addModel(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
+            timestampString = "520396612.088043"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "487"
+            endingLineNumber = "487"
+            landmarkName = "drawTextViewSureBtnCLicked(textView:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
+            timestampString = "520396612.088043"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "513"
+            endingLineNumber = "513"
+            landmarkName = "drawTextViewSureBtnCLicked(textView:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
