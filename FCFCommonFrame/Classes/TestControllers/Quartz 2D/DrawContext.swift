@@ -45,7 +45,7 @@ class DrawManager{
     private init(){}
     
     var index = -1
-    //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imgData:就是图片数据;textStr:文本String,文本就是文字内容;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
+    //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imgData:就是图片数据;textStr:文本String,文本就是文字内容,音符就是音符;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
     var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imgData:Data,textStr:String,Width:CGFloat? ,Height:CGFloat? ,Rotate:CGFloat? ))] = [] //Scale:CGFloat
     //数组保存图片,存放每一笔的图片\文本，
     var modelArr = [DrawModel]()
@@ -141,6 +141,24 @@ class DrawManager{
                     }
                 }
             }
+        }
+    }
+    
+    //移除某一个文本
+    func delete(textView:DrawTextView) {
+        var deIndex:Int = -1
+        for (key,value) in textViewDic {
+            let textData:DrawTextView = value
+            if textData.frame == textView.frame  {
+                textViewDic.removeValue(forKey: key)
+                deIndex = key
+                break
+            }
+        }
+        if deIndex >= 0 && deIndex < modelArr.count  {
+            modelArr.remove(at: deIndex)
+            drawData.remove(at: deIndex)
+            self.index = modelArr.count-1
         }
     }
     
@@ -284,6 +302,9 @@ extension DrawContext{
                     let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
                     self.image = img
                     self.realImg = self.image
+                }else{
+                    self.image = nil
+                    self.realImg = nil
                 }
                 if let textData = self.boardUndoManager.textViewDic[(self.boardUndoManager.index + 1)] {
                     //是文本,将其移除
@@ -339,7 +360,18 @@ extension DrawContext{
             if obj.ifTextView {
                 //文本
                 let textView = obj.textData! as DrawTextView
-                self.addSubview(textView)
+                //添加过的就不再添加
+                var hasAdd:Bool = false
+                for view in self.subviews {
+                    if view.frame == textView.frame {
+                        hasAdd = true
+                        break
+                    }
+                }
+                if !hasAdd {
+                    self.addSubview(textView)
+                }
+                
             }else if let imgData = obj.imgData{
                 let img = NSKeyedUnarchiver.unarchiveObject(with: imgData) as! UIImage
                 self.image = img
@@ -435,7 +467,7 @@ extension DrawContext{
         if let brush = self.brush {
             //默认3行
             let twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
-            var textView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3))
+            var textView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3),index:self.boardUndoManager.index + 1)
             textView.textColor = UIColor.haxString(hex:brush.strockColor)
             textView.font = UIFont.systemFont(ofSize:brush.strokeWidth)
             perfectTextView(textView: &textView)
@@ -485,13 +517,18 @@ extension DrawContext{
 }
 
 extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
-    func drawTextViewDeleteBtnCLicked(textView:DrawTextView){
+    func drawTextViewPullToNewPosition(textView: DrawTextView,index:Int, oldCenterPoint: CGPoint, newCenterPoint: CGPoint) {
+        
+    }
+
+    func drawTextViewDeleteBtnCLicked(textView:DrawTextView,index:Int){
         textView.resignFirstResponder()
         textView.removeFromSuperview() //
         //移除。同时也需要从数组中移除，待续
+        self.boardUndoManager.delete(textView: textView)
     }
     
-    func drawTextViewSureBtnCLicked(textView:DrawTextView){
+    func drawTextViewSureBtnCLicked(textView:DrawTextView,index:Int){
         textView.resignFirstResponder()
         
         if textView.text == "" {
@@ -505,7 +542,7 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
         let textSize = text.boundingRect(with: CGSize(width: textView.frame.size.width, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
         let textW:CGFloat = textSize.width;
         let textH:CGFloat = textSize.height;
-        textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: textW + 10, height: textH + 10)
+        textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: (textW + 10 > 34 ? (textW + 10) : 34), height: (textH + 10 > 34 ? (textH + 10) : 34))
         
         //将图片存进数组中
         //            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textView)
@@ -525,8 +562,10 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
     
     func textViewDidChange(_ textView: UITextView){
         if textView.text != "" {
+            let fontsize:CGFloat = (brush?.strokeWidth)!
             //将输入的文字显示在inputAccessoryView上
             let tx:DrawTextView = textView as! DrawTextView
+            tx.textView.font = UIFont.systemFont(ofSize: fontsize)
             tx.textView.text = textView.text
             let bottom = tx.textView.contentSize.height - tx.textView.bounds.size.height
             tx.textView.setContentOffset(CGPoint(x: 0, y: bottom), animated: true)

@@ -22,10 +22,10 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Et9-RZ-qYQ">
-                    <rect key="frame" x="25" y="70" width="325" height="533"/>
+                    <rect key="frame" x="25" y="80" width="325" height="507"/>
                     <subviews>
                         <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="yoE-91-Pyj">
-                            <rect key="frame" x="8" y="8" width="309" height="517"/>
+                            <rect key="frame" x="8" y="8" width="309" height="491"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Noz-hN-DF1">
                                 <size key="itemSize" width="0.0" height="0.0"/>
@@ -51,9 +51,9 @@
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="Et9-RZ-qYQ" secondAttribute="trailing" constant="25" id="8ks-NW-P87"/>
-                <constraint firstAttribute="bottom" secondItem="Et9-RZ-qYQ" secondAttribute="bottom" constant="64" id="Wqv-Vf-Yp6"/>
+                <constraint firstAttribute="bottom" secondItem="Et9-RZ-qYQ" secondAttribute="bottom" constant="80" id="Wqv-Vf-Yp6"/>
                 <constraint firstItem="Et9-RZ-qYQ" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="25" id="h5h-yc-7LU"/>
-                <constraint firstItem="Et9-RZ-qYQ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="70" id="pZd-So-3E2"/>
+                <constraint firstItem="Et9-RZ-qYQ" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="80" id="pZd-So-3E2"/>
             </constraints>
             <point key="canvasLocation" x="52.5" y="65.5"/>
         </view>
