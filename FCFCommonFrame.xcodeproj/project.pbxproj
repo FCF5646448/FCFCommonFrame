@@ -167,6 +167,8 @@
 		19DD72451F035BCC000CAC0C /* LineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72441F035BCB000CAC0C /* LineBrush.swift */; };
 		19DD72471F035CBE000CAC0C /* ImaginaryLineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */; };
 		19DD72491F035EA7000CAC0C /* EllipseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72481F035EA7000CAC0C /* EllipseBrush.swift */; };
+		19DD724D1F05EBB9000CAC0C /* XmlManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD724C1F05EBB9000CAC0C /* XmlManager.swift */; };
+		19DD724F1F06011D000CAC0C /* draw.xml in Resources */ = {isa = PBXBuildFile; fileRef = 19DD724E1F06011D000CAC0C /* draw.xml */; };
 		19DF8FDB1EE506100044DA68 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */; };
 		19DF8FDD1EE64ED40044DA68 /* 面试Sqlite详解 in Resources */ = {isa = PBXBuildFile; fileRef = 19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */; };
 		19DF8FE01EE64FE80044DA68 /* DataBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */; };
@@ -413,6 +415,8 @@
 		19DD72441F035BCB000CAC0C /* LineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineBrush.swift; sourceTree = "<group>"; };
 		19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImaginaryLineBrush.swift; sourceTree = "<group>"; };
 		19DD72481F035EA7000CAC0C /* EllipseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipseBrush.swift; sourceTree = "<group>"; };
+		19DD724C1F05EBB9000CAC0C /* XmlManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XmlManager.swift; sourceTree = "<group>"; };
+		19DD724E1F06011D000CAC0C /* draw.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = draw.xml; sourceTree = "<group>"; };
 		19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "面试Sqlite详解"; sourceTree = "<group>"; };
 		19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseViewController.swift; sourceTree = "<group>"; };
@@ -955,6 +959,8 @@
 				197E39441F0297FC008AC461 /* DrawTextView.swift */,
 				195C82331F024C5B00297840 /* ColorPicker.swift */,
 				195C82341F024C5B00297840 /* ColorPicker.xib */,
+				19DD724C1F05EBB9000CAC0C /* XmlManager.swift */,
+				19DD724E1F06011D000CAC0C /* draw.xml */,
 			);
 			path = "Quartz 2D";
 			sourceTree = "<group>";
@@ -1277,6 +1283,7 @@
 				193717FA1EEA7B7000C13430 /* ActivityIndicatorController.xib in Resources */,
 				193717A31EE7F0FD00C13430 /* AlertControllerTest.xib in Resources */,
 				19DF8FDD1EE64ED40044DA68 /* 面试Sqlite详解 in Resources */,
+				19DD724F1F06011D000CAC0C /* draw.xml in Resources */,
 				1957EB571ED813FE00CD65FF /* CollectionViewPUBULIUController.xib in Resources */,
 				193717AF1EE8EB1900C13430 /* Animate使用总结 in Resources */,
 				19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */,
@@ -1425,6 +1432,7 @@
 				19612CAF1EA611E700A842DE /* MJPropertyType.m in Sources */,
 				1937179E1EE7D6E900C13430 /* SwiftyJSONTestController.swift in Sources */,
 				190C4A741E9F4EF700C0C6D9 /* ImageExtension.swift in Sources */,
+				19DD724D1F05EBB9000CAC0C /* XmlManager.swift in Sources */,
 				19612CB91EA611E700A842DE /* UIScrollView+MJRefresh.m in Sources */,
 				19DF8FE71EE652FC0044DA68 /* SQLTable.swift in Sources */,
 				19DF90321EE6A46B0044DA68 /* DDXMLElement.m in Sources */,

@@ -116,8 +116,8 @@ class DrawTextView:UIView {
         if self.backgroundColor == UIColor.clear {
             //未选中状态，变成选中状态，可以旋转
             selected = true
-            self.textView.backgroundColor = UIColor.lightGray
-            self.backgroundColor = UIColor.gray
+            self.textView.backgroundColor = UIColor.white
+            self.backgroundColor = UIColor.lightGray
         }else{
             //选中状态,变成未选中状态
             selected = false
@@ -128,6 +128,7 @@ class DrawTextView:UIView {
     }
     
     func move(recognizer:UISwipeGestureRecognizer){
+        
         let oldCenter = self.center
         var newCenterPoint:CGPoint?
         switch recognizer.state {
@@ -135,21 +136,20 @@ class DrawTextView:UIView {
             touchBenPoint = recognizer.location(in: self.superview)
         default:
             newCenterPoint = recognizer.location(in: self.superview)
-        }
-        let touch = recognizer.location(in: self)
-        if (touchBenPoint != nil && newCenterPoint != nil && self.textView.frame.contains(touch)) {
-            let newPoint = newCenterPoint!
-            let bengin = touchBenPoint!
-            let move:(x:CGFloat,y:CGFloat) = (newPoint.x-bengin.x,newPoint.y-bengin.y)
-            let newCenter:CGPoint = CGPoint(x: oldCenter.x + move.x, y: oldCenter.y + move.y)
-            UIView.animate(withDuration: 0, animations: { 
+            let touch = recognizer.location(in: self)
+            if (touchBenPoint != nil && newCenterPoint != nil && self.textView.frame.contains(touch)) {
+                let newPoint = newCenterPoint!
+                let bengin = touchBenPoint!
+                let move:(x:CGFloat,y:CGFloat) = (newPoint.x-bengin.x,newPoint.y-bengin.y)
+                let newCenter:CGPoint = CGPoint(x: oldCenter.x + move.x, y: oldCenter.y + move.y)
                 self.center = newCenter
-            })
-            
-            if oldCenter != self.center {
-                self.btnDelegate?.drawTextViewPullToNewPosition(drawTextView: self, index: self.index, oldCenterPoint: oldCenter, newCenterPoint: newCenter)
+                
+                if oldCenter != self.center {
+                    self.btnDelegate?.drawTextViewPullToNewPosition(drawTextView: self, index: self.index, oldCenterPoint: oldCenter, newCenterPoint: newCenter)
+                }
             }
         }
+        
     }
     
     func setRotatedAngle(angle:CGFloat){

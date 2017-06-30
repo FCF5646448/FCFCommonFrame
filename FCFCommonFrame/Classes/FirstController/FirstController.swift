@@ -41,6 +41,11 @@ class FirstController: BaseViewController {
             self.createData()
         })
         createData()
+        
+        let point = CGPoint(x: 234.0, y: 2348.0)
+        let str = NSStringFromCGPoint(point)
+//        let point = CGPointFromString(str)
+        print(str)
     }
     
     func endrefresh() {

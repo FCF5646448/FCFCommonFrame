@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ViewList>
+    <Path pen_type="HAND" pen_shape="HAND_WRITE" pen_width="20.0" color="fe4b2b" rotate_degree="0" pivot_x="378.0" pivot_y="528.0" point_list="{173.4394,379.78662}-{173.4394,379.78662}-{174.2227,379.78662}-{198.0007,377.68768}-{248.59108,370.67075}-{300.98666,364.72385}-{346.18436,364.60352}-{385.5713,369.4885}-{425.7954,377.6752}-{454.55048,381.8855}-{461.82166,381.5357}-{461.5726,381.18588}-"/>
+    <Path pen_type="ERASER" pen_shape="HAND_WRITE" pen_width="20.0" color="0" rotate_degree="0" pivot_x="378.0" pivot_y="528.0" point_list="{327.99628,279.03906}-{327.99628,279.03906}-{326.66245,285.51633}-{321.3938,313.26956}-{312.22177,371.9676}-{299.23007,454.123}-{288.68533,512.43445}-{285.61542,528.81006}-{285.3358,531.60754}-"/>
+    <Path pen_type="TEXT"  text="喇叭" size="62.999996" color="fe4b2b" text_rotate="0.0" rotate_degree="0" text_x="358.06845" text_y="586.8787" pivot_x="378.0" pivot_y="528.0"/>
+    <Path pen_type="HAND" pen_shape="SYMBOL" pen_width="63.0" color="fe4b2b" rotate_degree="0" pivot_x="378.0" pivot_y="528.0" start_x="198.61609" start_y="597.3732" end_x="199.31609" end_y="598.07324" symbol="♬"/>
+    <Path pen_type="HAND" pen_shape="HOLLOW_CIRCLE" pen_width="63.0" color="fe4b2b" rotate_degree="0" pivot_x="378.0" pivot_y="528.0" start_x="332.89175" start_y="744.99634" end_x="476.33972" end_y="798.8683"/>
+</ViewList>

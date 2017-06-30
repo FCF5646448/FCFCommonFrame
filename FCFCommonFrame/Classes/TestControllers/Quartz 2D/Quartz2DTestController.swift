@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 //1、将每次画的东西先存到全局类里
 //2、然后在app关闭的时候，将画的东西转成xml文档
 //3、每次打开页面的时候，先从全局数组里拿到数据，没有的话，从xml里将数据拿到，然后缓存到数组里，生成新的图片。将图片放到全局数组里
@@ -30,6 +29,9 @@ class Quartz2DTestController: BaseViewController {
     
     @IBOutlet weak var fontSizeSlide: UISlider!
     
+    var wBili:CGFloat = 1.0
+    var hBili:CGFloat = 1.0
+    
     var selectedColor:String = "000000" {
         didSet {
             self.colorBtn.backgroundColor = UIColor.haxString(hex: selectedColor)
@@ -47,10 +49,30 @@ class Quartz2DTestController: BaseViewController {
         super.viewDidLoad()
         title = "画板"
         updateUI()
-        self.bgImage.image = UIImage(named:"qupu")
+        let img = UIImage(named:"qupu")
+        self.bgImage.image = img
+        
+        let imgW = img!.size.width
+        let imgH = img!.size.height
+        
+        let ScreenW = self.bgImage.frame.width
+        let ScreenH = self.bgImage.frame.height
+        
+        self.wBili =  ScreenW*1.0/imgW
+        self.hBili = ScreenH*1.0/imgH
+        
+        
+        
+        
+        
         segment.addTarget(self, action: #selector(segmentValueChanged), for: .valueChanged)
         segment.selectedSegmentIndex = 0 //默认就是画曲线的画笔
         segmentValueChanged(seg: segment)
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: nil, queue: OperationQueue.main) { (notification) in
+            //程序进入后台，就把缓存里的笔画存为当前的笔画
+            self.saveXml()
+        }
     }
     
     func updateUI(){
@@ -72,6 +94,7 @@ class Quartz2DTestController: BaseViewController {
             self.drawContext.restoreDraw()
         }else{
             //从xml中读取
+            getDataFromXML()
         }
     }
     
@@ -160,58 +183,215 @@ class Quartz2DTestController: BaseViewController {
 extension Quartz2DTestController{
     //将xml的操作顺序放进数组里
     func getDataFromXML(){
+        var pathArr:[PathModel] = []
+        let file = Bundle.main.path(forResource: "draw", ofType: "xml")
+        let url = URL(fileURLWithPath: file!)
+        //xml
+        let xmlData = try! Data(contentsOf: url)
+        //
+        let doc = try! DDXMLDocument(data: xmlData, options: 0)
         
+        let paths = try! doc.nodes(forXPath: "//Path") as! [DDXMLElement]
+        
+        for path in paths {
+            let obj:PathModel = PathModel()
+            if let pen_type = path.attribute(forName: "pen_type") {
+                obj.pen_type = pen_type.stringValue
+            }
+            
+            if let pen_shape = path.attribute(forName: "pen_shape") {
+                obj.pen_shape = pen_shape.stringValue
+            }
+            
+            if let pen_width = path.attribute(forName: "pen_width") {
+                obj.pen_width = pen_width.stringValue
+            }
+            if let color = path.attribute(forName: "color") {
+                obj.color = color.stringValue
+            }
+            if let rotate_degree = path.attribute(forName: "rotate_degree"){
+                obj.rotate_degree = rotate_degree.stringValue
+            }
+            if let pivot_x = path.attribute(forName: "pivot_x") {
+                obj.pivot_x = pivot_x.stringValue
+            }
+            if let pivot_y = path.attribute(forName: "pivot_y") {
+                obj.pivot_y = pivot_y.stringValue
+            }
+            if let point_list = path.attribute(forName: "point_list") {
+                obj.point_list = point_list.stringValue
+            }
+            if let size = path.attribute(forName: "size") {
+                obj.size = size.stringValue
+            }
+            if let text_rotate = path.attribute(forName: "text_rotate") {
+                obj.text_rotate = text_rotate.stringValue
+            }
+            if let text_x = path.attribute(forName: "text_x") {
+                obj.text_x = text_x.stringValue
+            }
+            if let text_y = path.attribute(forName: "text_y") {
+                obj.text_y = text_y.stringValue
+            }
+            if let start_x = path.attribute(forName: "start_x") {
+                obj.start_x  = start_x.stringValue
+            }
+            if let start_y = path.attribute(forName: "start_y") {
+                obj.start_y = start_y.stringValue
+            }
+            if let end_x = path.attribute(forName: "end_x") {
+                obj.end_x = end_x.stringValue
+            }
+            if let end_y = path.attribute(forName: "end_y") {
+                obj.end_y = end_y.stringValue
+            }
+            if let symbol = path.attribute(forName: "symbol") {
+                obj.symbol = symbol.stringValue
+            }
+            if let text = path.attribute(forName: "text") {
+                obj.text = text.stringValue
+            }
+            pathArr.append(obj)
+        }
+        
+        for obj in pathArr {
+            if obj.pen_type == "HAND" {
+                if obj.pen_shape == "HAND_WRITE" {
+                    obj.type = .Pentype(.Curve)
+                }else if obj.pen_shape == "ARROW"{
+                    //  箭头
+                }else if obj.pen_shape == "LINE"{
+                    obj.type = .Pentype(.Line)
+                }else if obj.pen_shape == "FILL_CIRCLE"{
+                    //实心圆
+                }else if obj.pen_shape == "HOLLOW_CIRCLE"{
+                    obj.type = .Formtype(.Ellipse)
+                }else if obj.pen_shape == "FILL_RECT"{
+                    //
+                }else if obj.pen_shape == "HOLLOW_RECT"{
+                    obj.type = .Formtype(.Rect)
+                }else if obj.pen_shape == "SYMBOL"{
+                    obj.type = .Note
+                }
+                    
+            }else if obj.pen_type == "ERASER" {
+                obj.type = .Eraser
+            }else if obj.pen_type == "TEXT" {
+                obj.type = .Text
+            }
+            self.autoDraw(obj: obj)
+        }
+    }
+    
+    func autoDraw(obj:PathModel){
+        switch obj.type! {
+        case .Pentype(.Curve):
+            print("曲线")
+            self.drawContext.initBrush(type: .Pentype(.Curve), color: obj.color, width: obj.pen_width?.floatValue)
+            if let pointStr = obj.point_list {
+                self.draw(points: pointStr)
+            }
+            
+        case .Pentype(.Line):
+            print("直线")
+           self.drawContext.initBrush(type: .Pentype(.Line), color: obj.color, width: obj.pen_width?.floatValue)
+            if let x = obj.start_x, let y = obj.start_y {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
+            }
+            if let x = obj.end_x, let y = obj.end_x {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
+            }
+        case .Pentype(.ImaginaryLine):
+            print("虚线")
+            self.drawContext.initBrush(type: .Pentype(.ImaginaryLine), color: obj.color, width: obj.pen_width?.floatValue)
+            if let x = obj.start_x, let y = obj.start_y {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
+            }
+            if let x = obj.end_x, let y = obj.end_x {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
+            }
+        case .Formtype(.Rect):
+            print("矩形")
+            self.drawContext.initBrush(type: .Formtype(.Rect), color: obj.color, width: obj.pen_width?.floatValue)
+            if let x = obj.start_x, let y = obj.start_y {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
+            }
+            if let x = obj.end_x, let y = obj.end_x {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
+            }
+        case .Formtype(.Ellipse):
+            print("椭圆")
+            self.drawContext.initBrush(type: .Formtype(.Ellipse), color: obj.color, width: obj.pen_width?.floatValue)
+            if let x = obj.start_x, let y = obj.start_y {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
+            }
+            if let x = obj.end_x, let y = obj.end_x {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
+            }
+        case .Eraser:
+            print("橡皮擦")
+            self.drawContext.initBrush(type: .Eraser, color: obj.color, width: obj.pen_width?.floatValue)
+            if let pointStr = obj.point_list {
+                self.draw(points: pointStr)
+            }
+        case .Note:
+            print("音符")
+            self.drawContext.initBrush(type: .Note, color: obj.color, width: obj.pen_width?.floatValue)
+            if let x = obj.end_x, let y = obj.end_y,let symbol = obj.symbol {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin , text: symbol)
+            }
+        case .Text:
+            print("文本")
+            self.drawContext.initBrush(type: .Text, color: obj.color, width: obj.size?.floatValue)
+            if let x = obj.text_x, let y = obj.text_y,let text = obj.text {
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin,text: text)
+            }
+        }
+    }
+    
+    //画线，橡皮擦
+    func draw(points:String){
+        let pointStrArr = points.components(separatedBy: "-") // componentsSeparatedByString("-")
+        var pointsArr:[CGPoint] = []
+        for str in pointStrArr {
+            if str == "" {
+                continue
+            }
+            let point:CGPoint = CGPointFromString(str)
+            pointsArr.append(point)
+        }
+        
+        for i in 0..<pointsArr.count {
+            var point = pointsArr[i]
+            point.x = point.x * self.wBili
+            point.y = point.y * self.hBili
+            if i == 0 {
+                self.drawContext.drawPoints(state: .begin, point: point)
+            }else if i == pointsArr.count - 1 {
+                self.drawContext.drawPoints(state: .ended, point: point)
+            }else{
+                self.drawContext.drawPoints(state: .moved, point: point)
+            }
+        }
+    }
+    
+    func drawPoint(point:CGPoint,state:DrawingState,text:String?=nil) {
+        var p = point
+        p.x = p.x * self.wBili
+        p.y = p.y * self.hBili
+        switch state {
+        case .begin:
+            self.drawContext.drawPoints(state: .begin, point: p, textStr: text)
+        case .moved:
+            self.drawContext.drawPoints(state: .moved, point: p, textStr: text)
+        case .ended:
+            self.drawContext.drawPoints(state: .ended, point: p, textStr: text)
+        }
     }
     
     //将全局数组里的数据按画画顺序存进xml文本中
-    func saveDrawToXML(){
-        
+    func saveXml(){
+        self.drawContext.saveDrawToXML()
     }
 }
 
-
-//备用
-//extension Quartz2DTestController{
-//    func getCacheImg(index:Int)->UIImage?{
-//        let userdefault = UserDefaults.standard
-//        if let contexts = userdefault.array(forKey: "contexts") {
-//            if index >= contexts.count {
-//                self.currentIndex = contexts.count - 1
-//                let imgD = contexts[currentIndex] as! Data
-//                let img = NSKeyedUnarchiver.unarchiveObject(with: imgD) as! UIImage
-//                return img
-//            }else if index >= 0 { //index < contexts.count &&
-//                let imgD = contexts[index] as! Data
-//                let img = NSKeyedUnarchiver.unarchiveObject(with: imgD) as! UIImage
-//                return img
-//            }else {
-//                self.currentIndex = -1
-//            }
-//        }
-//        return nil
-//    }
-//    
-//    func fu(){
-//        let userdefault = UserDefaults.standard
-//        if let contexts = userdefault.array(forKey: "contexts") {
-//            self.currentIndex = contexts.count - 1 //把当前定义为最后一张图
-////            self.imgView.image = self.getCacheImg(index: self.currentIndex)
-//        }
-//        
-//        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: nil, queue: OperationQueue.main) { (notification) in
-//            //程序进入后台，就把缓存里的笔画存为当前的笔画，之前被回撤的笔画就会消失掉
-//            let userdefault = UserDefaults.standard
-//            if let contexts = userdefault.array(forKey: "contexts") {
-//                var contextArr = contexts
-//                if self.currentIndex < 0{
-//                    userdefault.set(nil, forKey: "contexts")
-//                }else if self.currentIndex < contexts.count && self.currentIndex >= 0 {
-//                    let n = contextArr.count - (self.currentIndex + 1)
-//                    contextArr.removeLast(n) //移除最后n个元素
-//                    userdefault.set(contextArr, forKey: "contexts")
-//                }
-//            }
-//            
-//        }
-//    }
-//}

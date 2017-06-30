@@ -17,7 +17,7 @@ enum DrawingState{
 //画笔类型
 enum DrawType{
     enum PenType {
-        case Curve //曲线
+        case Curve //曲线，
         case Line //直线
         case ImaginaryLine //虚线
     }
@@ -30,6 +30,29 @@ enum DrawType{
     case Eraser //橡皮擦
     case Text //文本
     case Note //音符
+}
+
+class PathModel: NSObject {
+    var type:DrawType?
+    
+    var pen_type:String?
+    var pen_shape:String?
+    var pen_width:String? //画笔宽度
+    var color:String?
+    var rotate_degree:String? //背景旋转角度
+    var pivot_x:String? //背景图中心点.x
+    var pivot_y:String? //背景图中心点.y
+    var point_list:String? //曲线、橡皮擦画的点
+    var size:String? //文本文字大小
+    var text_rotate:String? //文本旋转角度
+    var text_x:String? //文本锚点（起始点.x）
+    var text_y:String? //文本锚点（起始点.y）
+    var start_x:String? //
+    var start_y:String? //
+    var end_x:String? //
+    var end_y:String? //
+    var symbol:String? //音符
+    var text:String? //
 }
 
 //自定义一个数据模型，有image、textview,如果是图片，就txtview为nil，如果是文本，就UIImage为就存之前的图片
@@ -45,8 +68,12 @@ class DrawManager{
     private init(){}
     
     var index = -1
+    
+    var drawModles:[PathModel] = []
+    
     //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imgData:就是图片数据;textStr:文本String,文本就是文字内容,音符就是音符;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
     var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imgData:Data,textStr:String,Width:CGFloat? ,Height:CGFloat? ,Rotate:CGFloat? ))] = [] //Scale:CGFloat
+    
     //数组保存图片,存放每一笔的图片\文本，
     var modelArr = [DrawModel]()
     //这里就存储文本，key值是对应modelArr中对应的下标，值是图片
@@ -456,7 +483,6 @@ extension DrawContext{
                 obj.imgData = imgData
                 self.boardUndoManager.addModel(obj)
                 //将点集存进数组
-                
                 self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imgData:imgData,textStr:"", Width: 0, Height: 0, Rotate: 0)))
             }
             brush.lastPoint = brush.endPoint
@@ -464,32 +490,60 @@ extension DrawContext{
     }
     
     //文本
-    func drawText(){
+    func drawText(textStr:String?){
         if let brush = self.brush {
             //默认3行
-            let twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
-            var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: 24 * 3),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:brush.strokeWidth)
+            var twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
+            var textH:CGFloat = 24 * 3
+            if let text = textStr {
+                let textSize = text.boundingRect(with: CGSize(width: 320, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: (brush.strokeWidth > 20 ? 20 : brush.strokeWidth))], context: nil)
+                twidth = twidth > textSize.width ? twidth : textSize.width
+                textH = textH > textSize.height ? textH : textSize.height
+            }
+            
+            
+            var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: textH),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:(brush.strokeWidth > 20 ? 20 : brush.strokeWidth))
             perfectTextView(textView: &drawtextView)
             drawtextView.btnDelegate = self
             self.addSubview(drawtextView)
+            if let text = textStr {
+                drawtextView.textView.text = text
+                drawtextView.textView.resignFirstResponder()
+                
+                var imgData:Data? = nil
+                if let img = self.image {
+                    imgData = NSKeyedArchiver.archivedData(withRootObject: img)
+                }
+                let obj = DrawModel()
+                obj.textData = drawtextView
+                obj.imgData = imgData
+                obj.ifTextView = true
+                self.boardUndoManager.addModel(obj)
+                let twidth:CGFloat = (self.frame.width - (self.brush!.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (self.brush!.beginPoint?.x)!)
+                //将点集存进数组
+                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:text, Width: twidth, Height: 200, Rotate: 0)))
+            }
         }
     }
     
     //文字
-    func drawWord() {
-        if let brush = self.brush {
+    func drawWord(textStr:String?) {
+        if let brush = self.brush,let text = textStr {
             //开启图片上下文
             UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
             //图形重绘
             self.draw(self.bounds)
-            let fontsize:CGFloat = brush.strokeWidth
+            let fontsize:CGFloat = brush.strokeWidth > 20 ? 20 : brush.strokeWidth
             //水印文字属性
             let att = [NSForegroundColorAttributeName:UIColor.haxString(hex: brush.strockColor),NSFontAttributeName:UIFont.systemFont(ofSize: fontsize),NSBackgroundColorAttributeName:UIColor.clear] as [String : Any]
             //水印文字大小
-            let text = NSString(string: "♪ ♩ ♫ ♬ ¶ ‖♭ ♯ § ∮")
+            
             let textSize = text.boundingRect(with: CGSize(width: 320, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: fontsize)], context: nil)
-            let textW:CGFloat = textSize.width;
-            let textH:CGFloat = textSize.height;
+            var textW:CGFloat = textSize.width;
+            var textH:CGFloat = textSize.height;
+            
+            textW = textW > 24 ? textW : 24
+            textH = textH > 24 ? textH : 24
             
             //绘制文字 ,文字显示的位置，要在textview的适当位置
             text.draw(in: CGRect(x:(brush.beginPoint?.x)!-(fontsize/2.0),y:(brush.beginPoint?.y)!-(fontsize/2.0),width:textW + 10,height:textH + 10), withAttributes: att)
@@ -577,7 +631,7 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
 extension DrawContext{
     
     //统一调用画图方法,解析xml的同时，调用这个方法就OK了
-    func drawPoints(state:DrawingState,point:CGPoint) {
+    func drawPoints(state:DrawingState,point:CGPoint,textStr:String?=nil) {
         self.drawingState = state
         if let brush = self.brush  {
             switch state {
@@ -593,11 +647,11 @@ extension DrawContext{
                 }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
                     //文本
                     brush.pointsArr.append(point) //原点位置
-                    self.drawText()
+                    self.drawText(textStr: textStr)
                 }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
                     //文字
                     brush.pointsArr.append(point) //原点位置
-                    drawWord()
+                    drawWord(textStr: textStr)
                 }
                 break
             case .moved:
@@ -661,6 +715,166 @@ extension DrawContext{
         if let brush = self.brush {
             brush.endPoint = nil
         }
+    }
+}
+
+extension DrawContext{
+    func saveDrawToXML(){
+        for (_,colorStr,strokeWidth,points,_,textStr,_ ,_ ,Rotate) in self.boardUndoManager.drawData {
+            var pointsStr = ""
+            for point in points {
+                let pStr = NSStringFromCGPoint(point)
+                pointsStr.append(pStr)
+                pointsStr.append("-")
+            }
+            
+            var startPoint:CGPoint?
+            var endPoint:CGPoint?
+            if points.count>0 {
+                startPoint = points[0]
+                endPoint = points[points.count-1]
+            }
+            
+            let model:PathModel = PathModel()
+            model.type = self.drawType
+            model.rotate_degree = "0"
+            model.pivot_x = "0"
+            model.pivot_y = "0"
+            model.color = colorStr
+            switch self.drawType! {
+            case .Eraser:
+                model.pen_type = "ERASER"
+                model.pen_shape = "HAND_WRITE"
+                model.pen_width = String(format: "%.2f", strokeWidth)
+                model.point_list = pointsStr
+                break
+            case .Pentype(.Curve),.Pentype(.Line),.Pentype(.ImaginaryLine):
+                model.pen_type = "Hand"
+                model.pen_width = String(format: "%.2f", strokeWidth)
+                switch self.drawType!{
+                case .Pentype(.Curve):
+                    model.pen_shape = "HAND_WRITE"
+                    model.point_list = pointsStr
+                    break
+                case .Pentype(.Line):
+                    model.pen_shape = "LINE"
+                    break
+                case .Pentype(.ImaginaryLine):
+                    model.pen_shape = "ImaginaryLine"
+                    break
+                default:
+                    break
+                }
+            case .Text:
+                model.pen_type = "Text"
+                model.size = String(format: "%f", strokeWidth)
+                model.text_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x))
+                model.text_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y))
+                model.text = textStr
+                model.text_rotate = String(format: "%f", (Rotate == nil ? 0 : Rotate!))
+                break
+            case .Formtype(.Rect),.Formtype(.Ellipse):
+                model.pen_type = "Hand"
+                model.pen_width = String(format: "%.2f", strokeWidth)
+                model.start_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x))
+                model.start_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y))
+                model.end_x = String(format: "%f", (endPoint==nil ? 0 : startPoint!.x))
+                model.end_y = String(format: "%f", (endPoint==nil ? 0 : startPoint!.y))
+                switch self.drawType!{
+                case .Formtype(.Rect):
+                    model.pen_shape = "HOLLOW_RECT"
+                    break
+                case .Formtype(.Ellipse):
+                    model.pen_shape = "HOLLOW_CIRCLE"
+                    break
+                default:
+                    break
+                }
+            case .Note:
+                model.pen_type = "Hand"
+                model.pen_shape = "SYMBOL"
+                model.pen_width = String(format: "%.2f", strokeWidth)
+                model.end_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x))
+                model.end_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y))
+                model.symbol = textStr
+                break
+            }
+            self.boardUndoManager.drawModles.append(model)
+            
+        }
+        
+        let xml = "<?xml version='1.0' encoding='UTF-8'?>"
+        
+        let rootElement:DDXMLElement = DDXMLElement(name: "ViewList")
+        
+        for model in self.boardUndoManager.drawModles {
+            let pathElement:DDXMLElement = DDXMLElement(name: "Path")
+            
+            if let pentype = model.pen_type{
+                pathElement.addAttribute(withName: "pen_type", stringValue: pentype)
+            }
+            
+            if let pen_shape = model.pen_shape{
+                pathElement.addAttribute(withName: "pen_shape", stringValue: pen_shape)
+            }
+            if let pen_width = model.pen_width{
+                pathElement.addAttribute(withName: "pen_width", stringValue: pen_width)
+            }
+            if let color = model.color{
+                pathElement.addAttribute(withName: "color", stringValue: color)
+            }
+            if let rotate_degree = model.rotate_degree{
+                pathElement.addAttribute(withName: "rotate_degree", stringValue: rotate_degree)
+            }
+            if let pivot_x = model.pivot_x{
+                pathElement.addAttribute(withName: "pivot_x", stringValue: pivot_x)
+            }
+            if let pivot_y = model.pivot_y{
+                pathElement.addAttribute(withName: "pivot_y", stringValue: pivot_y)
+            }
+            if let point_list = model.point_list{
+                pathElement.addAttribute(withName: "point_list", stringValue: point_list)
+            }
+            if let size = model.size{
+                pathElement.addAttribute(withName: "size", stringValue: size)
+            }
+            if let text_rotate = model.text_rotate{
+                pathElement.addAttribute(withName: "text_rotate", stringValue: text_rotate)
+            }
+            if let text_x = model.text_x{
+                pathElement.addAttribute(withName: "text_x", stringValue: text_x)
+            }
+            if let text_y = model.text_y{
+                pathElement.addAttribute(withName: "text_y", stringValue: text_y)
+            }
+            if let start_x = model.start_x{
+                pathElement.addAttribute(withName: "start_x", stringValue: start_x)
+            }
+            if let start_y = model.start_y{
+                pathElement.addAttribute(withName: "start_y", stringValue: start_y)
+            }
+            if let end_x = model.end_x{
+                pathElement.addAttribute(withName: "end_x", stringValue: end_x)
+            }
+            if let end_y = model.end_y{
+                pathElement.addAttribute(withName: "end_y", stringValue: end_y)
+            }
+            if let symbol = model.symbol{
+                pathElement.addAttribute(withName: "symbol", stringValue: symbol)
+            }
+            if let text = model.text{
+                pathElement.addAttribute(withName: "text", stringValue: text)
+            }
+            
+            rootElement.addChild(pathElement)
+        }
+        
+        let xmlStr = xml.appending(rootElement.xmlString)
+        print(xmlStr)
+        
+        let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
+        try! xmlStr.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+        
     }
 }
 
