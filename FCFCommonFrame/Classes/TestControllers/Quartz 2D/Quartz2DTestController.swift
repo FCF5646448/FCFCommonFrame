@@ -7,6 +7,30 @@
 //
 
 import UIKit
+import ObjectMapper
+
+class XmlModel:BaseModel{
+    var returnMsg:String = ""
+    var returnCode:String = ""
+    var data:xmlDataObj?
+    
+    override func mapping(map: Map) {
+        returnMsg <- map["returnMsg"]
+        returnCode <- map["returnCode"]
+        data <- map["data"]
+    }
+}
+
+class xmlDataObj: BaseModel {
+    var id:String = ""
+    var uid:String = ""
+    var xml_str:String = ""
+    override func mapping(map: Map) {
+        id <- map["id"]
+        uid <- map["uid"]
+        xml_str <- map["xml_str"]
+    }
+}
 
 //1、将每次画的东西先存到全局类里
 //2、然后在app关闭的时候，将画的东西转成xml文档
@@ -73,8 +97,9 @@ class Quartz2DTestController: BaseViewController {
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: nil, queue: OperationQueue.main) { (notification) in
             //程序进入后台，就把缓存里的笔画存为当前的笔画
-            self.saveXml()
+//            self.saveXml()
         }
+        
     }
     
     func updateUI(){
@@ -84,6 +109,21 @@ class Quartz2DTestController: BaseViewController {
         self.forwardBtn.layer.masksToBounds = true
         self.colorBtn.layer.cornerRadius = 4
         self.colorBtn.layer.masksToBounds = true
+        
+        let btn = UIButton.init(type: .custom)
+        btn.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
+        btn.setTitleColor(UIColor.white, for: .normal)
+        btn.setTitle("保存", for: .normal)
+        btn.addTarget(self, action: #selector(saveXml), for: .touchUpInside)
+        let rbtn = UIBarButtonItem(customView: btn)
+        let btn2 = UIButton.init(type: .custom)
+        btn2.frame = CGRect(x: 0, y: 44, width: 44, height: 44)
+        btn2.setTitleColor(UIColor.white, for: .normal)
+        btn2.setTitle("刷新", for: .normal)
+        btn2.addTarget(self, action: #selector(refresh), for: .touchUpInside)
+        let rbtn2 = UIBarButtonItem(customView: btn2)
+        
+        self.navigationItem.rightBarButtonItems = [rbtn,rbtn2]
     }
 
     override func didReceiveMemoryWarning() {
@@ -176,19 +216,18 @@ class Quartz2DTestController: BaseViewController {
     }
     
     deinit {
-
+        
     }
     
 }
 
-
 extension Quartz2DTestController{
     //将xml的操作顺序放进数组里
     func getDataFromXML(){
+
         var pathArr:[PathModel] = []
-        let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
         
-//        let file = Bundle.main.path(forResource: "draw", ofType: "xml")
+        let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
         
         let url = URL(fileURLWithPath: filePath)
         //xml
@@ -296,12 +335,16 @@ extension Quartz2DTestController{
     }
     
     func autoDraw(obj:PathModel){
+        var dwidth:CGFloat = 0.0
         switch obj.type! {
         case .Pentype(.Curve):
             print("曲线")
             self.segment.selectedSegmentIndex = 0
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-            self.drawContext.initBrush(type: .Pentype(.Curve), color: obj.color, width: obj.pen_width?.floatValue)
+            
+            dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
+            
+            self.drawContext.initBrush(type: .Pentype(.Curve), color: obj.color, width: dwidth)
             if let pointStr = obj.point_list {
                 self.draw(points: pointStr)
             }
@@ -310,7 +353,8 @@ extension Quartz2DTestController{
             print("直线")
 //            self.segment.selectedSegmentIndex = 0
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-           self.drawContext.initBrush(type: .Pentype(.Line), color: obj.color, width: obj.pen_width?.floatValue)
+            dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
+           self.drawContext.initBrush(type: .Pentype(.Line), color: obj.color, width: dwidth)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
@@ -321,7 +365,8 @@ extension Quartz2DTestController{
             print("虚线")
 //            self.segment.selectedSegmentIndex = 0
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-            self.drawContext.initBrush(type: .Pentype(.ImaginaryLine), color: obj.color, width: obj.pen_width?.floatValue)
+            dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
+            self.drawContext.initBrush(type: .Pentype(.ImaginaryLine), color: obj.color, width: dwidth)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
@@ -332,7 +377,8 @@ extension Quartz2DTestController{
             print("矩形")
             self.segment.selectedSegmentIndex = 1
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-            self.drawContext.initBrush(type: .Formtype(.Rect), color: obj.color, width: obj.pen_width?.floatValue)
+            dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
+            self.drawContext.initBrush(type: .Formtype(.Rect), color: obj.color, width: dwidth)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
@@ -343,7 +389,8 @@ extension Quartz2DTestController{
             print("椭圆")
             self.segment.selectedSegmentIndex = 1
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-            self.drawContext.initBrush(type: .Formtype(.Ellipse), color: obj.color, width: obj.pen_width?.floatValue)
+            dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
+            self.drawContext.initBrush(type: .Formtype(.Ellipse), color: obj.color, width: dwidth)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
@@ -354,7 +401,8 @@ extension Quartz2DTestController{
             print("橡皮擦")
             self.segment.selectedSegmentIndex = 4
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-            self.drawContext.initBrush(type: .Eraser, color: obj.color, width: obj.pen_width?.floatValue)
+            dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
+            self.drawContext.initBrush(type: .Eraser, color: obj.color, width: dwidth)
             if let pointStr = obj.point_list {
                 self.draw(points: pointStr)
             }
@@ -362,7 +410,8 @@ extension Quartz2DTestController{
             print("音符")
             self.segment.selectedSegmentIndex = 3
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-            self.drawContext.initBrush(type: .Note, color: obj.color, width: obj.pen_width?.floatValue)
+            dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
+            self.drawContext.initBrush(type: .Note, color: obj.color, width: dwidth)
             if let x = obj.end_x, let y = obj.end_y,let symbol = obj.symbol {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin , text: symbol)
             }
@@ -370,11 +419,22 @@ extension Quartz2DTestController{
             print("文本")
             self.segment.selectedSegmentIndex = 2
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
-            self.drawContext.initBrush(type: .Text, color: obj.color, width: obj.size?.floatValue)
+            dwidth = obj.size != nil ? obj.size!.floatValue/2.0 : 20
+            self.drawContext.initBrush(type: .Text, color: obj.color, width: dwidth)
             if let x = obj.text_x, let y = obj.text_y,let text = obj.text {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin,text: text)
             }
         }
+        
+        if self.segment.selectedSegmentIndex == 2 {
+            self.drawContext.showTextVIewUIMsg()
+        }else{
+            self.drawContext.hideTextViewUIMsg()
+        }
+    
+        self.fontSizeSlide.setValue((Float(dwidth > CGFloat(35.0) ? CGFloat(35.0) : dwidth)), animated: false)
+        self.fontSize = (dwidth > CGFloat(35.0) ? CGFloat(35.0) : dwidth)
+    
     }
     
     //画线，橡皮擦
@@ -421,5 +481,30 @@ extension Quartz2DTestController{
     func saveXml(){
         self.drawContext.saveDrawToXML()
     }
+    
+    func refresh(){
+        func download(){
+            var params = [String:AnyObject]()
+            params["uid"] = "1" as AnyObject
+            DownloadManager.DownloadGet(host: "http://gangqinputest.yusi.tv/", path: "urlparam=note/xmlstr/getxmlbyuid", params: params, successed: {[weak self] (JsonString) in
+                print(JsonString ?? "")
+                let result = Mapper<XmlModel>().map(JSONString: JsonString!)
+                if let obj = result{
+                    if obj.returnCode == "0000" && obj.data != nil {
+                        if obj.data!.xml_str != "" {
+                            let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
+                            try! obj.data!.xml_str.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+                        }
+                        //读取
+                    }else{
+                        print("获取数据失败")
+                    }
+                }else{
+                    print("获取数据失败")
+                }
+            }) {[weak self] (error) in
+                print("\(String(describing: error))")
+            }
+        }
+    }
 }
-

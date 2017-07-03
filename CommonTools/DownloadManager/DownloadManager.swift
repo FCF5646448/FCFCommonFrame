@@ -49,8 +49,9 @@ class DownloadManager: NSObject {
                 }
             }
         }.responseString { (response) in
-            print("response:\(response.response)")
-            print("data:\(response.data)")
+            print("request:-\(response.request)")
+//            print("response:\(String(describing: response.response))")
+//            print("data:\(String(describing: response.data))")
             switch response.result{
             case .success(_):
                 successed(response.result.value)
@@ -96,8 +97,9 @@ class DownloadManager: NSObject {
                     }
                 })
                 upload.responseString(completionHandler: { (response) in
-                    print("response:\(response.response)")
-                    print("data:\(response.data)")
+                    print("request:-\(response.request)")
+//                    print("response:\(String(describing: response.response))")
+//                    print("data:\(String(describing: response.data))")
                     switch response.result{
                     case .success(_):
                         successed(response.result.value)
@@ -154,8 +156,8 @@ class DownloadManager: NSObject {
                     }
                 })
                 upload.responseString(completionHandler: { (response) in
-                    print("response:\(response.response)")
-                    print("data:\(response.data)")
+//                    print("response:\(String(describing: response.response))")
+//                    print("data:\(String(describing: response.data))")
                     switch response.result{
                     case .success(_):
                         successed(response.result.value)

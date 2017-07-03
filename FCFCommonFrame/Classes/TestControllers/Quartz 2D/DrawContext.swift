@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ObjectMapper
 
 enum DrawingState{
     case begin
@@ -295,6 +296,7 @@ extension DrawContext{
             if view.classForKeyedArchiver == DrawTextView.classForCoder() {
                 let textView:DrawTextView = view as! DrawTextView
                 textView.layer.borderWidth = 0.0
+                textView.hideBgSet()
                 textView.layer.borderColor = UIColor.clear.cgColor
             }
         }
@@ -305,6 +307,7 @@ extension DrawContext{
             let view = self.subviews[i]
             if view.classForKeyedArchiver == DrawTextView.classForCoder() {
                 var textView:DrawTextView = view as! DrawTextView
+                textView.showBgSet()
                 perfectTextView(textView: &textView)
             }
         }
@@ -315,6 +318,7 @@ extension DrawContext{
         textView.backgroundColor = UIColor.clear
         textView.layer.cornerRadius = 4
         textView.layer.masksToBounds = true
+        
     }
     
     //是否可重做
@@ -503,12 +507,12 @@ extension DrawContext{
             var twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
             var textH:CGFloat = 24 * 3
             if let text = textStr {
-                let textSize = text.boundingRect(with: CGSize(width: 320, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: (brush.strokeWidth > 20 ? 20 : brush.strokeWidth))], context: nil)
+                let textSize = text.boundingRect(with: CGSize(width: 320, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: brush.strokeWidth)], context: nil)
                 twidth = twidth > textSize.width ? twidth : textSize.width
                 textH = textH > textSize.height ? textH : textSize.height
             }
             
-            var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: textH),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:(brush.strokeWidth > 20 ? 20 : brush.strokeWidth))
+            var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: textH),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:brush.strokeWidth)
             perfectTextView(textView: &drawtextView)
             drawtextView.btnDelegate = self
             self.addSubview(drawtextView)
@@ -539,7 +543,7 @@ extension DrawContext{
             UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
             //图形重绘
             self.draw(self.bounds)
-            let fontsize:CGFloat = brush.strokeWidth > 20 ? 20 : brush.strokeWidth
+            let fontsize:CGFloat = brush.strokeWidth // > 20 ? 20 : brush.strokeWidth
             //水印文字属性
             let att = [NSForegroundColorAttributeName:UIColor.haxString(hex: brush.strockColor),NSFontAttributeName:UIFont.systemFont(ofSize: fontsize),NSBackgroundColorAttributeName:UIColor.clear] as [String : Any]
             //水印文字大小
@@ -612,7 +616,6 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
 //        textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: (textW + 10 > 34 ? (textW + 10) : 34), height: (textH + 10 > 34 ? (textH + 10) : 34))
         
         //将图片存进数组中
-        //            let dataDTView = NSKeyedArchiver.archivedData(withRootObject: textView)
         var imgData:Data? = nil
         if let img = self.image {
             imgData = NSKeyedArchiver.archivedData(withRootObject: img)
@@ -725,6 +728,7 @@ extension DrawContext{
 
 extension DrawContext{
     func saveDrawToXML(){
+        self.boardUndoManager.removeBiggerThanCurrentIndex()
         for (type,colorStr,strokeWidth,points,_,textStr,_ ,_ ,Rotate) in self.boardUndoManager.drawData {
             var pointsStr = ""
             for point in points {
@@ -754,12 +758,13 @@ extension DrawContext{
             case .Eraser:
                 model.pen_type = "ERASER"
                 model.pen_shape = "HAND_WRITE"
-                model.pen_width = String(format: "%.2f", strokeWidth)
+                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
                 model.point_list = pointsStr
                 break
+        
             case .Pentype(.Curve),.Pentype(.Line),.Pentype(.ImaginaryLine):
                 model.pen_type = "HAND"
-                model.pen_width = String(format: "%.2f", strokeWidth)
+                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
                 switch model.type! {
                 case .Pentype(.Curve):
                     model.pen_shape = "HAND_WRITE"
@@ -776,7 +781,7 @@ extension DrawContext{
                 }
             case .Text:
                 model.pen_type = "TEXT"
-                model.size = String(format: "%f", strokeWidth)
+                model.size = String(format: "%f", strokeWidth*2.0)
                 model.text_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
                 model.text_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
                 model.text = textStr
@@ -784,7 +789,7 @@ extension DrawContext{
                 break
             case .Formtype(.Rect),.Formtype(.Ellipse):
                 model.pen_type = "HAND"
-                model.pen_width = String(format: "%.2f", strokeWidth)
+                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
                 model.start_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
                 model.start_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
                 model.end_x = String(format: "%f", (endPoint==nil ? 0 : endPoint!.x*1.0/self.wBili))
@@ -802,7 +807,7 @@ extension DrawContext{
             case .Note:
                 model.pen_type = "HAND"
                 model.pen_shape = "SYMBOL"
-                model.pen_width = String(format: "%.2f", strokeWidth)
+                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
                 model.end_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
                 model.end_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
                 model.symbol = textStr
@@ -884,12 +889,45 @@ extension DrawContext{
             rootElement.addChild(pathElement)
         }
         
-        let xmlStr = xml.appending(rootElement.xmlString)
-        print(xmlStr)
+        let xmlStr =  xml.appending(rootElement.xmlString)
+        self.upload(xmlStr)
         
-        let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
-        try! xmlStr.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+    }
+    
+    //上传文件
+    func upload(_ xmlStr:String?=nil){
+        var params = [String:AnyObject]()
+        params["uid"] = "1" as AnyObject
+        if let xml = xmlStr {
+            params["xml_str"] = xml as AnyObject
+        }
         
+        DownloadManager.DownloadPost(host: "http://gangqinputest.yusi.tv/", path: "urlparam=note/xmlstr/setxmlbyuid", params: params, successed: {(JsonString) in
+            print(JsonString ?? "")
+            let result = Mapper<PostXmlModel>().map(JSONString: JsonString!)
+            if let obj = result{
+                if obj.returnCode == "0000" {
+//                    let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
+//                    try! xmlStr?.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+                }else{
+                    print("获取数据失败")
+                }
+            }else{
+                print("获取数据失败")
+            }
+        }) { (error) in
+            print("\(String(describing: error))")
+        }
+    }
+
+}
+
+class PostXmlModel:BaseModel{
+    var returnMsg:String = ""
+    var returnCode:String = ""
+    override func mapping(map: Map) {
+        returnMsg <- map["returnMsg"]
+        returnCode <- map["returnCode"]
     }
 }
 

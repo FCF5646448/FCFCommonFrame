@@ -163,9 +163,24 @@ class DrawTextView:UIView {
         self.btnDelegate?.drawTextViewSureBtnCLicked(drawTextView: self, index: self.index,textStr:self.textView.text)
     }
     
-    func remove(){
-        self.rotateView.isHidden = true
+    func showBgSet() {
+        textView.backgroundColor = UIColor.clear
+        textView.layer.borderWidth = 0.5
+        textView.layer.borderColor = UIColor.gray.cgColor
+        textView.layer.cornerRadius = 4
+        textView.layer.masksToBounds = true
+        self.rotateView.isHidden = false
     }
+    
+    func hideBgSet(){
+        self.rotateView.isHidden = true
+        textView.backgroundColor = UIColor.clear
+        textView.layer.borderWidth = 0.5
+        textView.layer.borderColor = UIColor.clear.cgColor
+        textView.layer.cornerRadius = 4
+        textView.layer.masksToBounds = true
+    }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
