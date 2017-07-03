@@ -14,7 +14,6 @@ protocol DrawTextViewDelegate{
     func drawTextViewDeleteBtnCLicked(drawTextView:DrawTextView,index:Int)
     func drawTextViewSureBtnCLicked(drawTextView:DrawTextView,index:Int,textStr:String)
     func drawTextViewPullToNewPosition(drawTextView:DrawTextView,index:Int,oldCenterPoint:CGPoint,newCenterPoint:CGPoint)
-    func drawTextViewRotated(drawTextView:DrawTextView,index:Int,touchPoint:CGPoint)
     func drawTextViewRotated(drawTextView:DrawTextView,index:Int,rotated:Bool)
 }
 

@@ -55,15 +55,17 @@ class Quartz2DTestController: BaseViewController {
         let imgW = img!.size.width
         let imgH = img!.size.height
         
+        self.drawContext.pivot_x = imgW*1.0/2
+        self.drawContext.pivot_y = imgH*1.0/2
+        
         let ScreenW = self.bgImage.frame.width
         let ScreenH = self.bgImage.frame.height
         
         self.wBili =  ScreenW*1.0/imgW
         self.hBili = ScreenH*1.0/imgH
         
-        
-        
-        
+        self.drawContext.wBili = self.wBili
+        self.drawContext.hBili = self.hBili
         
         segment.addTarget(self, action: #selector(segmentValueChanged), for: .valueChanged)
         segment.selectedSegmentIndex = 0 //默认就是画曲线的画笔
@@ -184,8 +186,11 @@ extension Quartz2DTestController{
     //将xml的操作顺序放进数组里
     func getDataFromXML(){
         var pathArr:[PathModel] = []
-        let file = Bundle.main.path(forResource: "draw", ofType: "xml")
-        let url = URL(fileURLWithPath: file!)
+        let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
+        
+//        let file = Bundle.main.path(forResource: "draw", ofType: "xml")
+        
+        let url = URL(fileURLWithPath: filePath)
         //xml
         let xmlData = try! Data(contentsOf: url)
         //
@@ -207,7 +212,14 @@ extension Quartz2DTestController{
                 obj.pen_width = pen_width.stringValue
             }
             if let color = path.attribute(forName: "color") {
-                obj.color = color.stringValue
+                
+                var colorStr = color.stringValue
+                if (colorStr?.hasPrefix("#"))! {
+                    let range = colorStr!.index(colorStr!.startIndex, offsetBy: 0)..<colorStr!.index(colorStr!.startIndex, offsetBy: 1)
+                    colorStr!.removeSubrange(range)
+                }
+                
+                obj.color = colorStr
             }
             if let rotate_degree = path.attribute(forName: "rotate_degree"){
                 obj.rotate_degree = rotate_degree.stringValue
@@ -287,6 +299,8 @@ extension Quartz2DTestController{
         switch obj.type! {
         case .Pentype(.Curve):
             print("曲线")
+            self.segment.selectedSegmentIndex = 0
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             self.drawContext.initBrush(type: .Pentype(.Curve), color: obj.color, width: obj.pen_width?.floatValue)
             if let pointStr = obj.point_list {
                 self.draw(points: pointStr)
@@ -294,54 +308,68 @@ extension Quartz2DTestController{
             
         case .Pentype(.Line):
             print("直线")
+//            self.segment.selectedSegmentIndex = 0
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
            self.drawContext.initBrush(type: .Pentype(.Line), color: obj.color, width: obj.pen_width?.floatValue)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
-            if let x = obj.end_x, let y = obj.end_x {
+            if let x = obj.end_x, let y = obj.end_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
             }
         case .Pentype(.ImaginaryLine):
             print("虚线")
+//            self.segment.selectedSegmentIndex = 0
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             self.drawContext.initBrush(type: .Pentype(.ImaginaryLine), color: obj.color, width: obj.pen_width?.floatValue)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
-            if let x = obj.end_x, let y = obj.end_x {
+            if let x = obj.end_x, let y = obj.end_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
             }
         case .Formtype(.Rect):
             print("矩形")
+            self.segment.selectedSegmentIndex = 1
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             self.drawContext.initBrush(type: .Formtype(.Rect), color: obj.color, width: obj.pen_width?.floatValue)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
-            if let x = obj.end_x, let y = obj.end_x {
+            if let x = obj.end_x, let y = obj.end_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
             }
         case .Formtype(.Ellipse):
             print("椭圆")
+            self.segment.selectedSegmentIndex = 1
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             self.drawContext.initBrush(type: .Formtype(.Ellipse), color: obj.color, width: obj.pen_width?.floatValue)
             if let x = obj.start_x, let y = obj.start_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin)
             }
-            if let x = obj.end_x, let y = obj.end_x {
+            if let x = obj.end_x, let y = obj.end_y {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .ended)
             }
         case .Eraser:
             print("橡皮擦")
+            self.segment.selectedSegmentIndex = 4
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             self.drawContext.initBrush(type: .Eraser, color: obj.color, width: obj.pen_width?.floatValue)
             if let pointStr = obj.point_list {
                 self.draw(points: pointStr)
             }
         case .Note:
             print("音符")
+            self.segment.selectedSegmentIndex = 3
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             self.drawContext.initBrush(type: .Note, color: obj.color, width: obj.pen_width?.floatValue)
             if let x = obj.end_x, let y = obj.end_y,let symbol = obj.symbol {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin , text: symbol)
             }
         case .Text:
             print("文本")
+            self.segment.selectedSegmentIndex = 2
+            self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             self.drawContext.initBrush(type: .Text, color: obj.color, width: obj.size?.floatValue)
             if let x = obj.text_x, let y = obj.text_y,let text = obj.text {
                 self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin,text: text)

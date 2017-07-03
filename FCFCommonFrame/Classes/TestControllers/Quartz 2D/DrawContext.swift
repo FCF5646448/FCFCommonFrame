@@ -193,6 +193,7 @@ class DrawManager{
     func clearArr(){
         self.modelArr.removeAll()
         self.drawData.removeAll()
+        self.textViewDic.removeAll()
         self.index = -1
     }
 }
@@ -208,6 +209,12 @@ class DrawContext: UIImageView {
     var drawingState:DrawingState? //当前绘画状态
     var realImg:UIImage? //当前图片,它只是一个临时缓存作用
     var drawType:DrawType? //画笔类型
+    
+    var pivot_x:CGFloat = 0.0 //图片中心点x
+    var pivot_y:CGFloat = 0.0 //图片中心点y
+    
+    var wBili:CGFloat = 1.0
+    var hBili:CGFloat = 1.0
     
     var rotateding:Bool = false
     var selectedDrawTextView:DrawTextView?
@@ -501,7 +508,6 @@ extension DrawContext{
                 textH = textH > textSize.height ? textH : textSize.height
             }
             
-            
             var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: textH),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:(brush.strokeWidth > 20 ? 20 : brush.strokeWidth))
             perfectTextView(textView: &drawtextView)
             drawtextView.btnDelegate = self
@@ -562,18 +568,13 @@ extension DrawContext{
             self.boardUndoManager.addModel(obj)
             //将点集存进数组
             
-            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imgData:imgData,textStr:"", Width: 0, Height: 0, Rotate: 0)))
+            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imgData:imgData,textStr:text, Width: 0, Height: 0, Rotate: 0)))
         }
     }
 }
 
 extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
-    func drawTextViewRotated(drawTextView:DrawTextView,index:Int,touchPoint:CGPoint){
-        let target = drawTextView.center
-        
-        let angle = atan2(touchPoint.y-target.y, touchPoint.x-target.x)
-        drawTextView.transform = CGAffineTransform(rotationAngle: angle)
-    }
+    //
     func drawTextViewPullToNewPosition(drawTextView: DrawTextView,index:Int, oldCenterPoint: CGPoint, newCenterPoint: CGPoint) {
         
     }
@@ -651,7 +652,11 @@ extension DrawContext{
                 }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
                     //文字
                     brush.pointsArr.append(point) //原点位置
-                    drawWord(textStr: textStr)
+                    var text = textStr
+                    if text == nil {
+                        text = "♬"
+                    }
+                    drawWord(textStr: text)
                 }
                 break
             case .moved:
@@ -720,10 +725,14 @@ extension DrawContext{
 
 extension DrawContext{
     func saveDrawToXML(){
-        for (_,colorStr,strokeWidth,points,_,textStr,_ ,_ ,Rotate) in self.boardUndoManager.drawData {
+        for (type,colorStr,strokeWidth,points,_,textStr,_ ,_ ,Rotate) in self.boardUndoManager.drawData {
             var pointsStr = ""
             for point in points {
-                let pStr = NSStringFromCGPoint(point)
+                var p = point
+                p.x = p.x*1.0 / self.wBili
+                p.y = p.y*1.0 / self.hBili
+                
+                let pStr = NSStringFromCGPoint(p)
                 pointsStr.append(pStr)
                 pointsStr.append("-")
             }
@@ -736,12 +745,12 @@ extension DrawContext{
             }
             
             let model:PathModel = PathModel()
-            model.type = self.drawType
+            model.type = type
             model.rotate_degree = "0"
-            model.pivot_x = "0"
-            model.pivot_y = "0"
+            model.pivot_x = String(format: "%.2f", self.pivot_x)
+            model.pivot_y = String(format: "%.2f", self.pivot_y)
             model.color = colorStr
-            switch self.drawType! {
+            switch model.type! {
             case .Eraser:
                 model.pen_type = "ERASER"
                 model.pen_shape = "HAND_WRITE"
@@ -749,9 +758,9 @@ extension DrawContext{
                 model.point_list = pointsStr
                 break
             case .Pentype(.Curve),.Pentype(.Line),.Pentype(.ImaginaryLine):
-                model.pen_type = "Hand"
+                model.pen_type = "HAND"
                 model.pen_width = String(format: "%.2f", strokeWidth)
-                switch self.drawType!{
+                switch model.type! {
                 case .Pentype(.Curve):
                     model.pen_shape = "HAND_WRITE"
                     model.point_list = pointsStr
@@ -766,21 +775,21 @@ extension DrawContext{
                     break
                 }
             case .Text:
-                model.pen_type = "Text"
+                model.pen_type = "TEXT"
                 model.size = String(format: "%f", strokeWidth)
-                model.text_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x))
-                model.text_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y))
+                model.text_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
+                model.text_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
                 model.text = textStr
                 model.text_rotate = String(format: "%f", (Rotate == nil ? 0 : Rotate!))
                 break
             case .Formtype(.Rect),.Formtype(.Ellipse):
-                model.pen_type = "Hand"
+                model.pen_type = "HAND"
                 model.pen_width = String(format: "%.2f", strokeWidth)
-                model.start_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x))
-                model.start_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y))
-                model.end_x = String(format: "%f", (endPoint==nil ? 0 : startPoint!.x))
-                model.end_y = String(format: "%f", (endPoint==nil ? 0 : startPoint!.y))
-                switch self.drawType!{
+                model.start_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
+                model.start_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
+                model.end_x = String(format: "%f", (endPoint==nil ? 0 : endPoint!.x*1.0/self.wBili))
+                model.end_y = String(format: "%f", (endPoint==nil ? 0 : endPoint!.y*1.0/self.hBili))
+                switch model.type! {
                 case .Formtype(.Rect):
                     model.pen_shape = "HOLLOW_RECT"
                     break
@@ -791,11 +800,11 @@ extension DrawContext{
                     break
                 }
             case .Note:
-                model.pen_type = "Hand"
+                model.pen_type = "HAND"
                 model.pen_shape = "SYMBOL"
                 model.pen_width = String(format: "%.2f", strokeWidth)
-                model.end_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x))
-                model.end_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y))
+                model.end_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
+                model.end_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
                 model.symbol = textStr
                 break
             }
@@ -817,11 +826,17 @@ extension DrawContext{
             if let pen_shape = model.pen_shape{
                 pathElement.addAttribute(withName: "pen_shape", stringValue: pen_shape)
             }
+            
             if let pen_width = model.pen_width{
                 pathElement.addAttribute(withName: "pen_width", stringValue: pen_width)
             }
+            
             if let color = model.color{
-                pathElement.addAttribute(withName: "color", stringValue: color)
+                var colorStr = color
+                if !colorStr.hasPrefix("#") {
+                    colorStr.insert("#", at: colorStr.startIndex)
+                }
+                pathElement.addAttribute(withName: "color", stringValue: colorStr)
             }
             if let rotate_degree = model.rotate_degree{
                 pathElement.addAttribute(withName: "rotate_degree", stringValue: rotate_degree)

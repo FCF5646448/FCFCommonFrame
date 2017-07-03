@@ -9,13 +9,61 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
-            timestampString = "520512325.760871"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/Quartz2DTestController.swift"
+            timestampString = "520757002.73103"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "873"
-            endingLineNumber = "873"
-            landmarkName = "saveDrawToXML()"
+            startingLineNumber = "336"
+            endingLineNumber = "336"
+            landmarkName = "autoDraw(obj:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FCFCommonFrame.Quartz2DTestController.autoDraw (obj : FCFCommonFrame.PathModel) -&gt; ()"
+                  moduleName = "FCFCommonFrame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fengcaifan/Desktop/git/FCFCommonFrame/FCFCommonFrame/Classes/TestControllers/Quartz%202D/Quartz2DTestController.swift"
+                  timestampString = "520757384.820568"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "336"
+                  endingLineNumber = "336"
+                  offsetFromSymbolStart = "8320">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "FCFCommonFrame.Quartz2DTestController.autoDraw (obj : FCFCommonFrame.PathModel) -&gt; ()"
+                  moduleName = "FCFCommonFrame"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/fengcaifan/Desktop/git/FCFCommonFrame/FCFCommonFrame/Classes/TestControllers/Quartz%202D/Quartz2DTestController.swift"
+                  timestampString = "520757384.822188"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "336"
+                  endingLineNumber = "336"
+                  offsetFromSymbolStart = "8424">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/Quartz2DTestController.swift"
+            timestampString = "520757149.697495"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "340"
+            endingLineNumber = "340"
+            landmarkName = "autoDraw(obj:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +74,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
-            timestampString = "520512994.988382"
+            timestampString = "520757187.357638"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "876"
-            endingLineNumber = "876"
-            landmarkName = "saveDrawToXML()"
+            startingLineNumber = "646"
+            endingLineNumber = "646"
+            landmarkName = "drawPoints(state:point:textStr:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "FCFCommonFrame/Classes/TestControllers/Quartz 2D/DrawContext.swift"
+            timestampString = "520757216.357426"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "678"
+            endingLineNumber = "678"
+            landmarkName = "drawPoints(state:point:textStr:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
