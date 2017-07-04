@@ -24,6 +24,10 @@ class DrawTextView:UIView {
     var btnDelegate:DrawTextViewDelegate?
     var touchBenPoint:CGPoint?
     var index:Int = -1 //在数组中的下标
+    var canmoved:Bool = false //是否可移动
+    
+    var transformAngle:CGFloat = 0 //旋转弧度
+    
     init(frame: CGRect,index:Int,color:String,strokewidth:CGFloat) {
         super.init(frame: frame)
         let oldFrame = self.frame
@@ -40,7 +44,7 @@ class DrawTextView:UIView {
         self.addSubview(self.rotateView)
         self.textView.textColor = UIColor.haxString(hex:color)
         self.textView.font = UIFont.systemFont(ofSize:strokewidth)
-        self.textView.becomeFirstResponder()
+        self.canmoved = true
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(move))
         self.addGestureRecognizer(panGesture)
     }
@@ -50,7 +54,7 @@ class DrawTextView:UIView {
     }
     
     lazy var textView:UITextView = {
-        let textV:UITextView = UITextView(frame: CGRect(x: 2, y: 2, width: self.frame.width-40, height: self.frame.height - 4))
+        let textV:UITextView = UITextView(frame: CGRect(x: 0, y: 0, width: self.frame.width-40, height: self.frame.height))
         textV.backgroundColor = UIColor.clear
         textV.layer.borderWidth = 0.5
         textV.layer.borderColor = UIColor.gray.cgColor
@@ -127,7 +131,9 @@ class DrawTextView:UIView {
     }
     
     func move(recognizer:UISwipeGestureRecognizer){
-        
+        if !self.canmoved {
+            return
+        }
         let oldCenter = self.center
         var newCenterPoint:CGPoint?
         switch recognizer.state {
@@ -148,7 +154,6 @@ class DrawTextView:UIView {
                 }
             }
         }
-        
     }
     
     func setRotatedAngle(angle:CGFloat){
@@ -169,16 +174,55 @@ class DrawTextView:UIView {
         textView.layer.borderColor = UIColor.gray.cgColor
         textView.layer.cornerRadius = 4
         textView.layer.masksToBounds = true
+        self.canmoved = true
         self.rotateView.isHidden = false
     }
     
     func hideBgSet(){
+        self.canmoved = false
         self.rotateView.isHidden = true
         textView.backgroundColor = UIColor.clear
         textView.layer.borderWidth = 0.5
         textView.layer.borderColor = UIColor.clear.cgColor
         textView.layer.cornerRadius = 4
         textView.layer.masksToBounds = true
+        
+    }
+    
+    //旋转
+    func transform(angle:CGFloat?=nil,ang:Double?=nil){
+        if let a = ang {
+            //
+            if a <= -180.0 {
+                //下面
+                let x = (360+a)/180.0 * Double.pi
+                self.transformAngle = CGFloat(x)
+                self.transform = CGAffineTransform(rotationAngle: CGFloat(x))
+            }else{
+                
+                let x = a/180.0 * Double.pi
+                self.transformAngle = CGFloat(x)
+                self.transform = CGAffineTransform(rotationAngle: CGFloat(x))
+            }
+            
+            
+        }else  if let a = angle {
+            self.transformAngle = CGFloat(a)
+            self.transform = CGAffineTransform(rotationAngle: CGFloat(a))
+        }
+    }
+    
+    //把弧度换算成角度
+    func returnAngle()->Double{
+        var rotate = 0.0
+        if self.transformAngle < 0 {
+            //上
+            rotate = Double(self.transformAngle) * 180.0 / Double.pi
+        }else{
+            rotate = 360 - Double(self.transformAngle) * 180.0 / Double.pi
+        }
+        
+        return rotate
     }
     
     
@@ -188,6 +232,9 @@ class DrawTextView:UIView {
 }
 
 extension DrawTextView:UITextViewDelegate{
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        self.textView.becomeFirstResponder()
+    }
     func textViewDidChange(_ textView: UITextView){
         if textView.text != "" {
             //将输入的文字显示在inputAccessoryView上

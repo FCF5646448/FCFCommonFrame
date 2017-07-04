@@ -136,6 +136,7 @@
 		19AD69A91F0238E200D796D2 /* EraserBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AD69A81F0238E200D796D2 /* EraserBrush.swift */; };
 		19B4A7871E9F69140050F661 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B4A7861E9F69140050F661 /* BaseViewController.swift */; };
 		19C48ACE1F05316C00676324 /* RotateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C48ACD1F05316C00676324 /* RotateController.swift */; };
+		19D02F6C1F0B70C6003D729A /* NumberExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F6B1F0B70C6003D729A /* NumberExtension.swift */; };
 		19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D28B1ED57C48000188ED /* BaseSearchController.swift */; };
 		19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D1D28C1ED57C48000188ED /* BaseSearchController.xib */; };
 		19D1D2971ED6B623000188ED /* TestSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D2951ED6B623000188ED /* TestSearchController.swift */; };
@@ -384,6 +385,7 @@
 		19AD69A81F0238E200D796D2 /* EraserBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EraserBrush.swift; sourceTree = "<group>"; };
 		19B4A7861E9F69140050F661 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		19C48ACD1F05316C00676324 /* RotateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotateController.swift; sourceTree = "<group>"; };
+		19D02F6B1F0B70C6003D729A /* NumberExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberExtension.swift; sourceTree = "<group>"; };
 		19D1D28B1ED57C48000188ED /* BaseSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSearchController.swift; sourceTree = "<group>"; };
 		19D1D28C1ED57C48000188ED /* BaseSearchController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseSearchController.xib; sourceTree = "<group>"; };
 		19D1D2951ED6B623000188ED /* TestSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSearchController.swift; sourceTree = "<group>"; };
@@ -547,6 +549,7 @@
 				190C4A6A1E9F4EF700C0C6D9 /* TableView+CollectionView+Extension.swift */,
 				190C4A6B1E9F4EF700C0C6D9 /* UIButtonExtension.swift */,
 				190C4A6C1E9F4EF700C0C6D9 /* ViewExtension.swift */,
+				19D02F6B1F0B70C6003D729A /* NumberExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1400,6 +1403,7 @@
 				19D1D29E1ED6E028000188ED /* WebKitViewController.swift in Sources */,
 				193717A21EE7F0FD00C13430 /* AlertControllerTest.swift in Sources */,
 				1978C47B1EFA5CE80076B728 /* FCFBaseBrush.swift in Sources */,
+				19D02F6C1F0B70C6003D729A /* NumberExtension.swift in Sources */,
 				1957EB941EDEB38600CD65FF /* ActivityTestController.swift in Sources */,
 				19DF90311EE6A46B0044DA68 /* DDXMLDocument.m in Sources */,
 				19DF8FE61EE652FC0044DA68 /* SQLiteDB.swift in Sources */,

@@ -13,6 +13,7 @@
             <connections>
                 <outlet property="backBtn" destination="fdu-pL-FeH" id="MxJ-Wk-BDS"/>
                 <outlet property="bgImage" destination="n60-u4-Afv" id="C94-BM-nNh"/>
+                <outlet property="clearBtn" destination="fUU-1A-sqr" id="gWV-zS-Utr"/>
                 <outlet property="colorBtn" destination="Exl-Ao-Y78" id="I7V-w9-cez"/>
                 <outlet property="drawContext" destination="r4N-Tv-Xn0" id="IwO-ag-VcQ"/>
                 <outlet property="fontSizeSlide" destination="NQa-Sh-dGC" id="yFM-fs-ms8"/>
@@ -33,7 +34,7 @@
                             <rect key="frame" x="0.0" y="622" width="375" height="45"/>
                             <subviews>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a5r-Xn-rk9">
-                                    <rect key="frame" x="338" y="7" width="32" height="32"/>
+                                    <rect key="frame" x="301" y="7" width="32" height="32"/>
                                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="32" id="eaf-dB-5PI"/>
@@ -45,7 +46,7 @@
                                     </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fdu-pL-FeH">
-                                    <rect key="frame" x="296" y="6.5" width="32" height="32"/>
+                                    <rect key="frame" x="259" y="6.5" width="32" height="32"/>
                                     <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="32" id="7mJ-bS-jlA"/>
@@ -68,7 +69,7 @@
                                     </connections>
                                 </button>
                                 <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="13" minValue="0.0" maxValue="35" translatesAutoresizingMaskIntoConstraints="NO" id="NQa-Sh-dGC">
-                                    <rect key="frame" x="46" y="7.5" width="244" height="31"/>
+                                    <rect key="frame" x="46" y="7.5" width="207" height="31"/>
                                     <color key="tintColor" red="0.94600340140000005" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="30" id="4JW-ak-xC5"/>
@@ -79,6 +80,18 @@
                                         <action selector="fontSizeChanged:" destination="-1" eventType="valueChanged" id="bfH-md-goL"/>
                                     </connections>
                                 </slider>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fUU-1A-sqr">
+                                    <rect key="frame" x="338" y="6.5" width="32" height="32"/>
+                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="32" id="LJo-GB-40m"/>
+                                        <constraint firstAttribute="height" constant="32" id="a6g-tL-hPM"/>
+                                    </constraints>
+                                    <state key="normal" image="clear"/>
+                                    <connections>
+                                        <action selector="clearBtnClicked:" destination="-1" eventType="touchUpInside" id="cRl-TR-4me"/>
+                                    </connections>
+                                </button>
                             </subviews>
                             <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
@@ -87,8 +100,10 @@
                                 <constraint firstItem="Exl-Ao-Y78" firstAttribute="leading" secondItem="cDi-G7-gU8" secondAttribute="leading" constant="8" id="Hwj-pj-Xvg"/>
                                 <constraint firstItem="a5r-Xn-rk9" firstAttribute="leading" secondItem="fdu-pL-FeH" secondAttribute="trailing" constant="10" id="Jwm-Sp-Ovq"/>
                                 <constraint firstItem="Exl-Ao-Y78" firstAttribute="centerY" secondItem="cDi-G7-gU8" secondAttribute="centerY" id="NXH-c4-dS9"/>
-                                <constraint firstAttribute="trailing" secondItem="a5r-Xn-rk9" secondAttribute="trailing" constant="5" id="SEB-4k-Xit"/>
+                                <constraint firstItem="fUU-1A-sqr" firstAttribute="centerY" secondItem="cDi-G7-gU8" secondAttribute="centerY" id="SeB-iJ-osH"/>
                                 <constraint firstItem="NQa-Sh-dGC" firstAttribute="leading" secondItem="Exl-Ao-Y78" secondAttribute="trailing" constant="8" id="bCo-CO-Ia9"/>
+                                <constraint firstItem="fUU-1A-sqr" firstAttribute="leading" secondItem="a5r-Xn-rk9" secondAttribute="trailing" constant="5" id="ei8-iF-DGP"/>
+                                <constraint firstAttribute="trailing" secondItem="fUU-1A-sqr" secondAttribute="trailing" constant="5" id="mMx-hc-tJA"/>
                                 <constraint firstItem="fdu-pL-FeH" firstAttribute="centerY" secondItem="cDi-G7-gU8" secondAttribute="centerY" id="nKz-jH-Oj2"/>
                                 <constraint firstAttribute="height" constant="45" id="tK3-3r-9Rz"/>
                                 <constraint firstItem="NQa-Sh-dGC" firstAttribute="centerY" secondItem="cDi-G7-gU8" secondAttribute="centerY" id="uce-l9-dqh"/>
@@ -104,11 +119,11 @@
                                 <segment title="画笔"/>
                                 <segment title="矩形"/>
                                 <segment title="文本"/>
-                                <segment title="音符"/>
+                                <segment title="♬"/>
                                 <segment title="橡皮擦"/>
                             </segments>
                         </segmentedControl>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="n60-u4-Afv">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="n60-u4-Afv">
                             <rect key="frame" x="0.0" y="40" width="375" height="582"/>
                         </imageView>
                         <imageView multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="r4N-Tv-Xn0" customClass="DrawContext" customModule="FCFCommonFrame" customModuleProvider="target">
@@ -146,6 +161,7 @@
     </objects>
     <resources>
         <image name="backoutSelected" width="32" height="32"/>
+        <image name="clear" width="32" height="32"/>
         <image name="redrawSelected" width="32" height="32"/>
     </resources>
 </document>

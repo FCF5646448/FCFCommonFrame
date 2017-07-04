@@ -36,8 +36,8 @@ class ColorPicker: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 2
         layout.minimumLineSpacing = 2
-        let iW:CGFloat = CGFloat(colorView.frame.width - 9 * 2) // - 50 - 16
-        let iH:CGFloat = CGFloat(colorView.frame.height - 15 * 2)//70 - 64 - 16 -
+        let iW:CGFloat = CGFloat(UIScreen.main.bounds.width - 66 - 9.0*2) // - 50 - 16
+        let iH:CGFloat = CGFloat(UIScreen.main.bounds.height - 176 - 15 * 2)//70 - 64 - 16 -
         layout.itemSize = CGSize(width: iW/10.0, height: iH/16.0)
         layout.sectionInset = UIEdgeInsets.init(top: 0, left: 0, bottom: 0, right: 0)
         colorView.showsVerticalScrollIndicator = false

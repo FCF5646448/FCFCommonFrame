@@ -9,6 +9,10 @@
 import UIKit
 import ObjectMapper
 
+protocol DrawContextDelegate {
+    func drawContext(uploadxml view:DrawContext,xmlStr:String?)
+}
+
 enum DrawingState{
     case begin
     case moved
@@ -45,7 +49,7 @@ class PathModel: NSObject {
     var pivot_y:String? //背景图中心点.y
     var point_list:String? //曲线、橡皮擦画的点
     var size:String? //文本文字大小
-    var text_rotate:String? //文本旋转角度
+    var text_rotate:String? = "0" //文本旋转角度
     var text_x:String? //文本锚点（起始点.x）
     var text_y:String? //文本锚点（起始点.y）
     var start_x:String? //
@@ -63,6 +67,15 @@ class DrawModel:NSObject{
     var textData:DrawTextView?
 }
 
+
+//class DrawDataModel: NSObject {
+//    var type:DrawType?
+//    var colorStr:String
+//    var strokeWidth:CGFloat
+//    
+//}
+
+
 //全局单例,用来存储每次画的笔画的相关数据
 class DrawManager{
     static let shareInstance = DrawManager()
@@ -73,7 +86,7 @@ class DrawManager{
     var drawModles:[PathModel] = []
     
     //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imgData:就是图片数据;textStr:文本String,文本就是文字内容,音符就是音符;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
-    var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imgData:Data,textStr:String,Width:CGFloat? ,Height:CGFloat? ,Rotate:CGFloat? ))] = [] //Scale:CGFloat
+    var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imgData:Data,textStr:String,Width:CGFloat? ,Height:CGFloat? ,Rotate:Double? ))] = [] //Scale:CGFloat
     
     //数组保存图片,存放每一笔的图片\文本，
     var modelArr = [DrawModel]()
@@ -192,6 +205,7 @@ class DrawManager{
     
     //每缓存一次就应该清理一下数组
     func clearArr(){
+        self.drawModles.removeAll()
         self.modelArr.removeAll()
         self.drawData.removeAll()
         self.textViewDic.removeAll()
@@ -201,6 +215,9 @@ class DrawManager{
 
 //所有的画画都在这里操作
 class DrawContext: UIImageView {
+    
+    var delegate:DrawContextDelegate?
+    
     var boardUndoManager = DrawManager.shareInstance
     var canUndo:Bool{get{return self.boardUndoManager.canUndo}}
     var canRedo:Bool{get{return self.boardUndoManager.canRedo}}
@@ -220,8 +237,11 @@ class DrawContext: UIImageView {
     var rotateding:Bool = false
     var selectedDrawTextView:DrawTextView?
     
+    var context:CGContext?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
+        
     }
     
     //初始化🖌️，设置默认为曲线、黑色、笔宽为1.0
@@ -447,8 +467,18 @@ extension DrawContext{
         
         for (_,value) in self.boardUndoManager.textViewDic {
             let textData:DrawTextView = value
-            print(textData.frame)
             self.addSubview(textData)
+            textData.hideBgSet()
+        }
+    }
+    
+    //清理页面
+    func clear(){
+        self.boardUndoManager.clearArr()
+        self.image = nil
+        self.realImg = nil
+        for subiew in self.subviews {
+            subiew.removeFromSuperview()
         }
     }
 }
@@ -457,12 +487,12 @@ extension DrawContext{
     //这个方法只适用于直线、曲线、椭圆、矩形、橡皮擦等类型
     func drawShapeing(){
         if let brush = self.brush {
-            //创建一个位图上下文
             UIGraphicsBeginImageContext(self.bounds.size)
             //初始化context（宽度、颜色、圆润度）
             let context = UIGraphicsGetCurrentContext()
             UIColor.clear.setFill()
             UIRectFill(self.bounds)
+            
             context?.setLineCap(CGLineCap.round)
             context?.setLineWidth(brush.strokeWidth)
             
@@ -501,24 +531,26 @@ extension DrawContext{
     }
     
     //文本
-    func drawText(textStr:String?){
+    func drawText(textStr:String?,angle:Double?=nil){
         if let brush = self.brush {
             //默认3行
-            var twidth:CGFloat = (self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
-            var textH:CGFloat = 24 * 3
+            var twidth:CGFloat = 200 //(self.frame.width - (brush.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (brush.beginPoint?.x)!)
+            var textH:CGFloat = 24 * 2
             if let text = textStr {
                 let textSize = text.boundingRect(with: CGSize(width: 320, height: 999), options: .usesLineFragmentOrigin, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: brush.strokeWidth)], context: nil)
-                twidth = twidth > textSize.width ? twidth : textSize.width
+                twidth = twidth > textSize.width + 40 ? twidth : textSize.width + 40
                 textH = textH > textSize.height ? textH : textSize.height
             }
             
-            var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: (brush.beginPoint?.y)!, width: twidth, height: textH),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:brush.strokeWidth)
+            var drawtextView = DrawTextView(frame: CGRect(x: (brush.beginPoint?.x)!, y: ((brush.beginPoint?.y)!-22), width: twidth, height: textH),index:self.boardUndoManager.index + 1,color:brush.strockColor,strokewidth:brush.strokeWidth)
             perfectTextView(textView: &drawtextView)
             drawtextView.btnDelegate = self
             self.addSubview(drawtextView)
             if let text = textStr {
                 drawtextView.textView.text = text
                 drawtextView.textView.resignFirstResponder()
+                
+                drawtextView.transform(angle: nil, ang: angle)
                 
                 var imgData:Data? = nil
                 if let img = self.image {
@@ -531,7 +563,7 @@ extension DrawContext{
                 self.boardUndoManager.addModel(obj)
                 let twidth:CGFloat = (self.frame.width - (self.brush!.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (self.brush!.beginPoint?.x)!)
                 //将点集存进数组
-                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:text, Width: twidth, Height: 200, Rotate: 0)))
+                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:text, Width: twidth, Height: 200, Rotate: angle)))
             }
         }
     }
@@ -540,7 +572,7 @@ extension DrawContext{
     func drawWord(textStr:String?) {
         if let brush = self.brush,let text = textStr {
             //开启图片上下文
-            UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
+            UIGraphicsBeginImageContext(self.bounds.size)
             //图形重绘
             self.draw(self.bounds)
             let fontsize:CGFloat = brush.strokeWidth // > 20 ? 20 : brush.strokeWidth
@@ -556,7 +588,7 @@ extension DrawContext{
             textH = textH > 24 ? textH : 24
             
             //绘制文字 ,文字显示的位置，要在textview的适当位置
-            text.draw(in: CGRect(x:(brush.beginPoint?.x)!-(fontsize/2.0),y:(brush.beginPoint?.y)!-(fontsize/2.0),width:textW + 10,height:textH + 10), withAttributes: att)
+            text.draw(in: CGRect(x:(brush.beginPoint?.x)!-(textW/2.0),y:(brush.beginPoint?.y)!-(textH/2.0),width:textW + 10,height:textH + 10), withAttributes: att)
             //从当前上下文获取图片
             let image = UIGraphicsGetImageFromCurrentImageContext()
             //关闭上下文
@@ -580,7 +612,12 @@ extension DrawContext{
 extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
     //
     func drawTextViewPullToNewPosition(drawTextView: DrawTextView,index:Int, oldCenterPoint: CGPoint, newCenterPoint: CGPoint) {
-        
+//        if index < self.boardUndoManager.drawData.count {
+//            var obj = self.boardUndoManager.drawData[index]
+//            obj.Rotate = drawTextView.returnAngle()
+//            self.boardUndoManager.drawData.insert(((type: obj.type, colorStr: obj.colorStr, strokeWidth: obj.strokeWidth, points: obj.points, imgData: obj.imgData, textStr: obj.textStr, Width: obj.Width, Height: obj.Height, Rotate: obj.Rotate)), at: index)
+//            self.boardUndoManager.drawData.remove(at: index + 1)
+//        }
     }
     
     func drawTextViewRotated(drawTextView:DrawTextView,index:Int,rotated:Bool){
@@ -588,6 +625,14 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
         if rotated {
             self.selectedDrawTextView = drawTextView
         }else{
+            
+            if index < self.boardUndoManager.drawData.count {
+                var obj = self.boardUndoManager.drawData[index]
+                obj.Rotate = drawTextView.returnAngle()
+                self.boardUndoManager.drawData.insert(((type: obj.type, colorStr: obj.colorStr, strokeWidth: obj.strokeWidth, points: obj.points, imgData: obj.imgData, textStr: obj.textStr, Width: obj.Width, Height: obj.Height, Rotate: obj.Rotate)), at: index)
+                self.boardUndoManager.drawData.remove(at: index + 1)
+            }
+            
             self.selectedDrawTextView = nil
         }
     }
@@ -607,6 +652,29 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
             return
         }
         
+        
+        if index < self.boardUndoManager.drawData.count {
+            var obj = self.boardUndoManager.drawData[index]
+            obj.Rotate = drawTextView.returnAngle()
+            obj.textStr = textStr
+            self.boardUndoManager.drawData.insert(((type: obj.type, colorStr: obj.colorStr, strokeWidth: obj.strokeWidth, points: obj.points, imgData: obj.imgData, textStr: obj.textStr, Width: obj.Width, Height: obj.Height, Rotate: obj.Rotate)), at: index)
+            self.boardUndoManager.drawData.remove(at: index + 1)
+        }else{
+            //将图片存进数组中
+            var imgData:Data? = nil
+            if let img = self.image {
+                imgData = NSKeyedArchiver.archivedData(withRootObject: img)
+            }
+            let obj = DrawModel()
+            obj.textData = drawTextView
+            obj.imgData = imgData
+            obj.ifTextView = true
+            self.boardUndoManager.addModel(obj)
+            let twidth:CGFloat = (self.frame.width - (self.brush!.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (self.brush!.beginPoint?.x)!)
+            //将点集存进数组
+            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textStr, Width: twidth, Height: 200, Rotate: 0)))
+        }
+        
         //修正framw
 //        let fontsize:CGFloat = (brush?.strokeWidth)!
 //        let text = NSString(string: textView.text)
@@ -615,19 +683,6 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
 //        let textH:CGFloat = textSize.height;
 //        textView.frame = CGRect(x: textView.frame.origin.x, y: textView.frame.origin.y, width: (textW + 10 > 34 ? (textW + 10) : 34), height: (textH + 10 > 34 ? (textH + 10) : 34))
         
-        //将图片存进数组中
-        var imgData:Data? = nil
-        if let img = self.image {
-            imgData = NSKeyedArchiver.archivedData(withRootObject: img)
-        }
-        let obj = DrawModel()
-        obj.textData = drawTextView
-        obj.imgData = imgData
-        obj.ifTextView = true
-        self.boardUndoManager.addModel(obj)
-        let twidth:CGFloat = (self.frame.width - (self.brush!.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (self.brush!.beginPoint?.x)!)
-        //将点集存进数组
-        self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textStr, Width: twidth, Height: 200, Rotate: 0))) //(textW + 10) textH + 10
     }
 }
 
@@ -635,7 +690,7 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
 extension DrawContext{
     
     //统一调用画图方法,解析xml的同时，调用这个方法就OK了
-    func drawPoints(state:DrawingState,point:CGPoint,textStr:String?=nil) {
+    func drawPoints(state:DrawingState,point:CGPoint,textStr:String?=nil,angle:Double?=nil) {
         self.drawingState = state
         if let brush = self.brush  {
             switch state {
@@ -651,7 +706,7 @@ extension DrawContext{
                 }else if brush.classForKeyedArchiver == TextBrush.classForCoder() {
                     //文本
                     brush.pointsArr.append(point) //原点位置
-                    self.drawText(textStr: textStr)
+                    self.drawText(textStr: textStr,angle: angle)
                 }else if brush.classForKeyedArchiver == WordBrush.classForCoder(){
                     //文字
                     brush.pointsArr.append(point) //原点位置
@@ -707,6 +762,7 @@ extension DrawContext{
             if !drawTV.textView.frame.contains(point) {
                 let target = drawTV.center
                 let angle = atan2(point.y-target.y, point.x-target.x)
+                drawTV.transformAngle = angle
                 drawTV.transform = CGAffineTransform(rotationAngle: angle)
             }
         }
@@ -729,6 +785,7 @@ extension DrawContext{
 extension DrawContext{
     func saveDrawToXML(){
         self.boardUndoManager.removeBiggerThanCurrentIndex()
+        self.boardUndoManager.drawModles.removeAll()
         for (type,colorStr,strokeWidth,points,_,textStr,_ ,_ ,Rotate) in self.boardUndoManager.drawData {
             var pointsStr = ""
             for point in points {
@@ -736,7 +793,13 @@ extension DrawContext{
                 p.x = p.x*1.0 / self.wBili
                 p.y = p.y*1.0 / self.hBili
                 
-                let pStr = NSStringFromCGPoint(p)
+                var pStr = "{"
+                let xStr = String(format: "%.1f", p.x.roundTo(places: 1))
+                let yStr = String(format: "%.1f", p.y.roundTo(places: 1))
+                pStr.append(xStr)
+                pStr.append(",")
+                pStr.append(yStr)
+                pStr.append("}")
                 pointsStr.append(pStr)
                 pointsStr.append("-")
             }
@@ -761,7 +824,7 @@ extension DrawContext{
                 model.pen_width = String(format: "%.2f", strokeWidth*2.0)
                 model.point_list = pointsStr
                 break
-        
+                
             case .Pentype(.Curve),.Pentype(.Line),.Pentype(.ImaginaryLine):
                 model.pen_type = "HAND"
                 model.pen_width = String(format: "%.2f", strokeWidth*2.0)
@@ -772,6 +835,10 @@ extension DrawContext{
                     break
                 case .Pentype(.Line):
                     model.pen_shape = "LINE"
+                    model.start_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
+                    model.start_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
+                    model.end_x = String(format: "%f", (endPoint==nil ? 0 : endPoint!.x*1.0/self.wBili))
+                    model.end_y = String(format: "%f", (endPoint==nil ? 0 : endPoint!.y*1.0/self.hBili))
                     break
                 case .Pentype(.ImaginaryLine):
                     model.pen_shape = "ImaginaryLine"
@@ -890,44 +957,6 @@ extension DrawContext{
         }
         
         let xmlStr =  xml.appending(rootElement.xmlString)
-        self.upload(xmlStr)
-        
-    }
-    
-    //上传文件
-    func upload(_ xmlStr:String?=nil){
-        var params = [String:AnyObject]()
-        params["uid"] = "1" as AnyObject
-        if let xml = xmlStr {
-            params["xml_str"] = xml as AnyObject
-        }
-        
-        DownloadManager.DownloadPost(host: "http://gangqinputest.yusi.tv/", path: "urlparam=note/xmlstr/setxmlbyuid", params: params, successed: {(JsonString) in
-            print(JsonString ?? "")
-            let result = Mapper<PostXmlModel>().map(JSONString: JsonString!)
-            if let obj = result{
-                if obj.returnCode == "0000" {
-//                    let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
-//                    try! xmlStr?.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
-                }else{
-                    print("获取数据失败")
-                }
-            }else{
-                print("获取数据失败")
-            }
-        }) { (error) in
-            print("\(String(describing: error))")
-        }
-    }
-
-}
-
-class PostXmlModel:BaseModel{
-    var returnMsg:String = ""
-    var returnCode:String = ""
-    override func mapping(map: Map) {
-        returnMsg <- map["returnMsg"]
-        returnCode <- map["returnCode"]
+        self.delegate?.drawContext(uploadxml: self, xmlStr: xmlStr)
     }
 }
-

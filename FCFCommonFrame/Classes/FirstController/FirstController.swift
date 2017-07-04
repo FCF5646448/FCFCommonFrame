@@ -26,12 +26,11 @@ class FitemObj:BaseModel{
 }
 
 
-
 class FirstController: BaseViewController {
 
     @IBOutlet weak var tableview: UITableView!
     var sectionData:[FsectionObj] = []
-    let baseData:[String:[String]] = ["基础学习":["UI小控件的学习","Tableview使用","CollectionView使用"],"Demo实践":["加速传感器motion","webview","wkwebview","日历事件的使用","仿微信聊天页面","AnimateDemo","音视频相关"],"iOS框架学习":["Quartz 2D","图层CALayer","CAShapeLayer"],"三方库的学习":["数据存储相关","JSON相关","XML相关","MJRefresh"]]
+    let baseData:[String:[String]] = ["iOSQuartz 2D":["Quartz 2D"]]//["基础学习":["UI小控件的学习","Tableview使用","CollectionView使用"],"Demo实践":["加速传感器motion","webview","wkwebview","日历事件的使用","仿微信聊天页面","AnimateDemo","音视频相关"],"iOS框架学习":["Quartz 2D","图层CALayer","CAShapeLayer"],"三方库的学习":["数据存储相关","JSON相关","XML相关","MJRefresh"]] 
     
     override func viewDidLoad() {
         super.viewDidLoad()

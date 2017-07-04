@@ -51,10 +51,16 @@ class Quartz2DTestController: BaseViewController {
     
     @IBOutlet weak var colorBtn: UIButton!
     
+    @IBOutlet weak var clearBtn: UIButton!
     @IBOutlet weak var fontSizeSlide: UISlider!
     
     var wBili:CGFloat = 1.0
     var hBili:CGFloat = 1.0
+    
+    var imgW:CGFloat = 1.0
+    var imgH:CGFloat = 1.0
+    
+    var selectedIndex:Int = 0
     
     var selectedColor:String = "000000" {
         didSet {
@@ -72,18 +78,18 @@ class Quartz2DTestController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "画板"
+        self.drawContext.delegate = self
         updateUI()
         let img = UIImage(named:"qupu")
         self.bgImage.image = img
+        self.imgW = img!.size.width
+        self.imgH = img!.size.height
         
-        let imgW = img!.size.width
-        let imgH = img!.size.height
+        self.drawContext.pivot_x = imgW*1.0/2.0
+        self.drawContext.pivot_y = imgH*1.0/2.0
         
-        self.drawContext.pivot_x = imgW*1.0/2
-        self.drawContext.pivot_y = imgH*1.0/2
-        
-        let ScreenW = self.bgImage.frame.width
-        let ScreenH = self.bgImage.frame.height
+        let ScreenW = UIScreen.main.bounds.width//self.bgImage.frame.width
+        let ScreenH = UIScreen.main.bounds.height - 85 - 64 //self.bgImage.frame.height
         
         self.wBili =  ScreenW*1.0/imgW
         self.hBili = ScreenH*1.0/imgH
@@ -92,14 +98,8 @@ class Quartz2DTestController: BaseViewController {
         self.drawContext.hBili = self.hBili
         
         segment.addTarget(self, action: #selector(segmentValueChanged), for: .valueChanged)
-        segment.selectedSegmentIndex = 0 //默认就是画曲线的画笔
+        segment.selectedSegmentIndex = selectedIndex //默认就是画曲线的画笔
         segmentValueChanged(seg: segment)
-        
-        NotificationCenter.default.addObserver(forName: NSNotification.Name.UIApplicationDidEnterBackground, object: nil, queue: OperationQueue.main) { (notification) in
-            //程序进入后台，就把缓存里的笔画存为当前的笔画
-//            self.saveXml()
-        }
-        
     }
     
     func updateUI(){
@@ -109,6 +109,8 @@ class Quartz2DTestController: BaseViewController {
         self.forwardBtn.layer.masksToBounds = true
         self.colorBtn.layer.cornerRadius = 4
         self.colorBtn.layer.masksToBounds = true
+        self.clearBtn.layer.cornerRadius = 4
+        self.clearBtn.layer.masksToBounds = true
         
         let btn = UIButton.init(type: .custom)
         btn.frame = CGRect(x: 0, y: 0, width: 44, height: 44)
@@ -136,7 +138,7 @@ class Quartz2DTestController: BaseViewController {
             self.drawContext.restoreDraw()
         }else{
             //从xml中读取
-            getDataFromXML()
+            self.refresh()
         }
     }
     
@@ -170,6 +172,11 @@ class Quartz2DTestController: BaseViewController {
     //调整画笔大小
     @IBAction func fontSizeChanged(_ sender: Any) {
         fontSize = CGFloat((sender as! UISlider).value)
+    }
+    
+    @IBAction func clearBtnClicked(_ sender: Any) {
+        //清空就没法重做了
+        self.drawContext.clear()
     }
     
     func segmentValueChanged(seg:UISegmentedControl){
@@ -224,7 +231,8 @@ class Quartz2DTestController: BaseViewController {
 extension Quartz2DTestController{
     //将xml的操作顺序放进数组里
     func getDataFromXML(){
-
+        self.drawContext.clear()
+        
         var pathArr:[PathModel] = []
         
         let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
@@ -339,7 +347,8 @@ extension Quartz2DTestController{
         switch obj.type! {
         case .Pentype(.Curve):
             print("曲线")
-            self.segment.selectedSegmentIndex = 0
+            self.selectedIndex = 0
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             
             dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
@@ -351,7 +360,8 @@ extension Quartz2DTestController{
             
         case .Pentype(.Line):
             print("直线")
-//            self.segment.selectedSegmentIndex = 0
+            self.selectedIndex = 0//后续改
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
            self.drawContext.initBrush(type: .Pentype(.Line), color: obj.color, width: dwidth)
@@ -363,7 +373,8 @@ extension Quartz2DTestController{
             }
         case .Pentype(.ImaginaryLine):
             print("虚线")
-//            self.segment.selectedSegmentIndex = 0
+            self.selectedIndex = 0 //后续改
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
             self.drawContext.initBrush(type: .Pentype(.ImaginaryLine), color: obj.color, width: dwidth)
@@ -375,7 +386,8 @@ extension Quartz2DTestController{
             }
         case .Formtype(.Rect):
             print("矩形")
-            self.segment.selectedSegmentIndex = 1
+            self.selectedIndex = 1
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
             self.drawContext.initBrush(type: .Formtype(.Rect), color: obj.color, width: dwidth)
@@ -387,7 +399,8 @@ extension Quartz2DTestController{
             }
         case .Formtype(.Ellipse):
             print("椭圆")
-            self.segment.selectedSegmentIndex = 1
+            self.selectedIndex = 1 //后续改
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
             self.drawContext.initBrush(type: .Formtype(.Ellipse), color: obj.color, width: dwidth)
@@ -399,7 +412,8 @@ extension Quartz2DTestController{
             }
         case .Eraser:
             print("橡皮擦")
-            self.segment.selectedSegmentIndex = 4
+            self.selectedIndex = 4
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
             self.drawContext.initBrush(type: .Eraser, color: obj.color, width: dwidth)
@@ -408,7 +422,8 @@ extension Quartz2DTestController{
             }
         case .Note:
             print("音符")
-            self.segment.selectedSegmentIndex = 3
+            self.selectedIndex = 3
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             dwidth = obj.pen_width != nil ? obj.pen_width!.floatValue/2.0 : 20
             self.drawContext.initBrush(type: .Note, color: obj.color, width: dwidth)
@@ -417,15 +432,17 @@ extension Quartz2DTestController{
             }
         case .Text:
             print("文本")
-            self.segment.selectedSegmentIndex = 2
+            self.selectedIndex = 2
+            self.selectedColor = obj.color!
             self.colorBtn.backgroundColor = UIColor.haxString(hex: obj.color!)
             dwidth = obj.size != nil ? obj.size!.floatValue/2.0 : 20
             self.drawContext.initBrush(type: .Text, color: obj.color, width: dwidth)
             if let x = obj.text_x, let y = obj.text_y,let text = obj.text {
-                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin,text: text)
+                self.drawPoint(point: CGPoint(x: x.floatValue, y: y.floatValue), state: .begin,text: text,angle:(obj.text_rotate as! NSString).doubleValue)
             }
         }
         
+        self.segment.selectedSegmentIndex = self.selectedIndex
         if self.segment.selectedSegmentIndex == 2 {
             self.drawContext.showTextVIewUIMsg()
         }else{
@@ -463,48 +480,94 @@ extension Quartz2DTestController{
         }
     }
     
-    func drawPoint(point:CGPoint,state:DrawingState,text:String?=nil) {
+    func drawPoint(point:CGPoint,state:DrawingState,text:String?=nil,angle:Double?=nil) {
         var p = point
         p.x = p.x * self.wBili
         p.y = p.y * self.hBili
         switch state {
         case .begin:
-            self.drawContext.drawPoints(state: .begin, point: p, textStr: text)
+            self.drawContext.drawPoints(state: .begin, point: p, textStr: text , angle:angle)
         case .moved:
-            self.drawContext.drawPoints(state: .moved, point: p, textStr: text)
+            self.drawContext.drawPoints(state: .moved, point: p, textStr: text , angle:angle)
         case .ended:
-            self.drawContext.drawPoints(state: .ended, point: p, textStr: text)
+            self.drawContext.drawPoints(state: .ended, point: p, textStr: text , angle:angle)
         }
     }
     
+    
+}
+
+extension Quartz2DTestController{
     //将全局数组里的数据按画画顺序存进xml文本中
     func saveXml(){
         self.drawContext.saveDrawToXML()
     }
     
     func refresh(){
-        func download(){
-            var params = [String:AnyObject]()
-            params["uid"] = "1" as AnyObject
-            DownloadManager.DownloadGet(host: "http://gangqinputest.yusi.tv/", path: "urlparam=note/xmlstr/getxmlbyuid", params: params, successed: {[weak self] (JsonString) in
-                print(JsonString ?? "")
-                let result = Mapper<XmlModel>().map(JSONString: JsonString!)
-                if let obj = result{
-                    if obj.returnCode == "0000" && obj.data != nil {
-                        if obj.data!.xml_str != "" {
-                            let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
-                            try! obj.data!.xml_str.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
-                        }
-                        //读取
-                    }else{
-                        print("获取数据失败")
+        showdownLoading()
+        var params = [String:AnyObject]()
+        params["uid"] = "1" as AnyObject
+        DownloadManager.DownloadGet(host: "http://gangqinputest.yusi.tv/", path: "urlparam=note/xmlstr/getxmlbyuid", params: params, successed: {[weak self] (JsonString) in
+            print(JsonString ?? "")
+            self?.hidedownLoading()
+            let result = Mapper<XmlModel>().map(JSONString: JsonString!)
+            if let obj = result{
+                if obj.returnCode == "0000" && obj.data != nil {
+                    if obj.data!.xml_str != "" {
+                        let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
+                        try! obj.data!.xml_str.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
+                        self?.getDataFromXML()
                     }
+                    //读取
                 }else{
-                    print("获取数据失败")
+                    self?.showMsg("数据有问题")
                 }
-            }) {[weak self] (error) in
-                print("\(String(describing: error))")
+            }else{
+                self?.showMsg("获取数据失败")
             }
+        }) {[weak self] (error) in
+            self?.hidedownLoading()
+            self?.showMsg("网络异常")
         }
     }
 }
+
+class PostXmlModel:BaseModel{
+    var returnMsg:String = ""
+    var returnCode:String = ""
+    override func mapping(map: Map) {
+        returnMsg <- map["returnMsg"]
+        returnCode <- map["returnCode"]
+    }
+}
+
+extension Quartz2DTestController:DrawContextDelegate{
+    //上传文件
+    func drawContext(uploadxml view:DrawContext,xmlStr:String?){
+        self.showdownLoading()
+        var params = [String:AnyObject]()
+        params["uid"] = "1" as AnyObject
+        if let xml = xmlStr {
+            params["xml_str"] = xml as AnyObject
+        }
+        
+        DownloadManager.DownloadPost(host: "http://gangqinputest.yusi.tv/", path: "urlparam=note/xmlstr/setxmlbyuid", params: params, successed: {[weak self](JsonString) in
+            print(JsonString ?? "")
+            self?.hidedownLoading()
+            let result = Mapper<PostXmlModel>().map(JSONString: JsonString!)
+            if let obj = result{
+                if obj.returnCode == "0000" {
+                    self?.showMsg("上传成功")
+                }else{
+                    self?.showMsg("数据有问题")
+                }
+            }else{
+                self?.showMsg("获取数据失败")
+            }
+        }) {[weak self] (error) in
+            self?.hidedownLoading()
+            self?.showMsg("网络异常")
+        }
+    }
+}
+
