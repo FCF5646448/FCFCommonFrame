@@ -68,12 +68,18 @@ class DrawModel:NSObject{
 }
 
 
-//class DrawDataModel: NSObject {
-//    var type:DrawType?
-//    var colorStr:String
-//    var strokeWidth:CGFloat
-//    
-//}
+class DrawDataModel: NSObject {
+    //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imgData:就是图片数据;textStr:文本String,文本就是文字内容,音符就是音符;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
+    var type:DrawType?
+    var colorStr:String?
+    var strokeWidth:CGFloat = 10 //默认
+    var points:[CGPoint] = []
+    var imgData:Data?
+    var textStr:String = ""
+    var Width:CGFloat?
+    var Height:CGFloat?
+    var Rotate:Double?
+}
 
 
 //全局单例,用来存储每次画的笔画的相关数据
@@ -84,11 +90,9 @@ class DrawManager{
     var index = -1
     
     var drawModles:[PathModel] = []
+    var drawDataArr:[DrawDataModel] = []
     
-    //存储每一笔的相关数据，type:类型;colorStr:笔画颜色或文本文字颜色;strokeWidth笔画宽度，如果是文本就是文本文字最终(缩放之后)大小;points：就是每一笔所经过的点，如果是文本或者图片就存放中心点;imgData:就是图片数据;textStr:文本String,文本就是文字内容,音符就是音符;Width:文本或者图片的最终(缩放之后)宽度,其他类型就为0;Height:文本或图片的最终(缩放之后)高度,其他类型就为0;Rotate:旋转角度,其他类型就为0
-    var drawData:[((type:DrawType,colorStr:String,strokeWidth:CGFloat,points:[CGPoint],imgData:Data,textStr:String,Width:CGFloat? ,Height:CGFloat? ,Rotate:Double? ))] = [] //Scale:CGFloat
-    
-    //数组保存图片,存放每一笔的图片\文本，
+    //数组保存图片,存放每一笔的图片\文本，用于提交服务器
     var modelArr = [DrawModel]()
     //这里就存储文本，key值是对应modelArr中对应的下标，值是图片
     var textViewDic:[Int:DrawTextView] = [:]
@@ -175,7 +179,7 @@ class DrawManager{
             let n = modelArr.count - (index + 1)
             if n > 0 {
                 modelArr.removeLast(n)
-                drawData.removeLast(n)
+                drawDataArr.removeLast(n)
                 for (key,_) in textViewDic {
                     if key > index {
                         textViewDic.removeValue(forKey: key)
@@ -198,7 +202,7 @@ class DrawManager{
         }
         if deIndex >= 0 && deIndex < modelArr.count  {
             modelArr.remove(at: deIndex)
-            drawData.remove(at: deIndex)
+            drawDataArr.remove(at: deIndex)
             self.index = modelArr.count-1
         }
     }
@@ -207,7 +211,7 @@ class DrawManager{
     func clearArr(){
         self.drawModles.removeAll()
         self.modelArr.removeAll()
-        self.drawData.removeAll()
+        self.drawDataArr.removeAll()
         self.textViewDic.removeAll()
         self.index = -1
     }
@@ -524,7 +528,18 @@ extension DrawContext{
                 obj.imgData = imgData
                 self.boardUndoManager.addModel(obj)
                 //将点集存进数组
-                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imgData:imgData,textStr:"", Width: 0, Height: 0, Rotate: 0)))
+                let drawmodel = DrawDataModel()
+                drawmodel.type = self.drawType!
+                drawmodel.colorStr = brush.strockColor
+                drawmodel.strokeWidth = brush.strokeWidth
+                drawmodel.points = brush.pointsArr
+                drawmodel.imgData = imgData
+                drawmodel.textStr = ""
+                drawmodel.Width = 0
+                drawmodel.Height = 0
+                drawmodel.Rotate = 0
+                self.boardUndoManager.drawDataArr.append(drawmodel)
+                
             }
             brush.lastPoint = brush.endPoint
         }
@@ -563,7 +578,17 @@ extension DrawContext{
                 self.boardUndoManager.addModel(obj)
                 let twidth:CGFloat = (self.frame.width - (self.brush!.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (self.brush!.beginPoint?.x)!)
                 //将点集存进数组
-                self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:text, Width: twidth, Height: 200, Rotate: angle)))
+                let drawmodel = DrawDataModel()
+                drawmodel.type = self.drawType!
+                drawmodel.colorStr = brush.strockColor
+                drawmodel.strokeWidth = brush.strokeWidth
+                drawmodel.points = brush.pointsArr
+                drawmodel.imgData = imgData
+                drawmodel.textStr = text
+                drawmodel.Width = twidth
+                drawmodel.Height = 200
+                drawmodel.Rotate = angle
+                self.boardUndoManager.drawDataArr.append(drawmodel)
             }
         }
     }
@@ -603,8 +628,17 @@ extension DrawContext{
             obj.imgData = imgData
             self.boardUndoManager.addModel(obj)
             //将点集存进数组
-            
-            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: brush.strockColor, strokeWidth: brush.strokeWidth, points: brush.pointsArr, imgData:imgData,textStr:text, Width: 0, Height: 0, Rotate: 0)))
+            let drawmodel = DrawDataModel()
+            drawmodel.type = self.drawType!
+            drawmodel.colorStr = brush.strockColor
+            drawmodel.strokeWidth = brush.strokeWidth
+            drawmodel.points = brush.pointsArr
+            drawmodel.imgData = imgData
+            drawmodel.textStr = text
+            drawmodel.Width = 0
+            drawmodel.Height = 0
+            drawmodel.Rotate = 0
+            self.boardUndoManager.drawDataArr.append(drawmodel)
         }
     }
 }
@@ -612,12 +646,11 @@ extension DrawContext{
 extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
     //
     func drawTextViewPullToNewPosition(drawTextView: DrawTextView,index:Int, oldCenterPoint: CGPoint, newCenterPoint: CGPoint) {
-//        if index < self.boardUndoManager.drawData.count {
-//            var obj = self.boardUndoManager.drawData[index]
-//            obj.Rotate = drawTextView.returnAngle()
-//            self.boardUndoManager.drawData.insert(((type: obj.type, colorStr: obj.colorStr, strokeWidth: obj.strokeWidth, points: obj.points, imgData: obj.imgData, textStr: obj.textStr, Width: obj.Width, Height: obj.Height, Rotate: obj.Rotate)), at: index)
-//            self.boardUndoManager.drawData.remove(at: index + 1)
-//        }
+        if oldCenterPoint != newCenterPoint && index < self.boardUndoManager.drawDataArr.count {
+            let obj = self.boardUndoManager.drawDataArr[index]
+            obj.points[0] = CGPoint.init(x: newCenterPoint.x, y: newCenterPoint.y+22)
+            self.boardUndoManager.drawDataArr[index] = obj
+        }
     }
     
     func drawTextViewRotated(drawTextView:DrawTextView,index:Int,rotated:Bool){
@@ -626,11 +659,10 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
             self.selectedDrawTextView = drawTextView
         }else{
             
-            if index < self.boardUndoManager.drawData.count {
-                var obj = self.boardUndoManager.drawData[index]
+            if index < self.boardUndoManager.drawDataArr.count {
+                let obj = self.boardUndoManager.drawDataArr[index]
                 obj.Rotate = drawTextView.returnAngle()
-                self.boardUndoManager.drawData.insert(((type: obj.type, colorStr: obj.colorStr, strokeWidth: obj.strokeWidth, points: obj.points, imgData: obj.imgData, textStr: obj.textStr, Width: obj.Width, Height: obj.Height, Rotate: obj.Rotate)), at: index)
-                self.boardUndoManager.drawData.remove(at: index + 1)
+                self.boardUndoManager.drawDataArr[index] = obj
             }
             
             self.selectedDrawTextView = nil
@@ -653,12 +685,10 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
         }
         
         
-        if index < self.boardUndoManager.drawData.count {
-            var obj = self.boardUndoManager.drawData[index]
-            obj.Rotate = drawTextView.returnAngle()
+        if index < self.boardUndoManager.drawDataArr.count {
+            let obj = self.boardUndoManager.drawDataArr[index]
             obj.textStr = textStr
-            self.boardUndoManager.drawData.insert(((type: obj.type, colorStr: obj.colorStr, strokeWidth: obj.strokeWidth, points: obj.points, imgData: obj.imgData, textStr: obj.textStr, Width: obj.Width, Height: obj.Height, Rotate: obj.Rotate)), at: index)
-            self.boardUndoManager.drawData.remove(at: index + 1)
+            self.boardUndoManager.drawDataArr[index] = obj
         }else{
             //将图片存进数组中
             var imgData:Data? = nil
@@ -671,8 +701,18 @@ extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
             obj.ifTextView = true
             self.boardUndoManager.addModel(obj)
             let twidth:CGFloat = (self.frame.width - (self.brush!.beginPoint?.x)!) > 200 ? 200 : (self.frame.width - (self.brush!.beginPoint?.x)!)
-            //将点集存进数组
-            self.boardUndoManager.drawData.append(((type: self.drawType!, colorStr: (self.brush?.strockColor)!, strokeWidth: (self.brush?.strokeWidth)!, points: (self.brush?.pointsArr)!, imgData:Data(),textStr:textStr, Width: twidth, Height: 200, Rotate: 0)))
+            let drawmodel = DrawDataModel()
+            drawmodel.type = self.drawType!
+            drawmodel.colorStr = (self.brush?.strockColor)!
+            drawmodel.strokeWidth = (self.brush?.strokeWidth)!
+            drawmodel.points = (self.brush?.pointsArr)!
+            drawmodel.imgData = imgData
+            drawmodel.textStr = textStr
+            drawmodel.Width = twidth
+            drawmodel.Height = 200
+            drawmodel.Rotate = 0
+            self.boardUndoManager.drawDataArr.append(drawmodel)
+            
         }
         
         //修正framw
@@ -786,9 +826,9 @@ extension DrawContext{
     func saveDrawToXML(){
         self.boardUndoManager.removeBiggerThanCurrentIndex()
         self.boardUndoManager.drawModles.removeAll()
-        for (type,colorStr,strokeWidth,points,_,textStr,_ ,_ ,Rotate) in self.boardUndoManager.drawData {
+        for drawModel in self.boardUndoManager.drawDataArr {
             var pointsStr = ""
-            for point in points {
+            for point in drawModel.points {
                 var p = point
                 p.x = p.x*1.0 / self.wBili
                 p.y = p.y*1.0 / self.hBili
@@ -806,28 +846,28 @@ extension DrawContext{
             
             var startPoint:CGPoint?
             var endPoint:CGPoint?
-            if points.count>0 {
-                startPoint = points[0]
-                endPoint = points[points.count-1]
+            if drawModel.points.count>0 {
+                startPoint = drawModel.points[0]
+                endPoint = drawModel.points[drawModel.points.count-1]
             }
             
             let model:PathModel = PathModel()
-            model.type = type
+            model.type = drawModel.type
             model.rotate_degree = "0"
             model.pivot_x = String(format: "%.2f", self.pivot_x)
             model.pivot_y = String(format: "%.2f", self.pivot_y)
-            model.color = colorStr
+            model.color = drawModel.colorStr
             switch model.type! {
             case .Eraser:
                 model.pen_type = "ERASER"
                 model.pen_shape = "HAND_WRITE"
-                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
+                model.pen_width = String(format: "%.2f", drawModel.strokeWidth*2.0)
                 model.point_list = pointsStr
                 break
                 
             case .Pentype(.Curve),.Pentype(.Line),.Pentype(.ImaginaryLine):
                 model.pen_type = "HAND"
-                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
+                model.pen_width = String(format: "%.2f", drawModel.strokeWidth*2.0)
                 switch model.type! {
                 case .Pentype(.Curve):
                     model.pen_shape = "HAND_WRITE"
@@ -848,15 +888,15 @@ extension DrawContext{
                 }
             case .Text:
                 model.pen_type = "TEXT"
-                model.size = String(format: "%f", strokeWidth*2.0)
+                model.size = String(format: "%f", drawModel.strokeWidth*2.0)
                 model.text_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
                 model.text_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
-                model.text = textStr
-                model.text_rotate = String(format: "%f", (Rotate == nil ? 0 : Rotate!))
+                model.text = drawModel.textStr
+                model.text_rotate = String(format: "%f", (drawModel.Rotate == nil ? 0 : drawModel.Rotate!))
                 break
             case .Formtype(.Rect),.Formtype(.Ellipse):
                 model.pen_type = "HAND"
-                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
+                model.pen_width = String(format: "%.2f", drawModel.strokeWidth*2.0)
                 model.start_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
                 model.start_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
                 model.end_x = String(format: "%f", (endPoint==nil ? 0 : endPoint!.x*1.0/self.wBili))
@@ -874,10 +914,10 @@ extension DrawContext{
             case .Note:
                 model.pen_type = "HAND"
                 model.pen_shape = "SYMBOL"
-                model.pen_width = String(format: "%.2f", strokeWidth*2.0)
+                model.pen_width = String(format: "%.2f", drawModel.strokeWidth*2.0)
                 model.end_x = String(format: "%f", (startPoint==nil ? 0 : startPoint!.x*1.0/self.wBili))
                 model.end_y = String(format: "%f", (startPoint==nil ? 0 : startPoint!.y*1.0/self.hBili))
-                model.symbol = textStr
+                model.symbol = drawModel.textStr
                 break
             }
             self.boardUndoManager.drawModles.append(model)
