@@ -19,10 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.backgroundColor =  UIColor.white
         window?.rootViewController = MineMainTabController()
         window?.makeKeyAndVisible()
-        
-        
-        self.download() //将之前画的下载下来写进文件
-        
         return true
     }
     
@@ -55,32 +51,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //本地消息推送
 extension AppDelegate{
     
-}
-
-extension AppDelegate{
-    func download(){
-        var params = [String:AnyObject]()
-        params["uid"] = "1" as AnyObject
-        DownloadManager.DownloadGet(host: "http://gangqinputest.yusi.tv/", path: "urlparam=note/xmlstr/getxmlbyuid", params: params, successed: { (JsonString) in
-            print(JsonString ?? "")
-            let result = Mapper<XmlModel>().map(JSONString: JsonString!)
-            if let obj = result{
-                if obj.returnCode == "0000" && obj.data != nil {
-                    if obj.data!.xml_str != "" {
-                        let filePath:String = NSHomeDirectory() + "/Documents/DrawText.xml"
-                        try! obj.data!.xml_str.write(toFile: filePath, atomically: true, encoding: String.Encoding.utf8)
-                    }
-                    //读取
-                }else{
-                    print("获取数据失败")
-                }
-            }else{
-                print("获取数据失败")
-            }
-        }) { (error) in
-            print("\(String(describing: error))")
-        }
-    }
 }
 
 

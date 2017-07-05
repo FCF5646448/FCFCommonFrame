@@ -67,8 +67,6 @@
 		1957EBC31EE1384E00CD65FF /* SQlite3TestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1957EBC11EE1384E00CD65FF /* SQlite3TestController.swift */; };
 		1957EBC41EE1384E00CD65FF /* SQlite3TestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1957EBC21EE1384E00CD65FF /* SQlite3TestController.xib */; };
 		1957EBCA1EE14B8500CD65FF /* FCFSQLiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1957EBC91EE14B8500CD65FF /* FCFSQLiteManager.swift */; };
-		195C82351F024C5B00297840 /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195C82331F024C5B00297840 /* ColorPicker.swift */; };
-		195C82361F024C5B00297840 /* ColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 195C82341F024C5B00297840 /* ColorPicker.xib */; };
 		19612C2E1EA45BC300A842DE /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19612C2D1EA45BC300A842DE /* DownloadManager.swift */; };
 		19612C301EA45E0500A842DE /* GlobalManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19612C2F1EA45E0500A842DE /* GlobalManager.swift */; };
 		19612C331EA49EA100A842DE /* FirstController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19612C311EA49EA100A842DE /* FirstController.swift */; };
@@ -124,19 +122,34 @@
 		1978C47B1EFA5CE80076B728 /* FCFBaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978C47A1EFA5CE80076B728 /* FCFBaseBrush.swift */; };
 		1978C48C1EFA81320076B728 /* DrawLayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1978C48B1EFA81320076B728 /* DrawLayerView.swift */; };
 		197E0A741ECC8ACB005064B2 /* TextViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */; };
-		197E39451F0297FC008AC461 /* DrawTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E39441F0297FC008AC461 /* DrawTextView.swift */; };
-		197E39471F02A05A008AC461 /* TextBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 197E39461F02A05A008AC461 /* TextBrush.swift */; };
-		19AB01F91EF386B2009974A0 /* Quartz2DTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */; };
-		19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */; };
-		19AB02061EF3CD38009974A0 /* BaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB02051EF3CD38009974A0 /* BaseBrush.swift */; };
-		19AB02081EF3DFC7009974A0 /* PencilBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB02071EF3DFC7009974A0 /* PencilBrush.swift */; };
 		19AB020C1EF76F3D009974A0 /* CALayerTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AB020A1EF76F3D009974A0 /* CALayerTestController.swift */; };
 		19AB020D1EF76F3D009974A0 /* CALayerTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19AB020B1EF76F3D009974A0 /* CALayerTestController.xib */; };
-		19AD69A71F00E3D500D796D2 /* DrawContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AD69A61F00E3D500D796D2 /* DrawContext.swift */; };
-		19AD69A91F0238E200D796D2 /* EraserBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19AD69A81F0238E200D796D2 /* EraserBrush.swift */; };
 		19B4A7871E9F69140050F661 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B4A7861E9F69140050F661 /* BaseViewController.swift */; };
 		19C48ACE1F05316C00676324 /* RotateController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C48ACD1F05316C00676324 /* RotateController.swift */; };
 		19D02F6C1F0B70C6003D729A /* NumberExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F6B1F0B70C6003D729A /* NumberExtension.swift */; };
+		19D02F891F0CBEC9003D729A /* CoreGraphicsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F741F0CBEC9003D729A /* CoreGraphicsController.swift */; };
+		19D02F8A1F0CBEC9003D729A /* CoreGraphicsController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D02F751F0CBEC9003D729A /* CoreGraphicsController.xib */; };
+		19D02F8B1F0CBEC9003D729A /* BaseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F771F0CBEC9003D729A /* BaseBrush.swift */; };
+		19D02F8C1F0CBEC9003D729A /* colorPalette.plist in Resources */ = {isa = PBXBuildFile; fileRef = 19D02F781F0CBEC9003D729A /* colorPalette.plist */; };
+		19D02F8D1F0CBEC9003D729A /* ColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F791F0CBEC9003D729A /* ColorPicker.swift */; };
+		19D02F8E1F0CBEC9003D729A /* ColorPicker.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D02F7A1F0CBEC9003D729A /* ColorPicker.xib */; };
+		19D02F8F1F0CBEC9003D729A /* draw.xml in Resources */ = {isa = PBXBuildFile; fileRef = 19D02F7B1F0CBEC9003D729A /* draw.xml */; };
+		19D02F901F0CBEC9003D729A /* DrawContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F7C1F0CBEC9003D729A /* DrawContext.swift */; };
+		19D02F911F0CBEC9003D729A /* DrawTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F7D1F0CBEC9003D729A /* DrawTextView.swift */; };
+		19D02F921F0CBEC9003D729A /* EllipseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F7E1F0CBEC9003D729A /* EllipseBrush.swift */; };
+		19D02F931F0CBEC9003D729A /* EraserBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F7F1F0CBEC9003D729A /* EraserBrush.swift */; };
+		19D02F941F0CBEC9003D729A /* ImaginaryLineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F801F0CBEC9003D729A /* ImaginaryLineBrush.swift */; };
+		19D02F951F0CBEC9003D729A /* LineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F811F0CBEC9003D729A /* LineBrush.swift */; };
+		19D02F961F0CBEC9003D729A /* PencilBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F821F0CBEC9003D729A /* PencilBrush.swift */; };
+		19D02F971F0CBEC9003D729A /* Quartz2DTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F831F0CBEC9003D729A /* Quartz2DTestController.swift */; };
+		19D02F981F0CBEC9003D729A /* Quartz2DTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D02F841F0CBEC9003D729A /* Quartz2DTestController.xib */; };
+		19D02F991F0CBEC9003D729A /* RectBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F851F0CBEC9003D729A /* RectBrush.swift */; };
+		19D02F9A1F0CBEC9003D729A /* TextBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F861F0CBEC9003D729A /* TextBrush.swift */; };
+		19D02F9B1F0CBEC9003D729A /* WordBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F871F0CBEC9003D729A /* WordBrush.swift */; };
+		19D02F9C1F0CBEC9003D729A /* XmlManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F881F0CBEC9003D729A /* XmlManager.swift */; };
+		19D02F9F1F0CC94D003D729A /* CGBaseTestController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02F9D1F0CC94D003D729A /* CGBaseTestController.swift */; };
+		19D02FA01F0CC94D003D729A /* CGBaseTestController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D02F9E1F0CC94D003D729A /* CGBaseTestController.xib */; };
+		19D02FA21F0CC983003D729A /* CGView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D02FA11F0CC983003D729A /* CGView.swift */; };
 		19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D28B1ED57C48000188ED /* BaseSearchController.swift */; };
 		19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19D1D28C1ED57C48000188ED /* BaseSearchController.xib */; };
 		19D1D2971ED6B623000188ED /* TestSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19D1D2951ED6B623000188ED /* TestSearchController.swift */; };
@@ -162,14 +175,6 @@
 		19DA35441ECE986B00A56A93 /* MsgTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19DA35421ECE986B00A56A93 /* MsgTableViewCell.xib */; };
 		19DA35471ECEC56200A56A93 /* TableHeaderViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DA35451ECEC56200A56A93 /* TableHeaderViewCell.swift */; };
 		19DA35481ECEC56200A56A93 /* TableHeaderViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 19DA35461ECEC56200A56A93 /* TableHeaderViewCell.xib */; };
-		19DD723D1F024CD1000CAC0C /* colorPalette.plist in Resources */ = {isa = PBXBuildFile; fileRef = 19DD723C1F024CD1000CAC0C /* colorPalette.plist */; };
-		19DD72411F03450A000CAC0C /* WordBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72401F03450A000CAC0C /* WordBrush.swift */; };
-		19DD72431F035127000CAC0C /* RectBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72421F035127000CAC0C /* RectBrush.swift */; };
-		19DD72451F035BCC000CAC0C /* LineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72441F035BCB000CAC0C /* LineBrush.swift */; };
-		19DD72471F035CBE000CAC0C /* ImaginaryLineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */; };
-		19DD72491F035EA7000CAC0C /* EllipseBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD72481F035EA7000CAC0C /* EllipseBrush.swift */; };
-		19DD724D1F05EBB9000CAC0C /* XmlManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DD724C1F05EBB9000CAC0C /* XmlManager.swift */; };
-		19DD724F1F06011D000CAC0C /* draw.xml in Resources */ = {isa = PBXBuildFile; fileRef = 19DD724E1F06011D000CAC0C /* draw.xml */; };
 		19DF8FDB1EE506100044DA68 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */; };
 		19DF8FDD1EE64ED40044DA68 /* 面试Sqlite详解 in Resources */ = {isa = PBXBuildFile; fileRef = 19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */; };
 		19DF8FE01EE64FE80044DA68 /* DataBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */; };
@@ -287,8 +292,6 @@
 		1957EBC11EE1384E00CD65FF /* SQlite3TestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQlite3TestController.swift; sourceTree = "<group>"; };
 		1957EBC21EE1384E00CD65FF /* SQlite3TestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SQlite3TestController.xib; sourceTree = "<group>"; };
 		1957EBC91EE14B8500CD65FF /* FCFSQLiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCFSQLiteManager.swift; sourceTree = "<group>"; };
-		195C82331F024C5B00297840 /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
-		195C82341F024C5B00297840 /* ColorPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorPicker.xib; sourceTree = "<group>"; };
 		19612C2D1EA45BC300A842DE /* DownloadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		19612C2F1EA45E0500A842DE /* GlobalManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalManager.swift; sourceTree = "<group>"; };
 		19612C311EA49EA100A842DE /* FirstController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstController.swift; sourceTree = "<group>"; };
@@ -373,19 +376,34 @@
 		1978C47A1EFA5CE80076B728 /* FCFBaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FCFBaseBrush.swift; sourceTree = "<group>"; };
 		1978C48B1EFA81320076B728 /* DrawLayerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawLayerView.swift; sourceTree = "<group>"; };
 		197E0A731ECC8ACB005064B2 /* TextViewExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextViewExtension.swift; sourceTree = "<group>"; };
-		197E39441F0297FC008AC461 /* DrawTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawTextView.swift; sourceTree = "<group>"; };
-		197E39461F02A05A008AC461 /* TextBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextBrush.swift; sourceTree = "<group>"; };
-		19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quartz2DTestController.swift; sourceTree = "<group>"; };
-		19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Quartz2DTestController.xib; sourceTree = "<group>"; };
-		19AB02051EF3CD38009974A0 /* BaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBrush.swift; sourceTree = "<group>"; };
-		19AB02071EF3DFC7009974A0 /* PencilBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilBrush.swift; sourceTree = "<group>"; };
 		19AB020A1EF76F3D009974A0 /* CALayerTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CALayerTestController.swift; sourceTree = "<group>"; };
 		19AB020B1EF76F3D009974A0 /* CALayerTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CALayerTestController.xib; sourceTree = "<group>"; };
-		19AD69A61F00E3D500D796D2 /* DrawContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawContext.swift; sourceTree = "<group>"; };
-		19AD69A81F0238E200D796D2 /* EraserBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EraserBrush.swift; sourceTree = "<group>"; };
 		19B4A7861E9F69140050F661 /* BaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		19C48ACD1F05316C00676324 /* RotateController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RotateController.swift; sourceTree = "<group>"; };
 		19D02F6B1F0B70C6003D729A /* NumberExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NumberExtension.swift; sourceTree = "<group>"; };
+		19D02F741F0CBEC9003D729A /* CoreGraphicsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreGraphicsController.swift; sourceTree = "<group>"; };
+		19D02F751F0CBEC9003D729A /* CoreGraphicsController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CoreGraphicsController.xib; sourceTree = "<group>"; };
+		19D02F771F0CBEC9003D729A /* BaseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseBrush.swift; sourceTree = "<group>"; };
+		19D02F781F0CBEC9003D729A /* colorPalette.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = colorPalette.plist; sourceTree = "<group>"; };
+		19D02F791F0CBEC9003D729A /* ColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorPicker.swift; sourceTree = "<group>"; };
+		19D02F7A1F0CBEC9003D729A /* ColorPicker.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ColorPicker.xib; sourceTree = "<group>"; };
+		19D02F7B1F0CBEC9003D729A /* draw.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = draw.xml; sourceTree = "<group>"; };
+		19D02F7C1F0CBEC9003D729A /* DrawContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawContext.swift; sourceTree = "<group>"; };
+		19D02F7D1F0CBEC9003D729A /* DrawTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawTextView.swift; sourceTree = "<group>"; };
+		19D02F7E1F0CBEC9003D729A /* EllipseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipseBrush.swift; sourceTree = "<group>"; };
+		19D02F7F1F0CBEC9003D729A /* EraserBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EraserBrush.swift; sourceTree = "<group>"; };
+		19D02F801F0CBEC9003D729A /* ImaginaryLineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImaginaryLineBrush.swift; sourceTree = "<group>"; };
+		19D02F811F0CBEC9003D729A /* LineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineBrush.swift; sourceTree = "<group>"; };
+		19D02F821F0CBEC9003D729A /* PencilBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PencilBrush.swift; sourceTree = "<group>"; };
+		19D02F831F0CBEC9003D729A /* Quartz2DTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Quartz2DTestController.swift; sourceTree = "<group>"; };
+		19D02F841F0CBEC9003D729A /* Quartz2DTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Quartz2DTestController.xib; sourceTree = "<group>"; };
+		19D02F851F0CBEC9003D729A /* RectBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectBrush.swift; sourceTree = "<group>"; };
+		19D02F861F0CBEC9003D729A /* TextBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextBrush.swift; sourceTree = "<group>"; };
+		19D02F871F0CBEC9003D729A /* WordBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordBrush.swift; sourceTree = "<group>"; };
+		19D02F881F0CBEC9003D729A /* XmlManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XmlManager.swift; sourceTree = "<group>"; };
+		19D02F9D1F0CC94D003D729A /* CGBaseTestController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CGBaseTestController.swift; sourceTree = "<group>"; };
+		19D02F9E1F0CC94D003D729A /* CGBaseTestController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CGBaseTestController.xib; sourceTree = "<group>"; };
+		19D02FA11F0CC983003D729A /* CGView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CGView.swift; path = DrawDemo/CGView.swift; sourceTree = "<group>"; };
 		19D1D28B1ED57C48000188ED /* BaseSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseSearchController.swift; sourceTree = "<group>"; };
 		19D1D28C1ED57C48000188ED /* BaseSearchController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = BaseSearchController.xib; sourceTree = "<group>"; };
 		19D1D2951ED6B623000188ED /* TestSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestSearchController.swift; sourceTree = "<group>"; };
@@ -411,14 +429,6 @@
 		19DA35421ECE986B00A56A93 /* MsgTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MsgTableViewCell.xib; sourceTree = "<group>"; };
 		19DA35451ECEC56200A56A93 /* TableHeaderViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableHeaderViewCell.swift; sourceTree = "<group>"; };
 		19DA35461ECEC56200A56A93 /* TableHeaderViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TableHeaderViewCell.xib; sourceTree = "<group>"; };
-		19DD723C1F024CD1000CAC0C /* colorPalette.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = colorPalette.plist; sourceTree = "<group>"; };
-		19DD72401F03450A000CAC0C /* WordBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordBrush.swift; sourceTree = "<group>"; };
-		19DD72421F035127000CAC0C /* RectBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectBrush.swift; sourceTree = "<group>"; };
-		19DD72441F035BCB000CAC0C /* LineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineBrush.swift; sourceTree = "<group>"; };
-		19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImaginaryLineBrush.swift; sourceTree = "<group>"; };
-		19DD72481F035EA7000CAC0C /* EllipseBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipseBrush.swift; sourceTree = "<group>"; };
-		19DD724C1F05EBB9000CAC0C /* XmlManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = XmlManager.swift; sourceTree = "<group>"; };
-		19DD724E1F06011D000CAC0C /* draw.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = draw.xml; sourceTree = "<group>"; };
 		19DF8FDA1EE506100044DA68 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
 		19DF8FDC1EE64ED40044DA68 /* 面试Sqlite详解 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "面试Sqlite详解"; sourceTree = "<group>"; };
 		19DF8FDE1EE64FE80044DA68 /* DataBaseViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataBaseViewController.swift; sourceTree = "<group>"; };
@@ -726,9 +736,9 @@
 		1937CE8C1ECAE59000992949 /* TestControllers */ = {
 			isa = PBXGroup;
 			children = (
+				19D02F731F0CBEC9003D729A /* CoreGraphics */,
 				1978C4751EFA4A620076B728 /* CAShapeLayer */,
 				19AB02091EF76F0D009974A0 /* CALayerAnimation */,
-				19AB01F61EF38697009974A0 /* Quartz 2D */,
 				19C7B4F91EEFD79000CFBFB9 /* Spritekit */,
 				193718001EEA826A00C13430 /* AudioAndVideo */,
 				193717A91EE8E9DE00C13430 /* Animate */,
@@ -943,31 +953,6 @@
 			path = CAShapeLayer;
 			sourceTree = "<group>";
 		};
-		19AB01F61EF38697009974A0 /* Quartz 2D */ = {
-			isa = PBXGroup;
-			children = (
-				19DD723C1F024CD1000CAC0C /* colorPalette.plist */,
-				19AB01F71EF386B2009974A0 /* Quartz2DTestController.swift */,
-				19AB01F81EF386B2009974A0 /* Quartz2DTestController.xib */,
-				19AD69A61F00E3D500D796D2 /* DrawContext.swift */,
-				19AB02051EF3CD38009974A0 /* BaseBrush.swift */,
-				19AB02071EF3DFC7009974A0 /* PencilBrush.swift */,
-				19DD72441F035BCB000CAC0C /* LineBrush.swift */,
-				19DD72461F035CBE000CAC0C /* ImaginaryLineBrush.swift */,
-				19DD72421F035127000CAC0C /* RectBrush.swift */,
-				19DD72481F035EA7000CAC0C /* EllipseBrush.swift */,
-				19AD69A81F0238E200D796D2 /* EraserBrush.swift */,
-				197E39461F02A05A008AC461 /* TextBrush.swift */,
-				19DD72401F03450A000CAC0C /* WordBrush.swift */,
-				197E39441F0297FC008AC461 /* DrawTextView.swift */,
-				195C82331F024C5B00297840 /* ColorPicker.swift */,
-				195C82341F024C5B00297840 /* ColorPicker.xib */,
-				19DD724C1F05EBB9000CAC0C /* XmlManager.swift */,
-				19DD724E1F06011D000CAC0C /* draw.xml */,
-			);
-			path = "Quartz 2D";
-			sourceTree = "<group>";
-		};
 		19AB02091EF76F0D009974A0 /* CALayerAnimation */ = {
 			isa = PBXGroup;
 			children = (
@@ -982,6 +967,44 @@
 			children = (
 			);
 			path = Spritekit;
+			sourceTree = "<group>";
+		};
+		19D02F731F0CBEC9003D729A /* CoreGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				19D02F741F0CBEC9003D729A /* CoreGraphicsController.swift */,
+				19D02F751F0CBEC9003D729A /* CoreGraphicsController.xib */,
+				19D02F761F0CBEC9003D729A /* DrawDemo */,
+				19D02F9D1F0CC94D003D729A /* CGBaseTestController.swift */,
+				19D02F9E1F0CC94D003D729A /* CGBaseTestController.xib */,
+				19D02FA11F0CC983003D729A /* CGView.swift */,
+			);
+			path = CoreGraphics;
+			sourceTree = "<group>";
+		};
+		19D02F761F0CBEC9003D729A /* DrawDemo */ = {
+			isa = PBXGroup;
+			children = (
+				19D02F771F0CBEC9003D729A /* BaseBrush.swift */,
+				19D02F781F0CBEC9003D729A /* colorPalette.plist */,
+				19D02F791F0CBEC9003D729A /* ColorPicker.swift */,
+				19D02F7A1F0CBEC9003D729A /* ColorPicker.xib */,
+				19D02F7B1F0CBEC9003D729A /* draw.xml */,
+				19D02F7C1F0CBEC9003D729A /* DrawContext.swift */,
+				19D02F7D1F0CBEC9003D729A /* DrawTextView.swift */,
+				19D02F7E1F0CBEC9003D729A /* EllipseBrush.swift */,
+				19D02F7F1F0CBEC9003D729A /* EraserBrush.swift */,
+				19D02F801F0CBEC9003D729A /* ImaginaryLineBrush.swift */,
+				19D02F811F0CBEC9003D729A /* LineBrush.swift */,
+				19D02F821F0CBEC9003D729A /* PencilBrush.swift */,
+				19D02F831F0CBEC9003D729A /* Quartz2DTestController.swift */,
+				19D02F841F0CBEC9003D729A /* Quartz2DTestController.xib */,
+				19D02F851F0CBEC9003D729A /* RectBrush.swift */,
+				19D02F861F0CBEC9003D729A /* TextBrush.swift */,
+				19D02F871F0CBEC9003D729A /* WordBrush.swift */,
+				19D02F881F0CBEC9003D729A /* XmlManager.swift */,
+			);
+			path = DrawDemo;
 			sourceTree = "<group>";
 		};
 		19D1D28A1ED57BD9000188ED /* Search */ = {
@@ -1246,13 +1269,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				193717991EE7ACA200C13430 /* data.json in Resources */,
+				19D02F8E1F0CBEC9003D729A /* ColorPicker.xib in Resources */,
 				19DF8FF01EE661060044DA68 /* data.db in Resources */,
+				19D02F8C1F0CBEC9003D729A /* colorPalette.plist in Resources */,
 				19D1D2981ED6B623000188ED /* TestSearchController.xib in Resources */,
 				193718121EEE480400C13430 /* NSCodeToPlistController.xib in Resources */,
 				19612C381EA4A36900A842DE /* SecondController.xib in Resources */,
-				195C82361F024C5B00297840 /* ColorPicker.xib in Resources */,
 				1937180D1EEA9C0600C13430 /* TextFieldtestController.xib in Resources */,
-				19AB01FA1EF386B2009974A0 /* Quartz2DTestController.xib in Resources */,
 				193717F41EEA6F3000C13430 /* LabelTestController.xib in Resources */,
 				1978C4791EFA52C60076B728 /* CAShapeLayerTestController.xib in Resources */,
 				19DF90021EE6780F0044DA68 /* ScrollViewController.xib in Resources */,
@@ -1260,6 +1283,7 @@
 				196640151EC5BD89002FB8F7 /* Image.xcassets in Resources */,
 				19AB020D1EF76F3D009974A0 /* CALayerTestController.xib in Resources */,
 				193717AD1EE8EA3F00C13430 /* AnimateTestController.xib in Resources */,
+				19D02F8A1F0CBEC9003D729A /* CoreGraphicsController.xib in Resources */,
 				19612C341EA49EA100A842DE /* FirstController.xib in Resources */,
 				193718051EEA826A00C13430 /* MusicDemoController.xib in Resources */,
 				19DA353C1ECE85DE00A56A93 /* WechatViewController.xib in Resources */,
@@ -1283,16 +1307,17 @@
 				19DA35481ECEC56200A56A93 /* TableHeaderViewCell.xib in Resources */,
 				19612C3C1EA4A37C00A842DE /* ThirdController.xib in Resources */,
 				19D1D2AF1ED6E378000188ED /* BaseCollectionViewCell.xib in Resources */,
+				19D02F981F0CBEC9003D729A /* Quartz2DTestController.xib in Resources */,
 				193717FA1EEA7B7000C13430 /* ActivityIndicatorController.xib in Resources */,
 				193717A31EE7F0FD00C13430 /* AlertControllerTest.xib in Resources */,
+				19D02F8F1F0CBEC9003D729A /* draw.xml in Resources */,
 				19DF8FDD1EE64ED40044DA68 /* 面试Sqlite详解 in Resources */,
-				19DD724F1F06011D000CAC0C /* draw.xml in Resources */,
 				1957EB571ED813FE00CD65FF /* CollectionViewPUBULIUController.xib in Resources */,
 				193717AF1EE8EB1900C13430 /* Animate使用总结 in Resources */,
+				19D02FA01F0CC94D003D729A /* CGBaseTestController.xib in Resources */,
 				19D1D28E1ED57C48000188ED /* BaseSearchController.xib in Resources */,
 				19DF8FFE1EE6780F0044DA68 /* EKEventStoreController.xib in Resources */,
 				1957EB531ED80FFD00CD65FF /* CollectViewDataController.xib in Resources */,
-				19DD723D1F024CD1000CAC0C /* colorPalette.plist in Resources */,
 				19D1D29F1ED6E028000188ED /* WebKitViewController.xib in Resources */,
 				19DF90061EE678850044DA68 /* XMLTestController.xib in Resources */,
 				1957EB911EDEB05D00CD65FF /* ViewTestController.xib in Resources */,
@@ -1341,27 +1366,30 @@
 				19612CA91EA611E700A842DE /* MJRefreshStateHeader.m in Sources */,
 				19612CAB1EA611E700A842DE /* MJExtensionConst.m in Sources */,
 				19612CA51EA611E700A842DE /* MJRefreshBackNormalFooter.m in Sources */,
+				19D02F9B1F0CBEC9003D729A /* WordBrush.swift in Sources */,
 				19DF8FEA1EE6533E0044DA68 /* SqliteDBSwiftController.swift in Sources */,
 				1957EB8C1EDE981800CD65FF /* PageControlTestController.swift in Sources */,
-				19DD72431F035127000CAC0C /* RectBrush.swift in Sources */,
+				19D02F8D1F0CBEC9003D729A /* ColorPicker.swift in Sources */,
+				19D02F921F0CBEC9003D729A /* EllipseBrush.swift in Sources */,
 				19D1D2AA1ED6E0C5000188ED /* CollectionViewController.swift in Sources */,
-				195C82351F024C5B00297840 /* ColorPicker.swift in Sources */,
 				19DF90011EE6780F0044DA68 /* ScrollViewController.swift in Sources */,
 				19612CB21EA611E700A842DE /* NSObject+MJKeyValue.m in Sources */,
-				19DD72451F035BCC000CAC0C /* LineBrush.swift in Sources */,
+				19D02F951F0CBEC9003D729A /* LineBrush.swift in Sources */,
 				19DF90331EE6A46B0044DA68 /* DDXMLNode.m in Sources */,
 				19612CB11EA611E700A842DE /* NSObject+MJCoding.m in Sources */,
-				19DD72471F035CBE000CAC0C /* ImaginaryLineBrush.swift in Sources */,
+				19D02FA21F0CC983003D729A /* CGView.swift in Sources */,
 				19612CAE1EA611E700A842DE /* MJPropertyKey.m in Sources */,
+				19D02F941F0CBEC9003D729A /* ImaginaryLineBrush.swift in Sources */,
+				19D02F971F0CBEC9003D729A /* Quartz2DTestController.swift in Sources */,
 				19612CBA1EA611E700A842DE /* UIView+MJExtension.m in Sources */,
 				19612C9F1EA611E700A842DE /* MJRefreshFooter.m in Sources */,
+				19D02F9F1F0CC94D003D729A /* CGBaseTestController.swift in Sources */,
 				19612CB61EA611E700A842DE /* MJRefreshConst.m in Sources */,
 				19612C301EA45E0500A842DE /* GlobalManager.swift in Sources */,
 				19DF8FFD1EE6780F0044DA68 /* EKEventStoreController.swift in Sources */,
 				19DF8FFF1EE6780F0044DA68 /* MotionViewController.swift in Sources */,
 				193717EB1EEA3CFF00C13430 /* UserDefaultTestController.swift in Sources */,
 				19612CA61EA611E700A842DE /* MJRefreshBackStateFooter.m in Sources */,
-				19AB01F91EF386B2009974A0 /* Quartz2DTestController.swift in Sources */,
 				193718111EEE480400C13430 /* NSCodeToPlistController.swift in Sources */,
 				193717AC1EE8EA3F00C13430 /* AnimateTestController.swift in Sources */,
 				190C4A711E9F4EF700C0C6D9 /* MineTabBarController.swift in Sources */,
@@ -1379,27 +1407,28 @@
 				193717F31EEA6F3000C13430 /* LabelTestController.swift in Sources */,
 				19612CAA1EA611E700A842DE /* MJDictionaryCache.m in Sources */,
 				19D1D2A61ED6E0B3000188ED /* TestTableController.swift in Sources */,
+				19D02F991F0CBEC9003D729A /* RectBrush.swift in Sources */,
+				19D02F9C1F0CBEC9003D729A /* XmlManager.swift in Sources */,
 				19DF90301EE6A46B0044DA68 /* DDXML.swift in Sources */,
 				1937179B1EE7D6BF00C13430 /* SwiftyJSON.swift in Sources */,
 				19612CA31EA611E700A842DE /* MJRefreshAutoStateFooter.m in Sources */,
 				190C4A6F1E9F4EF700C0C6D9 /* MineMainTabController.swift in Sources */,
 				190C4A701E9F4EF700C0C6D9 /* MineNavigationController.swift in Sources */,
-				19AD69A71F00E3D500D796D2 /* DrawContext.swift in Sources */,
 				193717EF1EEA6CB300C13430 /* ScrollViewTestController.swift in Sources */,
 				19612C9C1EA611E700A842DE /* MJRefreshAutoFooter.m in Sources */,
 				193717F91EEA7B7000C13430 /* ActivityIndicatorController.swift in Sources */,
-				197E39451F0297FC008AC461 /* DrawTextView.swift in Sources */,
 				190C4A781E9F4EF700C0C6D9 /* ViewExtension.swift in Sources */,
 				19612CA41EA611E700A842DE /* MJRefreshBackGifFooter.m in Sources */,
+				19D02F911F0CBEC9003D729A /* DrawTextView.swift in Sources */,
 				19612CA01EA611E700A842DE /* MJRefreshHeader.m in Sources */,
 				19DF902F1EE6A46B0044DA68 /* NSString+DDXML.m in Sources */,
 				1978C4781EFA52C60076B728 /* CAShapeLayerTestController.swift in Sources */,
+				19D02F9A1F0CBEC9003D729A /* TextBrush.swift in Sources */,
 				190C4A4F1E9F4EC700C0C6D9 /* AppDelegate.swift in Sources */,
 				1957EB521ED80FFD00CD65FF /* CollectViewDataController.swift in Sources */,
 				1957EBC31EE1384E00CD65FF /* SQlite3TestController.swift in Sources */,
 				19612CA71EA611E700A842DE /* MJRefreshGifHeader.m in Sources */,
 				19DA353B1ECE85DE00A56A93 /* WechatViewController.swift in Sources */,
-				19AD69A91F0238E200D796D2 /* EraserBrush.swift in Sources */,
 				19D1D29E1ED6E028000188ED /* WebKitViewController.swift in Sources */,
 				193717A21EE7F0FD00C13430 /* AlertControllerTest.swift in Sources */,
 				1978C47B1EFA5CE80076B728 /* FCFBaseBrush.swift in Sources */,
@@ -1418,45 +1447,44 @@
 				19D1D2A01ED6E028000188ED /* WebViewTestController.swift in Sources */,
 				19DA35401ECE93BA00A56A93 /* TableView.swift in Sources */,
 				190C4A761E9F4EF700C0C6D9 /* TableView+CollectionView+Extension.swift in Sources */,
+				19D02F8B1F0CBEC9003D729A /* BaseBrush.swift in Sources */,
 				19612CA21EA611E700A842DE /* MJRefreshAutoNormalFooter.m in Sources */,
+				19D02F931F0CBEC9003D729A /* EraserBrush.swift in Sources */,
 				19612CB01EA611E700A842DE /* NSObject+MJClass.m in Sources */,
 				19DF90051EE678850044DA68 /* XMLTestController.swift in Sources */,
 				1957EB781ED94A5A00CD65FF /* TestCollectionViewCell.swift in Sources */,
 				19DF900C1EE67C5D0044DA68 /* XMLParserTestController.swift in Sources */,
 				19DA35301ECD92E300A56A93 /* BaseTableViewCell.swift in Sources */,
 				193717901EE7953E00C13430 /* JSONTestController.swift in Sources */,
+				19D02F961F0CBEC9003D729A /* PencilBrush.swift in Sources */,
 				190C4A731E9F4EF700C0C6D9 /* ColorExtension.swift in Sources */,
 				19612C331EA49EA100A842DE /* FirstController.swift in Sources */,
 				19DF902E1EE6A46B0044DA68 /* DDXMLElementAdditions.m in Sources */,
 				19C48ACE1F05316C00676324 /* RotateController.swift in Sources */,
 				19612C3B1EA4A37C00A842DE /* ThirdController.swift in Sources */,
 				19D1D2AE1ED6E378000188ED /* BaseCollectionViewCell.swift in Sources */,
-				197E39471F02A05A008AC461 /* TextBrush.swift in Sources */,
 				190C4A721E9F4EF700C0C6D9 /* CellExtension.swift in Sources */,
 				19612CAF1EA611E700A842DE /* MJPropertyType.m in Sources */,
 				1937179E1EE7D6E900C13430 /* SwiftyJSONTestController.swift in Sources */,
 				190C4A741E9F4EF700C0C6D9 /* ImageExtension.swift in Sources */,
-				19DD724D1F05EBB9000CAC0C /* XmlManager.swift in Sources */,
 				19612CB91EA611E700A842DE /* UIScrollView+MJRefresh.m in Sources */,
 				19DF8FE71EE652FC0044DA68 /* SQLTable.swift in Sources */,
 				19DF90321EE6A46B0044DA68 /* DDXMLElement.m in Sources */,
 				19DF8FE01EE64FE80044DA68 /* DataBaseViewController.swift in Sources */,
-				19DD72411F03450A000CAC0C /* WordBrush.swift in Sources */,
 				19612CAD1EA611E700A842DE /* MJProperty.m in Sources */,
 				19D1D28D1ED57C48000188ED /* BaseSearchController.swift in Sources */,
 				19DA35431ECE986B00A56A93 /* MsgTableViewCell.swift in Sources */,
 				1957EB561ED813FE00CD65FF /* CollectionViewPUBULIUController.swift in Sources */,
-				19AB02081EF3DFC7009974A0 /* PencilBrush.swift in Sources */,
 				19612CB31EA611E700A842DE /* NSObject+MJProperty.m in Sources */,
 				193717A71EE8E22700C13430 /* InterviewTestController.swift in Sources */,
-				19AB02061EF3CD38009974A0 /* BaseBrush.swift in Sources */,
 				193718081EEA828400C13430 /* AudioVideoTestController.swift in Sources */,
 				19612CA81EA611E700A842DE /* MJRefreshNormalHeader.m in Sources */,
+				19D02F891F0CBEC9003D729A /* CoreGraphicsController.swift in Sources */,
 				19DA35471ECEC56200A56A93 /* TableHeaderViewCell.swift in Sources */,
 				19612C2E1EA45BC300A842DE /* DownloadManager.swift in Sources */,
 				19612C9D1EA611E700A842DE /* MJRefreshBackFooter.m in Sources */,
 				19612C371EA4A36900A842DE /* SecondController.swift in Sources */,
-				19DD72491F035EA7000CAC0C /* EllipseBrush.swift in Sources */,
+				19D02F901F0CBEC9003D729A /* DrawContext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
