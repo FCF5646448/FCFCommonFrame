@@ -181,12 +181,12 @@ class DrawTextView:UIView {
     func hideBgSet(){
         self.canmoved = false
         self.rotateView.isHidden = true
+        self.backgroundColor = UIColor.clear
         textView.backgroundColor = UIColor.clear
         textView.layer.borderWidth = 0.5
         textView.layer.borderColor = UIColor.clear.cgColor
         textView.layer.cornerRadius = 4
         textView.layer.masksToBounds = true
-        
     }
     
     //旋转
@@ -225,7 +225,16 @@ class DrawTextView:UIView {
         return rotate
     }
     
-    
+    //隐藏选中模式
+    func hideEditing(){
+        //选中状态,变成未选中状态
+        self.endEditing(false)
+        let selected = false
+        self.textView.backgroundColor = UIColor.clear
+        self.backgroundColor = UIColor.clear
+        self.btnDelegate?.drawTextViewRotated(drawTextView: self, index: self.index, rotated: selected)
+    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

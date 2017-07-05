@@ -589,6 +589,8 @@ extension DrawContext{
                 drawmodel.Height = 200
                 drawmodel.Rotate = angle
                 self.boardUndoManager.drawDataArr.append(drawmodel)
+            }else{
+                drawtextView.textView.becomeFirstResponder()
             }
         }
     }
@@ -644,7 +646,6 @@ extension DrawContext{
 }
 
 extension DrawContext:UITextViewDelegate,DrawTextViewDelegate{
-    //
     func drawTextViewPullToNewPosition(drawTextView: DrawTextView,index:Int, oldCenterPoint: CGPoint, newCenterPoint: CGPoint) {
         if oldCenterPoint != newCenterPoint && index < self.boardUndoManager.drawDataArr.count {
             let obj = self.boardUndoManager.drawDataArr[index]
@@ -824,6 +825,11 @@ extension DrawContext{
 
 extension DrawContext{
     func saveDrawToXML(){
+        
+        if let drawTextView =  self.selectedDrawTextView {
+            drawTextView.hideEditing()
+        }
+        
         self.boardUndoManager.removeBiggerThanCurrentIndex()
         self.boardUndoManager.drawModles.removeAll()
         for drawModel in self.boardUndoManager.drawDataArr {

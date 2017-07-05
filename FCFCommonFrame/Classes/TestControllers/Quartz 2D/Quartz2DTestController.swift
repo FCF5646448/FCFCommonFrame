@@ -52,6 +52,7 @@ class Quartz2DTestController: BaseViewController {
     @IBOutlet weak var colorBtn: UIButton!
     
     @IBOutlet weak var clearBtn: UIButton!
+    
     @IBOutlet weak var fontSizeSlide: UISlider!
     
     var wBili:CGFloat = 1.0
@@ -84,18 +85,15 @@ class Quartz2DTestController: BaseViewController {
         self.bgImage.image = img
         self.imgW = img!.size.width
         self.imgH = img!.size.height
-        
         self.drawContext.pivot_x = imgW*1.0/2.0
         self.drawContext.pivot_y = imgH*1.0/2.0
-        
-        let ScreenW = UIScreen.main.bounds.width//self.bgImage.frame.width
-        let ScreenH = UIScreen.main.bounds.height - 85 - 64 //self.bgImage.frame.height
-        
+        let ScreenW = UIScreen.main.bounds.width
+        let ScreenH = UIScreen.main.bounds.height - 85 - 64
         self.wBili =  ScreenW*1.0/imgW
         self.hBili = ScreenH*1.0/imgH
-        
         self.drawContext.wBili = self.wBili
         self.drawContext.hBili = self.hBili
+        print(self.view.frame)
         
         segment.addTarget(self, action: #selector(segmentValueChanged), for: .valueChanged)
         segment.selectedSegmentIndex = selectedIndex //默认就是画曲线的画笔
@@ -145,6 +143,11 @@ class Quartz2DTestController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.drawContext.removeUselessSave()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        print(self.view.frame)
     }
 
     //复原 减笔画
